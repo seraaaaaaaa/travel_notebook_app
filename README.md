@@ -9,4 +9,6 @@ This is an app built with Flutter designed to help users manage their travel pla
 - Currency Converter: Calcualte and convert local currencies within the app.
 - To-Do List: Create and manage to-do lists for your trips to stay organized.
 
+## Preview
+
 ![](/preview/screenshots.png)
