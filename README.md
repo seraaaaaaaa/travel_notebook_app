@@ -6,7 +6,7 @@ This is an app built with Flutter designed to help users manage their travel pla
 
 - Manage Destinations: Add and organize multiple travel destinations.
 - Expense Tracking: Record expenses for each trip and provide data visualization for financial insights.
-- Currency Converter: Calcualte and convert local currencies within the app.
+- Currency Converter: Calculate and convert local currencies within the app.
 - To-Do List: Create and manage to-do lists for your trips to stay organized.
 
 ## Preview
