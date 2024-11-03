@@ -1,6 +1,6 @@
 # Travel Notebook App
 
-This is an app built with Flutter designed to help users manage their travel plans efficiently. It allows users to manage destinations,track expenses, create to-do lists, and convert currencies within the app seamlessly. The app works offline, ensuring that users can access their information anytime, anywhere.
+This is an app built with Flutter designed to help users manage their travel plans efficiently. It allows users to manage destinations, track expenses, create to-do lists, and convert currencies within the app seamlessly. The app works offline, ensuring that users can access their information anytime, anywhere.
 
 ## Features
 
