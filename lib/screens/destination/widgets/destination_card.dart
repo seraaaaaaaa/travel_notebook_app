@@ -13,12 +13,14 @@ class DestinationCard extends StatelessWidget {
   final Destination destination;
   final String ownCurrency;
   final Function() onDelete;
+  final Function() onPin;
 
   const DestinationCard({
     super.key,
     required this.destination,
     required this.ownCurrency,
     required this.onDelete,
+    required this.onPin,
   });
 
   @override
@@ -43,7 +45,7 @@ class DestinationCard extends StatelessWidget {
         height: size.height * .28,
         margin: const EdgeInsets.symmetric(horizontal: kPadding, vertical: 12),
         decoration: BoxDecoration(
-          color: Colors.grey.shade500,
+          color: kGreyColor.shade500,
           borderRadius: BorderRadius.circular(kPadding),
           image: destination.imgPath.isEmpty
               ? null
@@ -60,48 +62,63 @@ class DestinationCard extends StatelessWidget {
             children: [
               Expanded(
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => DestinationDetailPage(
-                                        destination: destination,
-                                        ownCurrency: ownCurrency,
-                                      )));
-                        },
-                        icon: const Icon(
-                          Icons.edit_outlined,
-                          color: kPrimaryColor,
-                        )),
-                    IconButton(
-                        onPressed: () {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return DeleteDialog(
-                                  title: "Delete Destination",
-                                  content:
-                                      "Are you sure you want to delete this destination? All records will be removed.",
-                                  onConfirm: () {
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
+                      onPressed: onPin,
+                      icon: Icon(
+                        destination.isPin == 1 ? Icons.star : Icons.star_border,
+                        color: destination.isPin == 1
+                            ? kAmberColor
+                            : kSecondaryColor,
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          DestinationDetailPage(
+                                            destination: destination,
+                                            ownCurrency: ownCurrency,
+                                          )));
+                            },
+                            icon: const Icon(
+                              Icons.edit_outlined,
+                              color: kPrimaryColor,
+                            )),
+                        IconButton(
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return DeleteDialog(
+                                    title: "Delete Destination",
+                                    content:
+                                        "Are you sure you want to delete this destination? All records will be removed.",
+                                    onConfirm: () {
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
 
-                                    onDelete();
-                                  },
-                                  onCancel: () {
-                                    Navigator.pop(context);
-                                  },
-                                );
-                              });
-                        },
-                        icon: Icon(
-                          Icons.delete_outline,
-                          color: Colors.red.shade300,
-                        )),
+                                      onDelete();
+                                    },
+                                    onCancel: () {
+                                      Navigator.pop(context);
+                                    },
+                                  );
+                                });
+                          },
+                          icon: Icon(
+                            Icons.delete_outline,
+                            color: kRedColor,
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),

@@ -5,6 +5,7 @@ import 'package:travel_notebook/blocs/destination/destination_state.dart';
 import 'package:travel_notebook/blocs/todo/todo_bloc.dart';
 import 'package:travel_notebook/blocs/todo/todo_event.dart';
 import 'package:travel_notebook/blocs/todo/todo_state.dart';
+import 'package:travel_notebook/components/error_msg.dart';
 import 'package:travel_notebook/models/destination/destination_model.dart';
 import 'package:travel_notebook/models/todo/enum/todo_category.dart';
 import 'package:travel_notebook/models/todo/todo_model.dart';
@@ -162,7 +163,10 @@ class _TodoListState extends State<TodoList> {
                                 }),
                               );
                       } else if (state is TodoError) {
-                        return Center(child: Text(state.message));
+                        return ErrorMsg(
+                          msg: state.message,
+                          onTryAgain: () => _refreshPage(),
+                        );
                       }
                       return Container();
                     },

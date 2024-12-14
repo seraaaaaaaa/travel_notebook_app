@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_notebook/blocs/expense/expense_bloc.dart';
 import 'package:travel_notebook/blocs/expense/expense_event.dart';
 import 'package:travel_notebook/blocs/expense/expense_state.dart';
+import 'package:travel_notebook/components/error_msg.dart';
 import 'package:travel_notebook/themes/constants.dart';
 import 'package:travel_notebook/models/destination/destination_model.dart';
 import 'package:travel_notebook/models/expense/expense_model.dart';
@@ -142,7 +143,10 @@ class _AllExpensePageState extends State<AllExpensePage> {
                       },
                     );
             } else if (state is ExpenseError) {
-              return Center(child: Text(state.message));
+              return ErrorMsg(
+                msg: state.message,
+                onTryAgain: () => Navigator.pop(context),
+              );
             }
             return Container();
           },

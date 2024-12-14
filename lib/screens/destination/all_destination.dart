@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_notebook/blocs/destination/destination_bloc.dart';
 import 'package:travel_notebook/blocs/destination/destination_event.dart';
 import 'package:travel_notebook/blocs/destination/destination_state.dart';
+import 'package:travel_notebook/components/error_msg.dart';
 import 'package:travel_notebook/screens/home.dart';
 import 'package:travel_notebook/themes/constants.dart';
 import 'package:travel_notebook/models/destination/destination_model.dart';
@@ -77,20 +78,20 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: const BorderRadius.all(Radius.circular(40)),
-              borderSide: BorderSide(color: Colors.grey.shade200, width: 1),
+              borderSide: BorderSide(color: kGreyColor.shade200, width: 1),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: const BorderRadius.all(Radius.circular(40)),
-              borderSide: BorderSide(color: Colors.grey.shade200, width: 1),
+              borderSide: BorderSide(color: kGreyColor.shade200, width: 1),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: const BorderRadius.all(Radius.circular(40)),
-              borderSide: BorderSide(color: Colors.grey.shade200, width: 1),
+              borderSide: BorderSide(color: kGreyColor.shade200, width: 1),
             ),
-            fillColor: Colors.grey[100], // Add grey background
+            fillColor: kGreyColor[100], // Add grey background
             filled: true, // Enable fill color
             hintText: 'Search...',
-            hintStyle: const TextStyle(color: Colors.grey),
+            hintStyle: const TextStyle(color: kGreyColor),
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 10, horizontal: kPadding),
             prefixIcon: const Padding(
@@ -146,7 +147,10 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
               if (state is DestinationLoading) {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is DestinationError) {
-                return Center(child: Text(state.message));
+                return ErrorMsg(
+                  msg: state.message,
+                  onTryAgain: () => _refreshPage(),
+                );
               } else {
                 final destinations = _destinations
                     .where((destination) => destination.name
@@ -171,6 +175,13 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
                                   .deleteImage(destination.imgPath);
                               _destinationBloc.add(DeleteDestination(
                                   destination.destinationId!));
+                            },
+                            onPin: () {
+                              destination.isPin =
+                                  destination.isPin == 1 ? 0 : 1;
+
+                              _destinationBloc
+                                  .add(UpdateDestination(destination));
                             },
                           );
                         },

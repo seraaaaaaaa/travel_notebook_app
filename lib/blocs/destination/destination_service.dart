@@ -8,7 +8,8 @@ class DestinationService {
 
   Future<List<Destination>> readAllDestinations() async {
     final db = await _databaseHelper.database;
-    const orderBy = '${DestinationField.destinationId} DESC';
+    const orderBy =
+        '${DestinationField.isPin} DESC, ${DestinationField.destinationId} DESC';
     final result = await db.query(DestinationField.tableName, orderBy: orderBy);
 
     return result.map((json) => Destination.fromJson(json)).toList();
