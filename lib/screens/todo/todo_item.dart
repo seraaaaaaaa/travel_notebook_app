@@ -88,7 +88,7 @@ class _TodoItemState extends State<TodoItem> {
           decoration: InputDecoration(
               border: InputBorder.none,
               hintText: 'To-do',
-              hintStyle: TextStyle(color: Colors.grey.shade400)),
+              hintStyle: TextStyle(color: kGreyColor.shade400)),
         ),
         trailing: GestureDetector(
           onTap: () {
@@ -97,7 +97,7 @@ class _TodoItemState extends State<TodoItem> {
           child: Icon(
             widget.todo.status == 1 ? Icons.task_alt : Icons.circle_outlined,
             color:
-                widget.todo.status == 1 ? kPrimaryColor : Colors.grey.shade500,
+                widget.todo.status == 1 ? kPrimaryColor : kGreyColor.shade500,
             size: 28,
           ),
         ),

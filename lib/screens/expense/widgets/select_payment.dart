@@ -28,19 +28,19 @@ class _SelectPaymentState extends State<SelectPayment> {
         padding: const EdgeInsets.all(4.0),
         child: ChoiceChip(
           showCheckmark: false,
-          side: BorderSide(color: Colors.grey.shade100),
-          backgroundColor: Colors.grey.shade100,
+          side: BorderSide(color: kGreyColor.shade100),
+          backgroundColor: kGreyColor.shade100,
           selectedColor: kPrimaryColor,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           avatar: Icon(
             item.icon,
-            color: selectedChoice == item ? kWhiteColor : Colors.grey.shade800,
+            color: selectedChoice == item ? kWhiteColor : kGreyColor.shade800,
           ),
           label: Text(item.name),
           labelStyle: TextStyle(
               color:
-                  selectedChoice == item ? kWhiteColor : Colors.grey.shade800),
+                  selectedChoice == item ? kWhiteColor : kGreyColor.shade800),
           selected: selectedChoice == item,
           onSelected: (selected) {
             setState(() {

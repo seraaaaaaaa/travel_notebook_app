@@ -28,11 +28,11 @@ class NoData extends StatelessWidget {
               padding: const EdgeInsets.symmetric(
                   horizontal: kPadding, vertical: 12),
               decoration: BoxDecoration(
-                  color: Colors.grey.shade50,
+                  color: kGreyColor.shade50,
                   borderRadius: BorderRadius.circular(8),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.shade300,
+                      color: kGreyColor.shade300,
                       offset: const Offset(1, 2),
                       blurRadius: 3,
                     ),
@@ -54,7 +54,7 @@ class NoData extends StatelessWidget {
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(6),
-                            color: Colors.grey.shade200,
+                            color: kGreyColor.shade200,
                           ),
                           height: 14,
                         ),
@@ -63,7 +63,7 @@ class NoData extends StatelessWidget {
                           width: 100,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(6),
-                            color: Colors.grey.shade200,
+                            color: kGreyColor.shade200,
                           ),
                           height: 14,
                         ),
@@ -82,11 +82,11 @@ class NoData extends StatelessWidget {
               padding: const EdgeInsets.symmetric(
                   horizontal: kPadding, vertical: 12),
               decoration: BoxDecoration(
-                  color: Colors.grey.shade50,
+                  color: kGreyColor.shade50,
                   borderRadius: BorderRadius.circular(8),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.shade300,
+                      color: kGreyColor.shade300,
                       offset: const Offset(1, 2),
                       blurRadius: 3,
                     ),
@@ -97,7 +97,7 @@ class NoData extends StatelessWidget {
                     margin: const EdgeInsets.only(right: 12),
                     child: Icon(
                       icon ?? Icons.reorder,
-                      color: Colors.cyan.withOpacity(.4),
+                      color: kCyanColor.withOpacity(.4),
                       size: 28,
                     ),
                   ),
@@ -108,7 +108,7 @@ class NoData extends StatelessWidget {
                         Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(6),
-                            color: Colors.grey.shade200,
+                            color: kGreyColor.shade200,
                           ),
                           height: 14,
                         ),
@@ -117,7 +117,7 @@ class NoData extends StatelessWidget {
                           width: 100,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(6),
-                            color: Colors.grey.shade200,
+                            color: kGreyColor.shade200,
                           ),
                           height: 14,
                         ),

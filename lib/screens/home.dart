@@ -41,7 +41,7 @@ class HomePage extends StatelessWidget {
                 ),
                 child: const TabBar(
                   indicatorSize: TabBarIndicatorSize.tab,
-                  dividerColor: Colors.transparent,
+                  dividerColor: kTransparentColor,
                   indicator: BoxDecoration(
                     color: kWhiteColor,
                     borderRadius: BorderRadius.all(Radius.circular(24)),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:travel_notebook/themes/constants.dart';
 
 class GlobalThemData {
-  static final Color _lightFocusColor = Colors.black.withOpacity(0.12);
+  static final Color _lightFocusColor = kBlackColor.withOpacity(0.12);
 
   static ThemeData lightThemeData =
       themeData(lightColorScheme, _lightFocusColor);
@@ -12,7 +12,7 @@ class GlobalThemData {
       colorScheme: colorScheme,
       canvasColor: colorScheme.surface,
       scaffoldBackgroundColor: colorScheme.surface,
-      highlightColor: Colors.transparent,
+      highlightColor: kTransparentColor,
       focusColor: focusColor,
       appBarTheme: const AppBarTheme(
         scrolledUnderElevation: 0,
@@ -23,7 +23,7 @@ class GlobalThemData {
         headlineLarge: boldTextStyle,
         titleLarge: boldTextStyle,
         titleMedium: boldTextStyle,
-        titleSmall: boldTextStyle.copyWith(color: Colors.grey.shade800),
+        titleSmall: boldTextStyle.copyWith(color: kGreyColor.shade800),
         labelLarge: labelTextStyle.copyWith(fontSize: 15),
         labelMedium: labelTextStyle,
         labelSmall: labelTextStyle,
@@ -43,14 +43,14 @@ class GlobalThemData {
 
   static const TextStyle labelTextStyle = TextStyle(
     letterSpacing: .6,
-    color: Colors.grey,
+    color: kGreyColor,
   );
 
   static IconButtonThemeData iconButtonTheme = IconButtonThemeData(
     style: IconButton.styleFrom(
       padding: const EdgeInsets.all(4),
       foregroundColor: kSecondaryColor,
-      backgroundColor: Colors.grey.shade200,
+      backgroundColor: kGreyColor.shade200,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(30)),
       ),
@@ -60,12 +60,12 @@ class GlobalThemData {
   static TextButtonThemeData textButtonTheme = TextButtonThemeData(
     style: TextButton.styleFrom(
       shape: RoundedRectangleBorder(
-        side: BorderSide(color: Colors.grey.shade200, width: 1),
+        side: BorderSide(color: kGreyColor.shade200, width: 1),
         borderRadius: const BorderRadius.all(Radius.circular(20)),
       ),
       padding: const EdgeInsets.symmetric(horizontal: kPadding),
       foregroundColor: kSecondaryColor,
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: kGreyColor.shade100,
       textStyle: const TextStyle(letterSpacing: 1, fontWeight: FontWeight.w500),
     ),
   );
@@ -85,7 +85,7 @@ class GlobalThemData {
     style: OutlinedButton.styleFrom(
       side: BorderSide(
         width: 1.0,
-        color: Colors.grey.shade500,
+        color: kGreyColor.shade500,
       ),
     ),
   );

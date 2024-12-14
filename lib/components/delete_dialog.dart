@@ -19,7 +19,7 @@ class DeleteDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget cancelButton = TextButton(
       style: OutlinedButton.styleFrom(
-        backgroundColor: Colors.grey.shade200,
+        backgroundColor: kGreyColor.shade200,
         foregroundColor: kSecondaryColor,
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: kPadding),
       ),
@@ -29,7 +29,7 @@ class DeleteDialog extends StatelessWidget {
 
     Widget confirmButton = TextButton(
       style: TextButton.styleFrom(
-        backgroundColor: Colors.red,
+        backgroundColor: kRedColor,
         foregroundColor: kWhiteColor,
         padding: const EdgeInsets.symmetric(horizontal: 30, vertical: kPadding),
       ),
@@ -40,7 +40,7 @@ class DeleteDialog extends StatelessWidget {
     return AlertDialog(
       icon: const Icon(
         Icons.auto_delete_outlined,
-        color: Colors.red,
+        color: kRedColor,
         size: 35,
       ),
       iconPadding: const EdgeInsets.only(top: 34, bottom: 10),

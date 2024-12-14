@@ -35,7 +35,7 @@ class CategoryItem extends StatelessWidget {
             Container(
               width: 38.0,
               height: 4.0,
-              color: selected ? kPrimaryColor : Colors.transparent,
+              color: selected ? kPrimaryColor : kTransparentColor,
               margin: const EdgeInsets.only(top: 4),
             ),
           ],

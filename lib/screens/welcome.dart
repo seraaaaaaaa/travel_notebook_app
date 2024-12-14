@@ -64,7 +64,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 15,
-                    color: Colors.grey,
+                    color: kGreyColor,
                     height: 1.4,
                     letterSpacing: .4),
               ),
@@ -88,16 +88,16 @@ class _WelcomePageState extends State<WelcomePage> {
                   fillColor: kWhiteColor,
                   hintText: 'Enter your currency',
                   hintStyle: const TextStyle(
-                      color: Colors.grey, fontWeight: FontWeight.normal),
+                      color: kGreyColor, fontWeight: FontWeight.normal),
                   enabledBorder: OutlineInputBorder(
                     borderRadius: const BorderRadius.all(Radius.circular(4)),
                     borderSide:
-                        BorderSide(color: Colors.grey.shade300, width: 1),
+                        BorderSide(color: kGreyColor.shade300, width: 1),
                   ),
                   border: OutlineInputBorder(
                     borderRadius: const BorderRadius.all(Radius.circular(4)),
                     borderSide:
-                        BorderSide(color: Colors.grey.shade200, width: 1),
+                        BorderSide(color: kGreyColor.shade200, width: 1),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: const BorderRadius.all(Radius.circular(4)),

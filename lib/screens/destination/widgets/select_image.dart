@@ -68,7 +68,7 @@ class _SelectImageState extends State<SelectImage> {
             decoration: BoxDecoration(
               color: kSecondaryColor.shade50,
               border: Border.all(
-                color: Colors.grey.shade300,
+                color: kGreyColor.shade300,
                 width: 1.0,
               ),
               borderRadius: const BorderRadius.all(
@@ -86,7 +86,7 @@ class _SelectImageState extends State<SelectImage> {
                       const Icon(
                         Icons.image,
                         size: 30,
-                        color: Colors.grey,
+                        color: kGreyColor,
                       ),
                       const SizedBox(
                         height: 6,

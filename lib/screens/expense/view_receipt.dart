@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:travel_notebook/services/image_handler.dart';
 import 'package:travel_notebook/components/delete_dialog.dart';
+import 'package:travel_notebook/themes/constants.dart';
 
 class ViewReceipt extends StatelessWidget {
   final String imagePath;
@@ -48,9 +49,9 @@ class ViewReceipt extends StatelessWidget {
                       );
                     });
               },
-              icon: const Icon(
+              icon: Icon(
                 Icons.delete_outline,
-                color: Colors.red,
+                color: kRedColor,
               ),
             ),
           )
@@ -76,7 +77,7 @@ class ViewReceipt extends StatelessWidget {
                     Icon(
                       Icons.image,
                       size: 60,
-                      color: Colors.grey.shade300,
+                      color: kGreyColor.shade300,
                     ),
                     const SizedBox(
                       height: 10,
@@ -85,7 +86,7 @@ class ViewReceipt extends StatelessWidget {
                       'Failed to load image',
                       style: TextStyle(
                           letterSpacing: .4,
-                          color: Colors.grey.shade400,
+                          color: kGreyColor.shade400,
                           fontWeight: FontWeight.w500),
                     ),
                   ],

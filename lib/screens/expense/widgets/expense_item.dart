@@ -94,7 +94,7 @@ class ExpenseItem extends StatelessWidget {
                                         (e) => e.name == expense.typeName)
                                     .icon,
                                 size: 28,
-                                color: Colors.grey.shade800,
+                                color: kGreyColor.shade800,
                               ),
                             ),
                             Column(
@@ -218,7 +218,7 @@ class ExpenseItem extends StatelessWidget {
                                   },
                                   icon: Icon(
                                     Icons.delete_outline,
-                                    color: Colors.red.shade600,
+                                    color: kRedColor,
                                     size: 20,
                                   )),
                             ],
@@ -245,7 +245,7 @@ class ExpenseItem extends StatelessWidget {
                                         (e) => e.name == expense.paymentMethod)
                                     .icon,
                                 size: 28,
-                                color: Colors.grey.shade800,
+                                color: kGreyColor.shade800,
                               ),
                               const SizedBox(width: 6),
                               Text(
@@ -282,7 +282,7 @@ class ExpenseItem extends StatelessWidget {
         child: Icon(
           ExpenseType.values.firstWhere((e) => e.name == expense.typeName).icon,
           size: 28,
-          color: Colors.grey.shade800,
+          color: kGreyColor.shade800,
         ),
       ),
       title: Column(
