@@ -1,3 +1,4 @@
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -127,59 +128,76 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
                         'Amount',
                         style: Theme.of(context).textTheme.labelLarge,
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(bottom: kPadding),
-                        child: TextFormField(
-                          controller: _amountController,
-                          onTap: () => _amountController.selection =
-                              TextSelection(
-                                  baseOffset: 0,
-                                  extentOffset:
-                                      _amountController.value.text.length),
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                          enableInteractiveSelection: false,
-                          autofocus: _isAddNew ? true : false,
-                          textAlignVertical: TextAlignVertical.center,
-                          textInputAction: TextInputAction.done,
-                          style: const TextStyle(
-                              letterSpacing: 1,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500),
-                          textAlign: TextAlign.end,
-                          onChanged: (val) {
-                            _amountController.text =
-                                formatCurrency(parseDouble(val));
-                          },
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Required';
-                            }
+                      TextFormField(
+                        controller: _amountController,
+                        onTap: () => _amountController.selection =
+                            TextSelection(
+                                baseOffset: 0,
+                                extentOffset:
+                                    _amountController.value.text.length),
+                        onChanged: (val) {
+                          double ownAmount = calculateOwnCurrency(
+                              _destination.rate, parseDouble(val));
 
-                            return null;
-                          },
-                          decoration: InputDecoration(
-                            prefixIcon: Padding(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: SizedBox(
-                                child: Center(
-                                  widthFactor: 0.0,
-                                  child: Text(
-                                    _destination.currency,
-                                    style: const TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w500,
-                                        color: kSecondaryColor),
-                                  ),
+                          setState(() {
+                            _expense.converted = ownAmount;
+                          });
+                        },
+                        keyboardType: TextInputType.number,
+                        inputFormatters: <TextInputFormatter>[
+                          CurrencyTextInputFormatter.simpleCurrency(
+                              decimalDigits: _destination.decimal, name: '')
+                        ],
+                        enableInteractiveSelection: false,
+                        autofocus: _isAddNew ? true : false,
+                        textAlignVertical: TextAlignVertical.center,
+                        textInputAction: TextInputAction.done,
+                        style: const TextStyle(
+                            letterSpacing: 1,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.end,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Required';
+                          }
+
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          prefixIcon: Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: SizedBox(
+                              child: Center(
+                                widthFactor: 0.0,
+                                child: Text(
+                                  _destination.currency,
+                                  style: const TextStyle(
+                                      letterSpacing: 1,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      color: kSecondaryColor),
                                 ),
                               ),
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(height: kPadding),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 4),
+                            child: Text(
+                              formatCurrency(_expense.converted,
+                                  currency: _destination.ownCurrency),
+                              style: Theme.of(context).textTheme.labelLarge,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
                       Text(
                         'Payment Method',
                         style: Theme.of(context).textTheme.labelLarge,
@@ -282,7 +300,7 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
                             ),
                             Container(
                                 decoration: BoxDecoration(
-                                    color: Colors.grey.shade200,
+                                    color: kGreyColor.shade200,
                                     borderRadius: BorderRadius.circular(30)),
                                 padding: const EdgeInsets.all(8),
                                 child: const Icon(Icons.keyboard_arrow_down))
@@ -306,7 +324,7 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
                           border: InputBorder.none,
                           hintStyle: TextStyle(
                             fontWeight: FontWeight.normal,
-                            color: Colors.grey,
+                            color: kGreyColor,
                           ),
                         ),
                       ),

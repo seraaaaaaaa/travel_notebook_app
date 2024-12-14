@@ -8,6 +8,7 @@ class DestinationField {
   static const String endDate = 'end_date';
   static const String budget = 'budget';
   static const String currency = 'currency';
+  static const String decimal = 'decimal';
   static const String rate = 'rate';
   static const String isPin = 'is_pin';
   static const String totalExpense = 'total_expense';
@@ -23,6 +24,7 @@ class DestinationField {
     endDate,
     budget,
     currency,
+    decimal,
     rate,
     isPin,
     totalExpense,

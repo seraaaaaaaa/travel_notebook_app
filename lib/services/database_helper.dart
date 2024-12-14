@@ -30,9 +30,19 @@ class DatabaseHelper {
     final path = join(databasePath, 'travel.db');
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: _createDatabase,
+      onUpgrade: _upgradeDatabase,
     );
+  }
+
+  Future<void> _upgradeDatabase(
+      Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await db.execute('''
+      ALTER TABLE ${DestinationField.tableName} ADD COLUMN ${DestinationField.decimal} $intType DEFAULT 0
+    ''');
+    }
   }
 
   void _createDatabase(Database db, _) async {
@@ -44,7 +54,8 @@ class DatabaseHelper {
           ${DestinationField.startDate} $textType,    
           ${DestinationField.endDate} $textType,    
           ${DestinationField.budget} $doubleType,
-          ${DestinationField.currency} $textType,    
+          ${DestinationField.currency} $textType,  
+          ${DestinationField.decimal} $intType,  
           ${DestinationField.rate} $doubleType,
           ${DestinationField.isPin} $intType,
           ${DestinationField.totalExpense} $doubleType,

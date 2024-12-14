@@ -78,6 +78,7 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
                   });
                 },
                 prefixText: _destination.ownCurrency,
+                decimal: 2,
               ),
               Center(
                 child: Container(
@@ -101,6 +102,7 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
                   });
                 },
                 prefixText: _destination.currency,
+                decimal: _destination.decimal,
               ),
             ],
           ),

@@ -1,3 +1,4 @@
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:travel_notebook/themes/constants.dart';
@@ -8,6 +9,7 @@ class CurrencyInput extends StatefulWidget {
   final String labelText;
   final Function(String)? onChanged;
   final String prefixText;
+  final int decimal;
 
   const CurrencyInput({
     super.key,
@@ -15,6 +17,7 @@ class CurrencyInput extends StatefulWidget {
     required this.labelText,
     required this.onChanged,
     required this.prefixText,
+    required this.decimal,
   });
 
   @override
@@ -46,7 +49,8 @@ class _CurrencyInputState extends State<CurrencyInput> {
             controller: widget.controller,
             keyboardType: TextInputType.number,
             inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
+              CurrencyTextInputFormatter.simpleCurrency(
+                  decimalDigits: widget.decimal, name: ''),
             ],
             enableInteractiveSelection: false,
             textAlignVertical: TextAlignVertical.center,
@@ -55,7 +59,7 @@ class _CurrencyInputState extends State<CurrencyInput> {
                 letterSpacing: 1,
                 fontWeight: FontWeight.w500,
                 fontSize: 18,
-                color: Colors.grey.shade800),
+                color: kGreyColor.shade800),
             textAlign: TextAlign.end,
             onChanged: widget.onChanged,
             onEditingComplete: () {

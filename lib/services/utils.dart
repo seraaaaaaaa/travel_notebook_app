@@ -39,10 +39,12 @@ String formatPercentage(double amount) {
   return '${(amount * 100).toStringAsFixed(0)}%';
 }
 
-String formatCurrency(double amount, {String currency = ''}) {
+String formatCurrency(double amount,
+    {String currency = '', bool inclDecimal = false}) {
   // Create a NumberFormat without a symbol
   final NumberFormat currencyFormatter = NumberFormat.currency(
-      symbol: '', decimalDigits: amount == amount.roundToDouble() ? 0 : 2);
+      symbol: '',
+      decimalDigits: amount == amount.roundToDouble() && !inclDecimal ? 0 : 2);
 
   // Add a space only if the currency symbol is not empty
   currency = currency.isEmpty ? '' : '$currency ';

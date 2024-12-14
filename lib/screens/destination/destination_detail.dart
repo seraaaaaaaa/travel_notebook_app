@@ -48,6 +48,7 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
           endDate: null,
           budget: 0.00,
           currency: '',
+          decimal: 0,
           rate: 0);
     } else {
       _destination = widget.destination!;
@@ -158,7 +159,10 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                               labelText: 'Budget',
                               initialValue: _isAddNew
                                   ? ''
-                                  : formatCurrency(_destination.budget),
+                                  : formatCurrency(
+                                      _destination.budget,
+                                      inclDecimal: true,
+                                    ),
                               onSaved: (val) {
                                 _destination.budget =
                                     parseDouble(val.replaceAll(',', ''));
@@ -175,7 +179,10 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                               labelText: 'Exchange Rate',
                               initialValue: _isAddNew
                                   ? ''
-                                  : formatCurrency(_destination.rate),
+                                  : formatCurrency(
+                                      _destination.rate,
+                                      inclDecimal: true,
+                                    ),
                               onSaved: (val) {
                                 _destination.rate =
                                     parseDouble(val.replaceAll(',', ''));
@@ -185,6 +192,28 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                             ),
                           ),
                         ],
+                      ),
+                      CheckboxListTile(
+                        checkColor: kWhiteColor,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                        value: _destination.decimal == 2,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            if (value != null && value) {
+                              _destination.decimal = 2;
+                            } else {
+                              _destination.decimal = 0;
+                            }
+                          });
+                        },
+                        title: Text(
+                          'Decimal Places',
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                        subtitle: Text(
+                          'Display amount in 2 decimal places.',
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
                       ),
                       SelectImage(
                           initialImgPath: _destination.imgPath,

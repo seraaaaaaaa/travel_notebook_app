@@ -1,3 +1,4 @@
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:travel_notebook/themes/constants.dart';
@@ -43,9 +44,14 @@ class _DestinationInputState extends State<DestinationInput> {
             initialValue: widget.initialValue,
             inputFormatters: widget.inputType == 'date'
                 ? [MaskTextInputFormatter(mask: "##/##/####")]
-                // : widget.inputType == 'double'
-                //     ? [FilteringTextInputFormatter.digitsOnly]
-                : null,
+                : widget.inputType == 'double'
+                    ? [
+                        CurrencyTextInputFormatter.simpleCurrency(
+                          decimalDigits: 2,
+                          name: '',
+                        )
+                      ]
+                    : null,
             keyboardType:
                 widget.inputType == 'date' || widget.inputType == 'double'
                     ? TextInputType.number
@@ -101,10 +107,10 @@ class _DestinationInputState extends State<DestinationInput> {
               fillColor: kWhiteColor,
               hintText: widget.hintText,
               hintStyle: const TextStyle(
-                  color: Colors.grey, fontWeight: FontWeight.normal),
+                  color: kGreyColor, fontWeight: FontWeight.normal),
               enabledBorder: OutlineInputBorder(
                 borderRadius: const BorderRadius.all(Radius.circular(4)),
-                borderSide: BorderSide(color: Colors.grey.shade300, width: 1),
+                borderSide: BorderSide(color: kGreyColor.shade300, width: 1),
               ),
               prefixIcon: widget.prefixText.isEmpty
                   ? null
@@ -125,7 +131,7 @@ class _DestinationInputState extends State<DestinationInput> {
                     ),
               border: OutlineInputBorder(
                 borderRadius: const BorderRadius.all(Radius.circular(4)),
-                borderSide: BorderSide(color: Colors.grey.shade200, width: 1),
+                borderSide: BorderSide(color: kGreyColor.shade200, width: 1),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: const BorderRadius.all(Radius.circular(4)),

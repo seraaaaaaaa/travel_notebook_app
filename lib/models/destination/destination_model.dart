@@ -9,6 +9,7 @@ class Destination {
   late DateTime? endDate;
   late double budget;
   late String currency;
+  late int decimal;
   late double rate;
   late int isPin;
   late double totalExpense;
@@ -33,6 +34,7 @@ class Destination {
     required this.endDate,
     required this.budget,
     required this.currency,
+    required this.decimal,
     required this.rate,
     this.isPin = 0,
     this.totalExpense = 0.0,
@@ -80,6 +82,9 @@ class Destination {
       endDate: parseDateTime(json[DestinationField.endDate]),
       budget: budget,
       currency: json[DestinationField.currency] as String,
+      decimal: json[DestinationField.decimal] != null
+          ? json[DestinationField.decimal] as int
+          : 0,
       rate: json[DestinationField.rate] as double,
       isPin: json[DestinationField.isPin] as int,
       totalExpense: totalExpense,
@@ -102,6 +107,7 @@ class Destination {
         DestinationField.endDate: endDate?.toIso8601String(),
         DestinationField.budget: budget,
         DestinationField.currency: currency,
+        DestinationField.decimal: decimal,
         DestinationField.rate: rate,
         DestinationField.isPin: isPin,
         DestinationField.totalExpense: totalExpense,
