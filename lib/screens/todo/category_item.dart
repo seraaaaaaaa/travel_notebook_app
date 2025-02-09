@@ -6,6 +6,7 @@ class CategoryItem extends StatelessWidget {
   final String categoryName;
   final bool selected;
   final Function() onTap;
+  final GlobalKey itemKey; // Key to track size
 
   const CategoryItem({
     super.key,
@@ -13,6 +14,7 @@ class CategoryItem extends StatelessWidget {
     required this.categoryName,
     required this.selected,
     required this.onTap,
+    required this.itemKey, // Pass key
   });
 
   @override
@@ -20,6 +22,7 @@ class CategoryItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Padding(
+        key: itemKey,
         padding: const EdgeInsets.fromLTRB(6, 10, 16, 10),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -32,12 +35,15 @@ class CategoryItem extends StatelessWidget {
                   fontWeight: selected ? FontWeight.w500 : FontWeight.normal,
                   color: selected ? kSecondaryColor : kGreyColor),
             ),
-            Container(
-              width: 38.0,
-              height: 4.0,
-              color: selected ? kPrimaryColor : kTransparentColor,
-              margin: const EdgeInsets.only(top: 4),
-            ),
+            // Container(
+            //   width: 38.0,
+            //   height: 5.0,
+            //   decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(kPadding),
+            //     color: selected ? kPrimaryColor : kTransparentColor,
+            //   ),
+            //   margin: const EdgeInsets.only(top: 4),
+            // ),
           ],
         ),
       ),

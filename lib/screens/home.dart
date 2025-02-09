@@ -39,7 +39,10 @@ class HomePage extends StatelessWidget {
                   borderRadius: const BorderRadius.all(Radius.circular(24)),
                   color: kSecondaryColor.shade50,
                 ),
-                child: const TabBar(
+                child: TabBar(
+                  onTap: (index) {
+                    FocusScope.of(context).unfocus();
+                  },
                   indicatorSize: TabBarIndicatorSize.tab,
                   dividerColor: kTransparentColor,
                   indicator: BoxDecoration(

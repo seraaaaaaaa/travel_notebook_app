@@ -14,6 +14,7 @@ import 'package:travel_notebook/services/debouncer.dart';
 import 'package:travel_notebook/components/no_data.dart';
 import 'package:travel_notebook/components/section_title.dart';
 import 'package:travel_notebook/screens/todo/todo_item.dart';
+import 'package:travel_notebook/themes/constants.dart';
 
 class TodoList extends StatefulWidget {
   final Destination destination;
@@ -31,15 +32,31 @@ class _TodoListState extends State<TodoList> {
   late TodoBloc _todoBloc;
 
   int _categoryId = 0;
+  int _latestSeq = 0;
+
+  final _scrollController = ScrollController();
+  final Map<int, GlobalKey> _itemKeys = {}; // Store keys for each category
+  double _indicatorLeft = 17.0;
+  double _indicatorWidth = 38.0; // Default width
 
   @override
   void initState() {
+    super.initState();
+
     _destination = widget.destination;
 
     _todoBloc = BlocProvider.of<TodoBloc>(context);
     _todoBloc.add(LoadTodos(_destination.destinationId!, _categoryId));
 
-    super.initState();
+    // Initialize keys for tracking each category size
+    for (var category in TodoCategory.values) {
+      _itemKeys[category.id] = GlobalKey();
+    }
+
+    // Delay to allow layout completion, then calculate size
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   _updateIndicatorPosition();
+    // });
   }
 
   @override
@@ -49,6 +66,37 @@ class _TodoListState extends State<TodoList> {
 
   Future<void> _refreshPage() async {
     _todoBloc.add(LoadTodos(_destination.destinationId!, _categoryId));
+  }
+
+  /// Updates the underline position dynamically based on category size
+  void _updateIndicatorPosition() {
+    if (!mounted) return;
+
+    final selectedKey = _itemKeys[_categoryId];
+    if (selectedKey == null) return;
+
+    final RenderBox? renderBox =
+        selectedKey.currentContext?.findRenderObject() as RenderBox?;
+    if (renderBox != null) {
+      final size = renderBox.size;
+      final position = renderBox.localToGlobal(Offset.zero);
+
+      setState(() {
+        _indicatorWidth =
+            size.width * 0.5; // Adjust width dynamically (60% of text width)
+
+        _indicatorLeft = position.dx +
+            (size.width / 3.8) -
+            (_indicatorWidth / 2); // Center the underline
+      });
+
+      // Auto-scroll to keep the selected category visible
+      _scrollController.animateTo(
+        _indicatorLeft - 20, // Scroll a bit before the selected category
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
   }
 
   @override
@@ -76,6 +124,7 @@ class _TodoListState extends State<TodoList> {
                     btnText: 'Add',
                     btnAction: () {
                       FocusScope.of(context).unfocus();
+
                       _todoBloc.add(AddTodo(Todo(
                           destinationId: _destination.destinationId!,
                           content: '',
@@ -84,21 +133,44 @@ class _TodoListState extends State<TodoList> {
                     },
                   ),
                   SingleChildScrollView(
+                    controller: _scrollController,
                     scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: TodoCategory.values.map((category) {
-                        return CategoryItem(
-                          categoryId: category.id,
-                          categoryName: category.name,
-                          selected: _categoryId == category.id,
-                          onTap: () {
-                            setState(() {
-                              _categoryId = category.id;
-                            });
-                            _refreshPage();
-                          },
-                        );
-                      }).toList(),
+                    child: Stack(
+                      children: [
+                        Row(
+                          children: TodoCategory.values.map((category) {
+                            return CategoryItem(
+                              categoryId: category.id,
+                              categoryName: category.name,
+                              selected: _categoryId == category.id,
+                              itemKey: _itemKeys[category.id]!,
+                              onTap: () {
+                                setState(() {
+                                  _categoryId = category.id;
+                                });
+
+                                _updateIndicatorPosition();
+                                _refreshPage();
+                              },
+                            );
+                          }).toList(),
+                        ),
+                        // Sliding underline animation
+                        AnimatedPositioned(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                          left: _indicatorLeft, // Dynamically updated
+                          bottom: 0,
+                          child: Container(
+                            width: _indicatorWidth, // Dynamic width
+                            height: 5.0,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6),
+                              color: kPrimaryColor,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   BlocBuilder<TodoBloc, TodoState>(
@@ -106,61 +178,88 @@ class _TodoListState extends State<TodoList> {
                       if (state is TodoLoading) {
                         return const Center(child: CircularProgressIndicator());
                       } else if (state is TodoLoaded) {
+                        _latestSeq = state.todos.isNotEmpty
+                            ? state.todos.last.sequence + 1
+                            : 0;
                         return state.todos.isEmpty
                             ? const NoData(
                                 msg: 'No To-do List', icon: Icons.check_box)
-                            : ReorderableListView(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                buildDefaultDragHandles:
-                                    false, // Disable the default drag handles
-                                onReorder: (int oldIndex, int newIndex) {
-                                  setState(() {
-                                    if (oldIndex < newIndex) {
-                                      newIndex -= 1;
-                                    }
-                                    final todo = state.todos.removeAt(oldIndex);
-                                    state.todos.insert(newIndex, todo);
+                            : Column(
+                                children: [
+                                  ReorderableListView(
+                                    shrinkWrap: true,
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    buildDefaultDragHandles:
+                                        false, // Disable the default drag handles
+                                    onReorder: (int oldIndex, int newIndex) {
+                                      setState(() {
+                                        if (oldIndex < newIndex) {
+                                          newIndex -= 1;
+                                        }
+                                        final todo =
+                                            state.todos.removeAt(oldIndex);
+                                        state.todos.insert(newIndex, todo);
 
-                                    for (int i = 0;
-                                        i < state.todos.length;
-                                        i++) {
-                                      state.todos[i].sequence = i;
-                                    }
-                                  });
-                                  _todoBloc.add(UpdateAllTodos(state.todos));
-                                },
-                                children:
-                                    List.generate(state.todos.length, (index) {
-                                  final todo = state.todos[index];
-                                  return Container(
-                                    key: Key(todo.id.toString()),
-                                    child: TodoItem(
-                                      todo: todo,
-                                      index: index,
-                                      onRemove: () {
-                                        _todoBloc.add(DeleteTodo(
-                                          todo.id!,
-                                          _destination.destinationId!,
-                                          _categoryId,
-                                        ));
+                                        for (int i = 0;
+                                            i < state.todos.length;
+                                            i++) {
+                                          state.todos[i].sequence = i;
+                                        }
+                                      });
+                                      _todoBloc
+                                          .add(UpdateAllTodos(state.todos));
+                                    },
+                                    children: List.generate(state.todos.length,
+                                        (index) {
+                                      final todo = state.todos[index];
+                                      return Container(
+                                        key: Key(todo.id.toString()),
+                                        child: TodoItem(
+                                          todo: todo,
+                                          index: index,
+                                          onRemove: () {
+                                            _todoBloc.add(DeleteTodo(
+                                              todo.id!,
+                                              _destination.destinationId!,
+                                              _categoryId,
+                                            ));
+                                          },
+                                          onTapCheck: () {
+                                            setState(() {
+                                              todo.status =
+                                                  todo.status == 1 ? 0 : 1;
+                                            });
+                                            _todoBloc.add(UpdateTodo(todo));
+                                          },
+                                          onChanged: (val) {
+                                            _debouncer.run(() {
+                                              todo.content = val;
+                                              _todoBloc.add(UpdateTodo(todo));
+                                            });
+                                          },
+                                        ),
+                                      );
+                                    }),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal: kPadding, vertical: 6),
+                                    width: double.infinity,
+                                    child: TextButton(
+                                      onPressed: () {
+                                        FocusScope.of(context).unfocus();
+                                        _todoBloc.add(AddTodo(Todo(
+                                            destinationId:
+                                                _destination.destinationId!,
+                                            content: '',
+                                            sequence: _latestSeq,
+                                            categoryId: _categoryId)));
                                       },
-                                      onTapCheck: () {
-                                        setState(() {
-                                          todo.status =
-                                              todo.status == 1 ? 0 : 1;
-                                        });
-                                        _todoBloc.add(UpdateTodo(todo));
-                                      },
-                                      onChanged: (val) {
-                                        _debouncer.run(() {
-                                          todo.content = val;
-                                          _todoBloc.add(UpdateTodo(todo));
-                                        });
-                                      },
+                                      child: Text('Add'),
                                     ),
-                                  );
-                                }),
+                                  ),
+                                ],
                               );
                       } else if (state is TodoError) {
                         return ErrorMsg(
