@@ -6,8 +6,9 @@ abstract class ExpenseEvent {}
 class GetExpenses extends ExpenseEvent {
   final int destinationId;
   final int? limit;
+  final int typeNo;
 
-  GetExpenses(this.destinationId, {this.limit});
+  GetExpenses(this.destinationId, {this.limit, this.typeNo = 0});
 }
 
 class AddExpense extends ExpenseEvent {

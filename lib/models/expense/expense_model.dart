@@ -7,7 +7,7 @@ class Expense {
   late double amount;
   late double converted;
   late String paymentMethod;
-  late int typeNo;
+  late int typeNo; //1-Transportation, 2-Meal, 3-Miscellaneous
   late String typeName;
   late String remark;
   late String receiptImg;

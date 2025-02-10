@@ -7,14 +7,23 @@ import 'package:travel_notebook/services/database_helper.dart'; // Import the da
 class ExpenseService {
   final DatabaseHelper _databaseHelper = DatabaseHelper.instance;
 
-  Future<List<Expense>> readAllExpenses(int destinationId, int? limit) async {
+  Future<List<Expense>> readAllExpenses(
+      int destinationId, int? limit, int typeNo) async {
     final db = await _databaseHelper.database;
     const orderBy = '${ExpenseField.createdTime} DESC';
 
+    var where = '${ExpenseField.destinationId} = ?';
+    List<dynamic> whereArgs = [destinationId];
+
+    if (typeNo > 0) {
+      where += " AND ${ExpenseField.typeNo} = ?";
+      whereArgs.add(typeNo);
+    }
+
     final result = await db.query(
       ExpenseField.tableName,
-      where: '${ExpenseField.destinationId} = ?',
-      whereArgs: [destinationId],
+      where: where,
+      whereArgs: whereArgs,
       orderBy: orderBy,
       limit: limit,
     );

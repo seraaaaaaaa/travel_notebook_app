@@ -11,7 +11,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
       emit(ExpenseLoading());
       try {
         final expenses = await expenseService.readAllExpenses(
-            event.destinationId, event.limit);
+            event.destinationId, event.limit, event.typeNo);
         emit(ExpensesLoaded(expenses));
       } catch (e) {
         emit(ExpenseError('Error occurred: ${e.toString()}'));
