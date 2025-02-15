@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:travel_notebook/models/destination/destination_model.dart';
 import 'package:travel_notebook/themes/constants.dart';
 import 'package:travel_notebook/models/expense/enum/expense_type.dart';
 import 'package:travel_notebook/models/expense/enum/payment_method.dart';
@@ -11,8 +12,7 @@ import 'package:travel_notebook/screens/expense/view_receipt.dart';
 
 class ExpenseItem extends StatelessWidget {
   final Expense expense;
-  final String currency;
-  final String ownCurrency;
+  final Destination destination;
   final Function(String) onUploadReceipt;
   final Function() onEdit;
   final Function() onDelete;
@@ -20,8 +20,7 @@ class ExpenseItem extends StatelessWidget {
   const ExpenseItem({
     super.key,
     required this.expense,
-    required this.currency,
-    required this.ownCurrency,
+    required this.destination,
     required this.onUploadReceipt,
     required this.onEdit,
     required this.onDelete,
@@ -255,7 +254,11 @@ class ExpenseItem extends StatelessWidget {
                             ],
                           ),
                           Text(
-                            formatCurrency(expense.amount, currency: currency),
+                            formatCurrency(
+                              expense.amount,
+                              destination.decimal,
+                              currency: destination.currency,
+                            ),
                             style: Theme.of(context)
                                 .textTheme
                                 .titleMedium!
@@ -308,12 +311,20 @@ class ExpenseItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Text(
-            formatCurrency(expense.amount, currency: currency),
+            formatCurrency(
+              expense.amount,
+              destination.decimal,
+              currency: destination.currency,
+            ),
             style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 2),
           Text(
-            formatCurrency(expense.converted, currency: ownCurrency),
+            formatCurrency(
+              expense.converted,
+              destination.ownDecimal,
+              currency: destination.ownCurrency,
+            ),
             style: Theme.of(context).textTheme.labelMedium,
           ),
         ],

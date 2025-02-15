@@ -23,6 +23,7 @@ class DestinationBloc extends Bloc<DestinationEvent, DestinationState> {
         final destination =
             await destinationService.readDestination(event.destinationId);
         destination.ownCurrency = event.ownCurrency;
+        destination.ownDecimal = event.ownDecimal;
 
         emit(DestinationUpdated(destination));
       } catch (e) {

@@ -63,12 +63,12 @@ class _CurrencyInputState extends State<CurrencyInput> {
             textAlign: TextAlign.end,
             onChanged: widget.onChanged,
             onEditingComplete: () {
-              widget.controller.text =
-                  formatCurrency(parseDouble(widget.controller.text));
+              widget.controller.text = formatCurrency(
+                  parseDouble(widget.controller.text), widget.decimal);
             },
             onTapOutside: (event) {
-              widget.controller.text =
-                  formatCurrency(parseDouble(widget.controller.text));
+              widget.controller.text = formatCurrency(
+                  parseDouble(widget.controller.text), widget.decimal);
             },
             decoration: InputDecoration(
               contentPadding: const EdgeInsets.all(kPadding),

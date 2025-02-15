@@ -20,6 +20,7 @@ void main() async {
 
   final int? prevDestinationId = prefs.getInt('destinationId');
   final String ownCurrency = prefs.getString('currency') ?? '';
+  final int ownDecimal = prefs.getInt('ownDecimal') ?? 2;
 
   runApp(MultiBlocProvider(
     providers: [
@@ -36,6 +37,7 @@ void main() async {
     child: MainApp(
       prevDestinationId: prevDestinationId,
       ownCurrency: ownCurrency,
+      ownDecimal: ownDecimal,
     ),
   ));
 }
@@ -43,11 +45,13 @@ void main() async {
 class MainApp extends StatelessWidget {
   final int? prevDestinationId;
   final String ownCurrency;
+  final int ownDecimal;
 
   const MainApp({
     super.key,
     required this.prevDestinationId,
     required this.ownCurrency,
+    required this.ownDecimal,
   });
 
   @override
@@ -61,6 +65,7 @@ class MainApp extends StatelessWidget {
           : AllDestinationPage(
               prevDestinationId: prevDestinationId,
               ownCurrency: ownCurrency,
+              ownDecimal: ownDecimal,
             ),
     );
   }

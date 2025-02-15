@@ -8,8 +8,9 @@ class GetAllDestinations extends DestinationEvent {}
 class GetDestination extends DestinationEvent {
   final int destinationId;
   final String ownCurrency;
+  final int ownDecimal;
 
-  GetDestination(this.destinationId, this.ownCurrency);
+  GetDestination(this.destinationId, this.ownCurrency, this.ownDecimal);
 }
 
 class AddDestination extends DestinationEvent {

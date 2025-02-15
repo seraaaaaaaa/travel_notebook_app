@@ -11,6 +11,7 @@ class DestinationInput extends StatefulWidget {
   final String prefixText;
   final String hintText;
   final bool required;
+  final int decimal;
 
   const DestinationInput({
     super.key,
@@ -21,6 +22,7 @@ class DestinationInput extends StatefulWidget {
     this.prefixText = '',
     this.hintText = '',
     this.required = false,
+    this.decimal = 2,
   });
 
   @override
@@ -47,7 +49,7 @@ class _DestinationInputState extends State<DestinationInput> {
                 : widget.inputType == 'double'
                     ? [
                         CurrencyTextInputFormatter.simpleCurrency(
-                          decimalDigits: 2,
+                          decimalDigits: widget.decimal,
                           name: '',
                         )
                       ]

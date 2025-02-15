@@ -61,7 +61,7 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
               SectionTitle(
                 title: 'Currency Converter',
                 subtitle:
-                    '1 ${_destination.ownCurrency} = ${_destination.currency} ${formatCurrency(_destination.rate)}',
+                    '1 ${_destination.ownCurrency} = ${formatCurrency(_destination.rate, null, currency: _destination.currency)}',
               ),
               const SizedBox(
                 height: 10,
@@ -74,11 +74,11 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
                       parseDouble(val), _destination.rate);
                   setState(() {
                     _foreignCurrencyController.text =
-                        formatCurrency(foreignAmount);
+                        formatCurrency(foreignAmount, _destination.decimal);
                   });
                 },
                 prefixText: _destination.ownCurrency,
-                decimal: 2,
+                decimal: _destination.ownDecimal,
               ),
               Center(
                 child: Container(
@@ -98,7 +98,8 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
                       calculateOwnCurrency(_destination.rate, parseDouble(val));
 
                   setState(() {
-                    _ownCurrencyController.text = formatCurrency(ownAmount);
+                    _ownCurrencyController.text =
+                        formatCurrency(ownAmount, _destination.ownDecimal);
                   });
                 },
                 prefixText: _destination.currency,

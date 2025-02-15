@@ -68,7 +68,8 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
       _paymentMethod = PaymentMethod.values
           .firstWhere((p) => p.name == _expense.paymentMethod);
 
-      _amountController.text = formatCurrency(_expense.amount);
+      _amountController.text =
+          formatCurrency(_expense.amount, _destination.decimal);
       _remarkController.text = _expense.remark;
     }
 
@@ -190,8 +191,11 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
                             padding: const EdgeInsets.symmetric(
                                 vertical: 8, horizontal: 4),
                             child: Text(
-                              formatCurrency(_expense.converted,
-                                  currency: _destination.ownCurrency),
+                              formatCurrency(
+                                _expense.converted,
+                                _destination.ownDecimal,
+                                currency: _destination.ownCurrency,
+                              ),
                               style: Theme.of(context).textTheme.labelLarge,
                             ),
                           ),

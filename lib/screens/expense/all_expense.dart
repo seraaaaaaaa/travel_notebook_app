@@ -156,8 +156,7 @@ class _AllExpensePageState extends State<AllExpensePage> {
                                   if (itemIndex == index) {
                                     return ExpenseItem(
                                       expense: expense,
-                                      currency: _destination.currency,
-                                      ownCurrency: _destination.ownCurrency,
+                                      destination: _destination,
                                       onUploadReceipt: (imgPath) async {
                                         setState(() {
                                           expense.receiptImg = imgPath;

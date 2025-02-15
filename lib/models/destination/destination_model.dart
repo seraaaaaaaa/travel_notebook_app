@@ -25,6 +25,7 @@ class Destination {
   late double budgetPercent;
 
   late String ownCurrency;
+  late int ownDecimal;
 
   Destination({
     this.destinationId,
@@ -47,6 +48,7 @@ class Destination {
     this.budgetRemaining = 0.0,
     this.budgetPercent = 0.0,
     this.ownCurrency = '',
+    this.ownDecimal = 0,
   });
 
   factory Destination.fromJson(Map<String, Object?> json) {

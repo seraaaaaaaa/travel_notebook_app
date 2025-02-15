@@ -161,13 +161,14 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                                   ? ''
                                   : formatCurrency(
                                       _destination.budget,
-                                      inclDecimal: true,
+                                      null,
                                     ),
                               onSaved: (val) {
                                 _destination.budget =
                                     parseDouble(val.replaceAll(',', ''));
                               },
                               inputType: 'double',
+                              decimal: _destination.decimal,
                             ),
                           ),
                         ],
@@ -181,7 +182,7 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                                   ? ''
                                   : formatCurrency(
                                       _destination.rate,
-                                      inclDecimal: true,
+                                      null,
                                     ),
                               onSaved: (val) {
                                 _destination.rate =
@@ -193,26 +194,82 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                           ),
                         ],
                       ),
-                      CheckboxListTile(
-                        checkColor: kWhiteColor,
-                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                        value: _destination.decimal == 2,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            if (value != null && value) {
-                              _destination.decimal = 2;
-                            } else {
-                              _destination.decimal = 0;
-                            }
-                          });
-                        },
-                        title: Text(
-                          'Decimal Places',
-                          style: Theme.of(context).textTheme.titleSmall,
-                        ),
-                        subtitle: Text(
-                          'Display amount in 2 decimal places.',
-                          style: Theme.of(context).textTheme.labelMedium,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 6),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Decimal Places',
+                                style: Theme.of(context).textTheme.titleSmall,
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                IconButton(
+                                  style: IconButton.styleFrom(
+                                    backgroundColor: kTransparentColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(30)),
+                                      side: BorderSide(
+                                          color: kSecondaryColor.shade100),
+                                    ),
+                                  ),
+                                  padding: EdgeInsets.all(0),
+                                  icon: const Icon(Icons.chevron_left),
+                                  color: kPrimaryColor,
+                                  onPressed: _destination.decimal <= 0
+                                      ? null
+                                      : () {
+                                          setState(() {
+                                            _destination.decimal--;
+                                          });
+                                        },
+                                ),
+                                Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: kPadding),
+                                  child: Text(
+                                    _destination.decimal == 0
+                                        ? 'N/A'
+                                        : '.${'0' * _destination.decimal}',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        letterSpacing: .4,
+                                        color: _destination.decimal == 0
+                                            ? kGreyColor
+                                            : null),
+                                  ),
+                                ),
+                                IconButton(
+                                  style: IconButton.styleFrom(
+                                    backgroundColor: kTransparentColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(30)),
+                                      side: BorderSide(
+                                          color: kSecondaryColor.shade100),
+                                    ),
+                                  ),
+                                  padding: EdgeInsets.all(0),
+                                  icon: const Icon(Icons.chevron_right),
+                                  color: kPrimaryColor,
+                                  onPressed: _destination.decimal >= 3
+                                      ? null
+                                      : () {
+                                          setState(() {
+                                            _destination.decimal++;
+                                          });
+                                        },
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                       SelectImage(

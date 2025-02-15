@@ -12,6 +12,7 @@ import 'package:travel_notebook/components/delete_dialog.dart';
 class DestinationCard extends StatelessWidget {
   final Destination destination;
   final String ownCurrency;
+  final int ownDecimal;
   final Function() onDelete;
   final Function() onPin;
 
@@ -19,6 +20,7 @@ class DestinationCard extends StatelessWidget {
     super.key,
     required this.destination,
     required this.ownCurrency,
+    required this.ownDecimal,
     required this.onDelete,
     required this.onPin,
   });
@@ -33,6 +35,7 @@ class DestinationCard extends StatelessWidget {
         await prefs.setInt('destinationId', destination.destinationId!);
 
         destination.ownCurrency = ownCurrency;
+        destination.ownDecimal = ownDecimal;
 
         if (context.mounted) {
           Navigator.of(context).push(MaterialPageRoute(
@@ -101,7 +104,6 @@ class DestinationCard extends StatelessWidget {
                                     content:
                                         "Are you sure you want to delete this destination? All records will be removed.",
                                     onConfirm: () {
-                                      Navigator.pop(context);
                                       Navigator.pop(context);
 
                                       onDelete();

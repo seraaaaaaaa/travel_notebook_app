@@ -46,8 +46,8 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
   }
 
   Future _refreshPage() async {
-    _destinationBloc.add(
-        GetDestination(_destination.destinationId!, _destination.ownCurrency));
+    _destinationBloc.add(GetDestination(_destination.destinationId!,
+        _destination.ownCurrency, _destination.ownDecimal));
     _expenseBloc.add(GetExpenses(_destination.destinationId!, limit: 4));
   }
 
@@ -67,8 +67,8 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
         BlocListener<ExpenseBloc, ExpenseState>(
           listener: (context, state) {
             if (state is ExpenseResult) {
-              _destinationBloc.add(GetDestination(
-                  _destination.destinationId!, _destination.ownCurrency));
+              _destinationBloc.add(GetDestination(_destination.destinationId!,
+                  _destination.ownCurrency, _destination.ownDecimal));
             }
           },
         ),
@@ -97,7 +97,7 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
               PercentIndicator(
                 percent: _destination.budgetPercent,
                 title:
-                    '${formatCurrency(_destination.totalExpense, currency: _destination.currency)} / ${formatCurrency(_destination.budget, currency: _destination.currency)}',
+                    '${formatCurrency(_destination.totalExpense, _destination.decimal, currency: _destination.currency)} / ${formatCurrency(_destination.budget, _destination.decimal, currency: _destination.currency)}',
                 color: kPrimaryColor.shade600,
               ),
               SectionTitle(
@@ -130,8 +130,7 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
                               final expense = state.expenses[index];
                               return ExpenseItem(
                                 expense: expense,
-                                currency: _destination.currency,
-                                ownCurrency: _destination.ownCurrency,
+                                destination: _destination,
                                 onUploadReceipt: (imgPath) async {
                                   setState(() {
                                     expense.receiptImg = imgPath;

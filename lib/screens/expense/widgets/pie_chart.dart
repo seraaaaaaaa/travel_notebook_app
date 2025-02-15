@@ -68,7 +68,8 @@ class PieChartWidgetState extends State<PieChartWidget> {
                         height: 4,
                       ),
                       Text(
-                        formatCurrency(widget.destination.budgetRemaining),
+                        formatCurrency(widget.destination.budgetRemaining,
+                            widget.destination.decimal),
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       Text(
@@ -89,22 +90,31 @@ class PieChartWidgetState extends State<PieChartWidget> {
                 color: ExpenseType.transportation.color!,
                 text: ExpenseType.transportation.name,
                 isSquare: false,
-                tooltipMsg: formatCurrency(widget.destination.totalTransport,
-                    currency: widget.destination.currency),
+                tooltipMsg: formatCurrency(
+                  widget.destination.totalTransport,
+                  widget.destination.decimal,
+                  currency: widget.destination.currency,
+                ),
               ),
               Indicator(
                 color: ExpenseType.meal.color!,
                 text: ExpenseType.meal.name,
                 isSquare: false,
-                tooltipMsg: formatCurrency(widget.destination.totalMeal,
-                    currency: widget.destination.currency),
+                tooltipMsg: formatCurrency(
+                  widget.destination.totalMeal,
+                  widget.destination.decimal,
+                  currency: widget.destination.currency,
+                ),
               ),
               Indicator(
                 color: ExpenseType.miscellaneous.color!,
                 text: ExpenseType.miscellaneous.name,
                 isSquare: false,
-                tooltipMsg: formatCurrency(widget.destination.totalMisc,
-                    currency: widget.destination.currency),
+                tooltipMsg: formatCurrency(
+                  widget.destination.totalMisc,
+                  widget.destination.decimal,
+                  currency: widget.destination.currency,
+                ),
               ),
             ],
           ),

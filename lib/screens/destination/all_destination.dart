@@ -5,6 +5,7 @@ import 'package:travel_notebook/blocs/destination/destination_event.dart';
 import 'package:travel_notebook/blocs/destination/destination_state.dart';
 import 'package:travel_notebook/components/error_msg.dart';
 import 'package:travel_notebook/screens/home.dart';
+import 'package:travel_notebook/screens/welcome.dart';
 import 'package:travel_notebook/themes/constants.dart';
 import 'package:travel_notebook/models/destination/destination_model.dart';
 import 'package:travel_notebook/screens/destination/destination_detail.dart';
@@ -15,11 +16,13 @@ import 'package:travel_notebook/components/no_data.dart';
 class AllDestinationPage extends StatefulWidget {
   final int? prevDestinationId;
   final String ownCurrency;
+  final int ownDecimal;
 
   const AllDestinationPage({
     super.key,
     this.prevDestinationId,
     required this.ownCurrency,
+    required this.ownDecimal,
   });
 
   @override
@@ -28,7 +31,7 @@ class AllDestinationPage extends StatefulWidget {
 
 class _AllDestinationPageState extends State<AllDestinationPage> {
   late DestinationBloc _destinationBloc;
-  late List<Destination> _destinations;
+  late List<Destination> _destinations = [];
 
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
@@ -36,11 +39,13 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
   bool _init = true;
   int? _prevDestinationId;
   String _ownCurrency = "";
+  int _ownDecimal = 2;
 
   @override
   void initState() {
     _prevDestinationId = widget.prevDestinationId;
     _ownCurrency = widget.ownCurrency;
+    _ownDecimal = widget.ownDecimal;
 
     _destinationBloc = BlocProvider.of<DestinationBloc>(context);
     _destinationBloc.add(GetAllDestinations());
@@ -65,40 +70,71 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         toolbarHeight: 90,
-        title: TextFormField(
-          controller: _searchController,
-          textAlignVertical: TextAlignVertical.center,
-          textInputAction: TextInputAction.done,
-          style: const TextStyle(letterSpacing: .6),
-          onChanged: (textValue) {
-            setState(() {
-              _searchQuery = textValue;
-            });
-          },
-          decoration: InputDecoration(
-            border: OutlineInputBorder(
-              borderRadius: const BorderRadius.all(Radius.circular(40)),
-              borderSide: BorderSide(color: kGreyColor.shade200, width: 1),
+        title: Text('My Destination'),
+        actions: [
+          GestureDetector(
+            onTap: () async {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => WelcomePage(
+                          ownCurrency: _ownCurrency,
+                          ownDecimal: _ownDecimal,
+                        )),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: kPadding),
+              child: Text(
+                _ownCurrency,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium!
+                    .copyWith(color: kSecondaryColor, letterSpacing: 1),
+              ),
             ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: const BorderRadius.all(Radius.circular(40)),
-              borderSide: BorderSide(color: kGreyColor.shade200, width: 1),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: const BorderRadius.all(Radius.circular(40)),
-              borderSide: BorderSide(color: kGreyColor.shade200, width: 1),
-            ),
-            fillColor: kGreyColor[100], // Add grey background
-            filled: true, // Enable fill color
-            hintText: 'Search...',
-            hintStyle: const TextStyle(color: kGreyColor),
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 10, horizontal: kPadding),
-            prefixIcon: const Padding(
-              padding: EdgeInsets.only(
-                  right: 20, left: 20), // Add padding to the prefixIcon
-              child: SizedBox(
-                child: Center(widthFactor: 0.0, child: Icon(Icons.search)),
+          ),
+        ],
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(30.0),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(kPadding, 4, kPadding, 10),
+            child: TextFormField(
+              controller: _searchController,
+              textAlignVertical: TextAlignVertical.center,
+              textInputAction: TextInputAction.done,
+              style: const TextStyle(letterSpacing: .6),
+              onChanged: (textValue) {
+                setState(() {
+                  _searchQuery = textValue;
+                });
+              },
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: const BorderRadius.all(Radius.circular(40)),
+                  borderSide: BorderSide(color: kGreyColor.shade200, width: 1),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: const BorderRadius.all(Radius.circular(40)),
+                  borderSide: BorderSide(color: kGreyColor.shade200, width: 1),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: const BorderRadius.all(Radius.circular(40)),
+                  borderSide: BorderSide(color: kGreyColor.shade200, width: 1),
+                ),
+                fillColor: kGreyColor[100], // Add grey background
+                filled: true, // Enable fill color
+                hintText: 'Search...',
+                hintStyle: const TextStyle(color: kGreyColor),
+                contentPadding: const EdgeInsets.symmetric(
+                    vertical: 10, horizontal: kPadding),
+                prefixIcon: const Padding(
+                  padding: EdgeInsets.only(
+                      right: 20, left: 20), // Add padding to the prefixIcon
+                  child: SizedBox(
+                    child: Center(widthFactor: 0.0, child: Icon(Icons.search)),
+                  ),
+                ),
               ),
             ),
           ),
@@ -109,11 +145,13 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
         child: RefreshIndicator(
           onRefresh: _refreshPage,
           child: BlocConsumer<DestinationBloc, DestinationState>(
-            listener: (context, state) {
+            listener: (context, state) async {
               if (state is DestinationsLoaded) {
                 _destinations = state.destinations;
 
-                if (_prevDestinationId != null && _init) {
+                if (_prevDestinationId != null &&
+                    _prevDestinationId! > 0 &&
+                    _init) {
                   setState(() {
                     _init = false;
                   });
@@ -126,8 +164,9 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
                       .first;
 
                   destination.ownCurrency = _ownCurrency;
+                  destination.ownDecimal = _ownDecimal;
 
-                  Navigator.push(
+                  await Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => HomePage(
@@ -170,6 +209,7 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
                           return DestinationCard(
                             destination: destination,
                             ownCurrency: _ownCurrency,
+                            ownDecimal: _ownDecimal,
                             onDelete: () async {
                               await ImageHandler()
                                   .deleteImage(destination.imgPath);

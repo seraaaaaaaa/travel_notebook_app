@@ -5,7 +5,14 @@ import 'package:travel_notebook/themes/constants.dart';
 import 'package:travel_notebook/screens/destination/all_destination.dart';
 
 class WelcomePage extends StatefulWidget {
-  const WelcomePage({super.key});
+  final String ownCurrency;
+  final int ownDecimal;
+
+  const WelcomePage({
+    super.key,
+    this.ownCurrency = '',
+    this.ownDecimal = 2,
+  });
 
   @override
   State<WelcomePage> createState() => _WelcomePageState();
@@ -15,10 +22,20 @@ class _WelcomePageState extends State<WelcomePage> {
   final TextEditingController _currencyController = TextEditingController();
 
   String _ownCurrency = "";
+  int _ownDecimal = 2;
+  bool _init = true;
 
   @override
   void initState() {
     super.initState();
+
+    _ownCurrency = widget.ownCurrency;
+    _ownDecimal = widget.ownDecimal;
+
+    if (_ownCurrency.isNotEmpty) {
+      _currencyController.text = _ownCurrency;
+      _init = false;
+    }
   }
 
   @override
@@ -32,8 +49,7 @@ class _WelcomePageState extends State<WelcomePage> {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
               builder: (context) => AllDestinationPage(
-                    ownCurrency: _ownCurrency,
-                  )),
+                  ownCurrency: _ownCurrency, ownDecimal: _ownDecimal)),
           (Route<dynamic> route) => false);
     }
   }
@@ -51,7 +67,7 @@ class _WelcomePageState extends State<WelcomePage> {
             children: [
               SvgPicture.asset(
                 'assets/images/welcome.svg',
-                // height: MediaQuery.of(context).size.height * .5,
+                height: MediaQuery.of(context).size.height * .55,
               ),
               Text(
                 'Welcome to Travel Notebook',
@@ -63,48 +79,116 @@ class _WelcomePageState extends State<WelcomePage> {
                 'Your all-in-one travel companion for organizing destinations and tracking expenses effortlessly',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 16,
                     color: kGreyColor,
-                    height: 1.4,
+                    height: 1.6,
                     letterSpacing: .4),
               ),
-              const SizedBox(height: 40),
-              TextFormField(
-                controller: _currencyController,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Required'; // Allow empty value (if needed)
-                  }
+              const SizedBox(height: 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                      child: Row(
+                    children: [
+                      Icon(Icons.attach_money, color: kPrimaryColor),
+                      SizedBox(width: 10),
+                      Text(
+                        'Your Currency',
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(color: kGreyColor),
+                      ),
+                    ],
+                  )),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _currencyController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Required'; // Allow empty value (if needed)
+                        }
 
-                  return null;
-                },
-                textAlignVertical: TextAlignVertical.center,
-                textInputAction: TextInputAction.done,
-                style: const TextStyle(letterSpacing: .6),
-                textAlign: TextAlign.start,
-                textCapitalization: TextCapitalization.characters,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: kWhiteColor,
-                  hintText: 'Enter your currency',
-                  hintStyle: const TextStyle(
-                      color: kGreyColor, fontWeight: FontWeight.normal),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: const BorderRadius.all(Radius.circular(4)),
-                    borderSide:
-                        BorderSide(color: kGreyColor.shade300, width: 1),
+                        return null;
+                      },
+                      autofocus: _init,
+                      textAlignVertical: TextAlignVertical.center,
+                      textInputAction: TextInputAction.done,
+                      style: const TextStyle(
+                          letterSpacing: 1.2,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500),
+                      textAlign: TextAlign.end,
+                      textCapitalization: TextCapitalization.characters,
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                      ),
+                    ),
                   ),
-                  border: OutlineInputBorder(
-                    borderRadius: const BorderRadius.all(Radius.circular(4)),
-                    borderSide:
-                        BorderSide(color: kGreyColor.shade200, width: 1),
+                  SizedBox(width: 10),
+                ],
+              ),
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Icon(Icons.more_horiz, color: kPrimaryColor),
+                        SizedBox(width: 10),
+                        Text(
+                          'Decimal Places',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium!
+                              .copyWith(color: kGreyColor),
+                        ),
+                      ],
+                    ),
                   ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: const BorderRadius.all(Radius.circular(4)),
-                    borderSide:
-                        BorderSide(color: kSecondaryColor.shade200, width: 1),
+                  Row(
+                    children: [
+                      IconButton(
+                        padding: EdgeInsets.all(0),
+                        icon: const Icon(Icons.chevron_left),
+                        color: kPrimaryColor,
+                        onPressed: _ownDecimal <= 0
+                            ? null
+                            : () {
+                                setState(() {
+                                  _ownDecimal--;
+                                });
+                              },
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: kPadding),
+                        child: Text(
+                          _ownDecimal == 0 ? 'N/A' : '.${'0' * _ownDecimal}',
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: _ownDecimal == 0 ? kGreyColor : null),
+                        ),
+                      ),
+                      IconButton(
+                        padding: EdgeInsets.all(0),
+                        icon: const Icon(Icons.chevron_right),
+                        color: kPrimaryColor,
+                        onPressed: _ownDecimal >= 3
+                            ? null
+                            : () {
+                                setState(() {
+                                  _ownDecimal++;
+                                });
+                              },
+                      ),
+                    ],
                   ),
-                ),
+                ],
               ),
               const SizedBox(height: 40),
               TextButton(
@@ -113,6 +197,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   if (_ownCurrency.isNotEmpty) {
                     final prefs = await SharedPreferences.getInstance();
                     await prefs.setString('currency', _ownCurrency);
+                    await prefs.setInt('decimalPlaces', _ownDecimal);
 
                     _navigateToAllDestinationPage();
                   } else {
@@ -133,6 +218,23 @@ class _WelcomePageState extends State<WelcomePage> {
                   style: TextStyle(fontSize: 18),
                 ),
               ),
+              _init
+                  ? Container()
+                  : GestureDetector(
+                      onTap: _navigateToAllDestinationPage,
+                      child: Container(
+                        padding: EdgeInsets.all(kPadding),
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Cancel',
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium!
+                              .copyWith(
+                                  color: kSecondaryColor, letterSpacing: .4),
+                        ),
+                      ),
+                    ),
             ],
           ),
         ),

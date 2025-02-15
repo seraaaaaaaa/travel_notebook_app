@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travel_notebook/models/destination/destination_model.dart';
 import 'package:travel_notebook/screens/currency/currency_converter.dart';
 import 'package:travel_notebook/screens/expense/expense_summary.dart';
@@ -80,12 +81,22 @@ class HomePage extends StatelessWidget {
             ),
           ),
         ),
-        body: TabBarView(
-          children: [
-            ExpenseSummary(destination: destination),
-            CurrencyConverter(destination: destination),
-            TodoList(destination: destination),
-          ],
+        body: PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (didPop, result) async {
+            if (didPop) {
+              final SharedPreferences prefs =
+                  await SharedPreferences.getInstance();
+              await prefs.setInt('destinationId', -1);
+            }
+          },
+          child: TabBarView(
+            children: [
+              ExpenseSummary(destination: destination),
+              CurrencyConverter(destination: destination),
+              TodoList(destination: destination),
+            ],
+          ),
         ),
       ),
     );
