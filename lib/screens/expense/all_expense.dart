@@ -5,7 +5,7 @@ import 'package:travel_notebook/blocs/expense/expense_event.dart';
 import 'package:travel_notebook/blocs/expense/expense_state.dart';
 import 'package:travel_notebook/components/error_msg.dart';
 import 'package:travel_notebook/models/expense/enum/expense_type.dart';
-import 'package:travel_notebook/screens/expense/widgets/expense_type_chip.dart';
+import 'package:travel_notebook/components/filter_chip.dart';
 import 'package:travel_notebook/themes/constants.dart';
 import 'package:travel_notebook/models/destination/destination_model.dart';
 import 'package:travel_notebook/models/expense/expense_model.dart';
@@ -37,13 +37,13 @@ class _AllExpensePageState extends State<AllExpensePage> {
 
   @override
   void initState() {
+    super.initState();
+
     _destination = widget.destination;
 
     _expenseBloc = BlocProvider.of<ExpenseBloc>(context);
     _expenseBloc
         .add(GetExpenses(_destination.destinationId!, typeNo: _currentTypeNo));
-
-    super.initState();
   }
 
   Map<String, List<Expense>> _groupExpensesByDate(List<Expense> expenses) {
@@ -90,7 +90,7 @@ class _AllExpensePageState extends State<AllExpensePage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   // Add "All" ChoiceChip at the beginning
-                  ExpenseTypeChoiceChip(
+                  FilterChoiceChip(
                     label: 'All',
                     selected: _currentTypeNo == 0,
                     onTap: () {
@@ -101,7 +101,7 @@ class _AllExpensePageState extends State<AllExpensePage> {
                   // Generate ChoiceChips dynamically
                   ...List.generate(_expenseTypes.length, (index) {
                     var expenseType = _expenseTypes[index];
-                    return ExpenseTypeChoiceChip(
+                    return FilterChoiceChip(
                       label: expenseType.name,
                       selected: _currentTypeNo == expenseType.typeNo,
                       onTap: () {

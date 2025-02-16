@@ -9,6 +9,12 @@ class LoadTodos extends TodoEvent {
   LoadTodos(this.destinationId, this.categoryId);
 }
 
+class LoadSelectTodos extends TodoEvent {
+  final int destinationId;
+
+  LoadSelectTodos(this.destinationId);
+}
+
 class AddTodo extends TodoEvent {
   final Todo todo;
 

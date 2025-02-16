@@ -15,3 +15,9 @@ class TodoError extends TodoState {
 
   TodoError(this.message);
 }
+
+class SelectTodoLoaded extends TodoState {
+  final List<Todo> todos;
+
+  SelectTodoLoaded(this.todos);
+}

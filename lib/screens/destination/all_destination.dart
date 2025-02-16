@@ -43,14 +43,14 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
 
   @override
   void initState() {
+    super.initState();
+
     _prevDestinationId = widget.prevDestinationId;
     _ownCurrency = widget.ownCurrency;
     _ownDecimal = widget.ownDecimal;
 
     _destinationBloc = BlocProvider.of<DestinationBloc>(context);
     _destinationBloc.add(GetAllDestinations());
-
-    super.initState();
   }
 
   @override

@@ -19,6 +19,17 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
       }
     });
 
+    on<LoadSelectTodos>((event, emit) async {
+      emit(TodoLoading());
+      try {
+        final todos = await todoService.readAllIncomplete(event.destinationId);
+
+        emit(SelectTodoLoaded(todos));
+      } catch (e) {
+        emit(TodoError('Failed to load To-do list'));
+      }
+    });
+
     on<AddTodo>((event, emit) async {
       try {
         await todoService.create(event.todo);

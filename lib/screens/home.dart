@@ -94,7 +94,7 @@ class HomePage extends StatelessWidget {
             children: [
               ExpenseSummary(destination: destination),
               CurrencyConverter(destination: destination),
-              TodoList(destination: destination),
+              TodoList(destinationId: destination.destinationId!),
             ],
           ),
         ),

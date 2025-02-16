@@ -18,21 +18,20 @@ class TodoService {
     return result.map((json) => Todo.fromJson(json)).toList();
   }
 
-  Future<Todo> read(int id) async {
+  Future<List<Todo>> readAllIncomplete(int destinationId) async {
     final db = await _databaseHelper.database;
+    const orderBy = '${TodoField.sequence} ASC, ${TodoField.categoryId} DESC';
 
-    final maps = await db.query(
+    var where = '${TodoField.destinationId} = ? AND ${TodoField.status} = ?';
+    List<dynamic> whereArgs = [destinationId, 0];
+
+    final result = await db.query(
       TodoField.tableName,
-      columns: TodoField.values,
-      where: '${TodoField.id} = ?',
-      whereArgs: [id],
+      where: where,
+      whereArgs: whereArgs,
+      orderBy: orderBy,
     );
-
-    if (maps.isNotEmpty) {
-      return Todo.fromJson(maps.first);
-    } else {
-      throw Exception('ID $id not found');
-    }
+    return result.map((json) => Todo.fromJson(json)).toList();
   }
 
   Future<void> create(Todo todo) async {

@@ -5,6 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:travel_notebook/blocs/expense/expense_bloc.dart';
 import 'package:travel_notebook/blocs/expense/expense_event.dart';
 import 'package:travel_notebook/blocs/expense/expense_state.dart';
+import 'package:travel_notebook/blocs/todo/todo_bloc.dart';
+import 'package:travel_notebook/blocs/todo/todo_event.dart';
+import 'package:travel_notebook/models/todo/todo_model.dart';
+import 'package:travel_notebook/screens/expense/detail/select_todo.dart';
 import 'package:travel_notebook/themes/constants.dart';
 import 'package:travel_notebook/models/destination/destination_model.dart';
 import 'package:travel_notebook/models/expense/enum/payment_method.dart';
@@ -41,13 +45,18 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
   ExpenseType _expenseType = ExpenseType.others;
   PaymentMethod _paymentMethod = PaymentMethod.cash;
 
+  late TodoBloc _todoBloc;
+  late List<Todo>? _todos;
+
   bool _isAddNew = false;
 
   @override
   void initState() {
     _destination = widget.destination;
+    _todos = [];
 
     _expenseBloc = BlocProvider.of<ExpenseBloc>(context);
+    _todoBloc = BlocProvider.of<TodoBloc>(context);
 
     if (widget.expense == null) {
       _isAddNew = true;
@@ -312,9 +321,43 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
                         ),
                       ),
                       const SizedBox(height: 24),
-                      Text(
-                        'Remark',
-                        style: Theme.of(context).textTheme.labelLarge,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Remark',
+                            style: Theme.of(context).textTheme.labelLarge,
+                          ),
+                          GestureDetector(
+                            onTap: () async {
+                              _todos = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SelectTodo(
+                                          destinationId:
+                                              _destination.destinationId!,
+                                        )),
+                              );
+
+                              if (_todos != null && _todos!.isNotEmpty) {
+                                if (_remarkController.text.isNotEmpty) {
+                                  _remarkController.text += ' ';
+                                }
+
+                                _remarkController.text += _todos!
+                                    .map((todo) => todo.content)
+                                    .join(', ');
+                              }
+                            },
+                            child: Text(
+                              'Select To-do',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(color: kPrimaryColor),
+                            ),
+                          ),
+                        ],
                       ),
                       TextField(
                         maxLines: 3,
@@ -362,6 +405,10 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
                 _expense.remark = _remarkController.text;
 
                 updateTotalExpenses(_expense, _destination);
+
+                if (_todos != null && _todos!.isNotEmpty) {
+                  _todoBloc.add(UpdateAllTodos(_todos!));
+                }
 
                 if (_isAddNew) {
                   _expenseBloc.add(AddExpense(_expense, _destination));

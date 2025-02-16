@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:travel_notebook/themes/constants.dart';
 
-class ExpenseTypeChoiceChip extends StatelessWidget {
+class FilterChoiceChip extends StatelessWidget {
   final String label;
   final bool selected;
   final VoidCallback onTap;
 
-  const ExpenseTypeChoiceChip({
+  const FilterChoiceChip({
     super.key,
     required this.label,
     required this.selected,
