@@ -12,3 +12,5 @@ This is an app built with Flutter designed to help users manage their travel pla
 ## Preview
 
 ![](/preview/screenshots.png)
+
+[Download APK](https://github.com/seraaaaaaaa/travel_notebook_app/releases/download/v0.2.0-beta/app-release.apk)
