@@ -42,6 +42,14 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
       }
     });
 
+    on<UpdateAllExpense>((event, emit) async {
+      try {
+        await expenseService.updateAllExpense(event.expenses);
+      } catch (e) {
+        emit(ExpenseError('Error occurred: ${e.toString()}'));
+      }
+    });
+
     on<DeleteExpense>((event, emit) async {
       try {
         await expenseService.deleteExpense(

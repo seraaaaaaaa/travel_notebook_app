@@ -6,6 +6,7 @@ import 'package:travel_notebook/blocs/expense/expense_state.dart';
 import 'package:travel_notebook/components/error_msg.dart';
 import 'package:travel_notebook/models/expense/enum/expense_type.dart';
 import 'package:travel_notebook/components/filter_chip.dart';
+import 'package:travel_notebook/screens/expense/reorder_expense.dart';
 import 'package:travel_notebook/themes/constants.dart';
 import 'package:travel_notebook/models/destination/destination_model.dart';
 import 'package:travel_notebook/models/expense/expense_model.dart';
@@ -139,12 +140,43 @@ class _AllExpensePageState extends State<AllExpensePage> {
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 10),
-                                    child: Text(
-                                      dateKey,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        color: kGreyColor,
-                                      ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          dateKey,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            color: kGreyColor,
+                                          ),
+                                        ),
+                                        _currentTypeNo > 0
+                                            ? Container()
+                                            : GestureDetector(
+                                                onTap: () async {
+                                                  await Navigator.of(context)
+                                                      .push(
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ReorderExpensePage(
+                                                        destination:
+                                                            _destination,
+                                                        expenses:
+                                                            groupedExpenses[
+                                                                dateKey]!,
+                                                      ),
+                                                    ),
+                                                  );
+
+                                                  _refreshData(_currentTypeNo);
+                                                },
+                                                child: Icon(
+                                                  Icons.filter_list,
+                                                  color: kGreyColor,
+                                                ),
+                                              ),
+                                      ],
                                     ),
                                   );
                                 }

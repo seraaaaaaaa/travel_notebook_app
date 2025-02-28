@@ -10,7 +10,13 @@ class ExpenseService {
   Future<List<Expense>> readAllExpenses(
       int destinationId, int? limit, int typeNo) async {
     final db = await _databaseHelper.database;
-    const orderBy = '${ExpenseField.createdTime} DESC';
+
+    var orderBy =
+        '${ExpenseField.sequence} ASC, ${ExpenseField.createdTime} DESC';
+
+    if (limit == 4) {
+      orderBy = '${ExpenseField.createdTime} DESC';
+    }
 
     var where = '${ExpenseField.destinationId} = ?';
     List<dynamic> whereArgs = [destinationId];
@@ -84,6 +90,21 @@ class ExpenseService {
     );
 
     return result;
+  }
+
+  Future<void> updateAllExpense(List<Expense> expenses) async {
+    final db = await _databaseHelper.database;
+
+    await db.transaction((txn) async {
+      for (var expense in expenses) {
+        await txn.update(
+          ExpenseField.tableName,
+          expense.toJson(),
+          where: '${ExpenseField.expenseId} = ?',
+          whereArgs: [expense.expenseId],
+        );
+      }
+    });
   }
 
   Future<String> deleteExpense(int expenseId, Destination destination) async {

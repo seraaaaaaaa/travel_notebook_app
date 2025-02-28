@@ -11,6 +11,7 @@ class ExpenseField {
   static const String remark = 'remark';
   static const String receiptImg = 'receipt_img';
   static const String createdTime = 'created_time';
+  static const String sequence = 'sequence';
 
   static const List<String> values = [
     expenseId,
@@ -23,5 +24,6 @@ class ExpenseField {
     remark,
     receiptImg,
     createdTime,
+    sequence,
   ];
 }

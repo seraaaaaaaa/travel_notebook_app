@@ -103,11 +103,14 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
               SectionTitle(
                 title: 'Recent Expense',
                 btnText: 'Show All',
-                btnAction: () {
-                  Navigator.of(context).push(MaterialPageRoute(
+                btnAction: () async {
+                  await Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => AllExpensePage(
                             destination: _destination,
                           )));
+
+                  _expenseBloc
+                      .add(GetExpenses(_destination.destinationId!, limit: 4));
                 },
               ),
               BlocBuilder<ExpenseBloc, ExpenseState>(

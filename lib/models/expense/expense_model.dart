@@ -12,6 +12,7 @@ class Expense {
   late String remark;
   late String receiptImg;
   late DateTime? createdTime;
+  late int sequence;
 
   Expense({
     this.expenseId,
@@ -24,6 +25,7 @@ class Expense {
     required this.remark,
     this.receiptImg = '',
     this.createdTime,
+    this.sequence = 0,
   });
 
   factory Expense.fromJson(Map<String, Object?> json) => Expense(
@@ -37,6 +39,7 @@ class Expense {
         remark: json[ExpenseField.remark] as String,
         receiptImg: json[ExpenseField.receiptImg] as String,
         createdTime: parseDateTime(json[ExpenseField.createdTime]),
+        sequence: json[ExpenseField.sequence] as int,
       );
 
   Map<String, Object?> toJson() => {
@@ -50,5 +53,6 @@ class Expense {
         ExpenseField.remark: remark,
         ExpenseField.receiptImg: receiptImg,
         ExpenseField.createdTime: createdTime?.toIso8601String(),
+        ExpenseField.sequence: sequence,
       };
 }

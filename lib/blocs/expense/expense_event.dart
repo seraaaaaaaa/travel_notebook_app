@@ -25,6 +25,12 @@ class UpdateExpense extends ExpenseEvent {
   UpdateExpense(this.expense, this.destination);
 }
 
+class UpdateAllExpense extends ExpenseEvent {
+  final List<Expense> expenses;
+
+  UpdateAllExpense(this.expenses);
+}
+
 class DeleteExpense extends ExpenseEvent {
   final Expense expense;
   final Destination destination;
