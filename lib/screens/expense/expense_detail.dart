@@ -330,6 +330,8 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
                           ),
                           GestureDetector(
                             onTap: () async {
+                              FocusManager.instance.primaryFocus?.unfocus();
+
                               _todos = await Navigator.push(
                                 context,
                                 MaterialPageRoute(

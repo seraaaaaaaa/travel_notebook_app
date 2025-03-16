@@ -41,6 +41,9 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
   String _ownCurrency = "";
   int _ownDecimal = 2;
 
+  bool _canPop = false;
+  DateTime? _lastPressedAt;
+
   @override
   void initState() {
     super.initState();
@@ -64,185 +67,219 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
     _destinationBloc.add(GetAllDestinations());
   }
 
+  void _onWillPop() {
+    DateTime now = DateTime.now();
+    if (_lastPressedAt == null ||
+        now.difference(_lastPressedAt!) > const Duration(seconds: 2)) {
+      _lastPressedAt = now;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Press back again to exit')),
+      );
+
+      setState(() {
+        _canPop = false;
+      });
+      return;
+    }
+
+    setState(() {
+      _canPop = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        toolbarHeight: 90,
-        title: Text('My Destination'),
-        actions: [
-          GestureDetector(
-            onTap: () async {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => WelcomePage(
-                          ownCurrency: _ownCurrency,
-                          ownDecimal: _ownDecimal,
-                        )),
-              );
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: kPadding),
-              child: Text(
-                _ownCurrency,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium!
-                    .copyWith(color: kSecondaryColor, letterSpacing: 1),
+    return PopScope(
+      canPop: _canPop,
+      onPopInvokedWithResult: (bool didPop, Object? result) {
+        if (didPop) {
+          return;
+        }
+
+        _onWillPop();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          toolbarHeight: 90,
+          title: Text('My Destination'),
+          actions: [
+            GestureDetector(
+              onTap: () async {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => WelcomePage(
+                            ownCurrency: _ownCurrency,
+                            ownDecimal: _ownDecimal,
+                          )),
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: kPadding),
+                child: Text(
+                  _ownCurrency,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium!
+                      .copyWith(color: kSecondaryColor, letterSpacing: 1),
+                ),
               ),
             ),
-          ),
-        ],
-        bottom: PreferredSize(
-          preferredSize: Size.fromHeight(30.0),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(kPadding, 4, kPadding, 10),
-            child: TextFormField(
-              controller: _searchController,
-              textAlignVertical: TextAlignVertical.center,
-              textInputAction: TextInputAction.done,
-              style: const TextStyle(letterSpacing: .6),
-              onChanged: (textValue) {
-                setState(() {
-                  _searchQuery = textValue;
-                });
-              },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: const BorderRadius.all(Radius.circular(40)),
-                  borderSide: BorderSide(color: kGreyColor.shade200, width: 1),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: const BorderRadius.all(Radius.circular(40)),
-                  borderSide: BorderSide(color: kGreyColor.shade200, width: 1),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: const BorderRadius.all(Radius.circular(40)),
-                  borderSide: BorderSide(color: kGreyColor.shade200, width: 1),
-                ),
-                fillColor: kGreyColor[100], // Add grey background
-                filled: true, // Enable fill color
-                hintText: 'Search...',
-                hintStyle: const TextStyle(color: kGreyColor),
-                contentPadding: const EdgeInsets.symmetric(
-                    vertical: 10, horizontal: kPadding),
-                prefixIcon: const Padding(
-                  padding: EdgeInsets.only(
-                      right: 20, left: 20), // Add padding to the prefixIcon
-                  child: SizedBox(
-                    child: Center(widthFactor: 0.0, child: Icon(Icons.search)),
+          ],
+          bottom: PreferredSize(
+            preferredSize: Size.fromHeight(30.0),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(kPadding, 4, kPadding, 10),
+              child: TextFormField(
+                controller: _searchController,
+                textAlignVertical: TextAlignVertical.center,
+                textInputAction: TextInputAction.done,
+                style: const TextStyle(letterSpacing: .6),
+                onChanged: (textValue) {
+                  setState(() {
+                    _searchQuery = textValue;
+                  });
+                },
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: const BorderRadius.all(Radius.circular(40)),
+                    borderSide:
+                        BorderSide(color: kGreyColor.shade200, width: 1),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: const BorderRadius.all(Radius.circular(40)),
+                    borderSide:
+                        BorderSide(color: kGreyColor.shade200, width: 1),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: const BorderRadius.all(Radius.circular(40)),
+                    borderSide:
+                        BorderSide(color: kGreyColor.shade200, width: 1),
+                  ),
+                  fillColor: kGreyColor[100], // Add grey background
+                  filled: true, // Enable fill color
+                  hintText: 'Search...',
+                  hintStyle: const TextStyle(color: kGreyColor),
+                  contentPadding: const EdgeInsets.symmetric(
+                      vertical: 10, horizontal: kPadding),
+                  prefixIcon: const Padding(
+                    padding: EdgeInsets.only(
+                        right: 20, left: 20), // Add padding to the prefixIcon
+                    child: SizedBox(
+                      child:
+                          Center(widthFactor: 0.0, child: Icon(Icons.search)),
+                    ),
                   ),
                 ),
               ),
             ),
           ),
         ),
-      ),
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: RefreshIndicator(
-          onRefresh: _refreshPage,
-          child: BlocConsumer<DestinationBloc, DestinationState>(
-            listener: (context, state) async {
-              if (state is DestinationsLoaded) {
-                _destinations = state.destinations;
+        body: GestureDetector(
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: RefreshIndicator(
+            onRefresh: _refreshPage,
+            child: BlocConsumer<DestinationBloc, DestinationState>(
+              listener: (context, state) async {
+                if (state is DestinationsLoaded) {
+                  _destinations = state.destinations;
 
-                if (_prevDestinationId != null &&
-                    _prevDestinationId! > 0 &&
-                    _init) {
-                  setState(() {
-                    _init = false;
-                  });
+                  if (_prevDestinationId != null &&
+                      _prevDestinationId! > 0 &&
+                      _init) {
+                    setState(() {
+                      _init = false;
+                    });
 
-                  final destination = state.destinations
-                      .where(
-                        (destination) =>
-                            destination.destinationId == _prevDestinationId,
-                      )
-                      .first;
+                    final destination = state.destinations
+                        .where(
+                          (destination) =>
+                              destination.destinationId == _prevDestinationId,
+                        )
+                        .first;
 
-                  destination.ownCurrency = _ownCurrency;
-                  destination.ownDecimal = _ownDecimal;
+                    destination.ownCurrency = _ownCurrency;
+                    destination.ownDecimal = _ownDecimal;
 
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => HomePage(
-                              destination: destination,
-                            )),
-                  );
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => HomePage(
+                                destination: destination,
+                              )),
+                    );
+                  }
                 }
-              }
 
-              if (state is DestinationUpdated) {
-                _destinations[_destinations.indexWhere((destination) =>
-                    destination.destinationId ==
-                    state.destination.destinationId)] = state.destination;
-              }
-            },
-            builder: (context, state) {
-              if (state is DestinationLoading) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (state is DestinationError) {
-                return ErrorMsg(
-                  msg: state.message,
-                  onTryAgain: () => _refreshPage(),
-                );
-              } else {
-                final destinations = _destinations
-                    .where((destination) => destination.name
-                        .toLowerCase()
-                        .contains(_searchQuery.toLowerCase()))
-                    .toList();
+                if (state is DestinationUpdated) {
+                  _destinations[_destinations.indexWhere((destination) =>
+                      destination.destinationId ==
+                      state.destination.destinationId)] = state.destination;
+                }
+              },
+              builder: (context, state) {
+                if (state is DestinationLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is DestinationError) {
+                  return ErrorMsg(
+                    msg: state.message,
+                    onTryAgain: () => _refreshPage(),
+                  );
+                } else {
+                  final destinations = _destinations
+                      .where((destination) => destination.name
+                          .toLowerCase()
+                          .contains(_searchQuery.toLowerCase()))
+                      .toList();
 
-                return destinations.isEmpty
-                    ? const NoData(
-                        msg: 'No Destination Found',
-                        icon: Icons.location_on,
-                      )
-                    : ListView.builder(
-                        itemCount: destinations.length,
-                        itemBuilder: (context, index) {
-                          final destination = destinations[index];
-                          return DestinationCard(
-                            destination: destination,
-                            ownCurrency: _ownCurrency,
-                            ownDecimal: _ownDecimal,
-                            onDelete: () async {
-                              await ImageHandler()
-                                  .deleteImage(destination.imgPath);
-                              _destinationBloc.add(DeleteDestination(
-                                  destination.destinationId!));
-                            },
-                            onPin: () {
-                              destination.isPin =
-                                  destination.isPin == 1 ? 0 : 1;
+                  return destinations.isEmpty
+                      ? const NoData(
+                          msg: 'No Destination Found',
+                          icon: Icons.location_on,
+                        )
+                      : ListView.builder(
+                          itemCount: destinations.length,
+                          itemBuilder: (context, index) {
+                            final destination = destinations[index];
+                            return DestinationCard(
+                              destination: destination,
+                              ownCurrency: _ownCurrency,
+                              ownDecimal: _ownDecimal,
+                              onDelete: () async {
+                                await ImageHandler()
+                                    .deleteImage(destination.imgPath);
+                                _destinationBloc.add(DeleteDestination(
+                                    destination.destinationId!));
+                              },
+                              onPin: () {
+                                destination.isPin =
+                                    destination.isPin == 1 ? 0 : 1;
 
-                              _destinationBloc
-                                  .add(UpdateDestination(destination));
-                            },
-                          );
-                        },
-                      );
-              }
-            },
+                                _destinationBloc
+                                    .add(UpdateDestination(destination));
+                              },
+                            );
+                          },
+                        );
+                }
+              },
+            ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => DestinationDetailPage(
-                      ownCurrency: _ownCurrency,
-                    )),
-          );
-        },
-        tooltip: 'Create Destination',
-        child: const Icon(Icons.add),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => DestinationDetailPage(
+                        ownCurrency: _ownCurrency,
+                      )),
+            );
+          },
+          tooltip: 'Create Destination',
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }
