@@ -18,6 +18,11 @@ String formatDateWithoutYear(DateTime? date) {
   return date == null ? "" : dateFormat.format(date).toUpperCase();
 }
 
+String formatDateWithYearOnly(DateTime? date) {
+  final DateFormat dateFormat = DateFormat('yyyy');
+  return date == null ? "" : dateFormat.format(date).toUpperCase();
+}
+
 // Function to parse date string to DateTime
 DateTime? parseDateString(String dateString) {
   final DateFormat dateFormat = DateFormat('dd/MM/yyyy');

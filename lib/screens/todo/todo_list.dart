@@ -227,6 +227,18 @@ class _TodoListState extends State<TodoList> {
                                             _todoBloc.add(UpdateTodo(todo));
                                           });
                                         },
+                                        onCopy: todo.status == 1
+                                            ? null
+                                            : () {
+                                                FocusScope.of(context)
+                                                    .unfocus();
+                                                _todoBloc.add(AddTodo(Todo(
+                                                    destinationId:
+                                                        _destinationId,
+                                                    content: todo.content,
+                                                    sequence: todo.sequence,
+                                                    categoryId: _categoryId)));
+                                              },
                                       ),
                                     );
                                   }),

@@ -9,6 +9,7 @@ class TodoItem extends StatefulWidget {
   final Function() onRemove;
   final Function() onTapCheck;
   final Function(String)? onChanged;
+  final Function()? onCopy;
 
   const TodoItem({
     super.key,
@@ -17,6 +18,7 @@ class TodoItem extends StatefulWidget {
     required this.onRemove,
     required this.onTapCheck,
     required this.onChanged,
+    required this.onCopy,
   });
 
   @override
@@ -59,11 +61,20 @@ class _TodoItemState extends State<TodoItem> {
       },
       child: ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-        leading: ReorderableDragStartListener(
-          index: widget.index,
-          child: const Icon(
-            Icons.drag_indicator,
-            color: kSecondaryColor,
+        leading: GestureDetector(
+          onDoubleTap: () {
+            if (widget.onCopy != null) {
+              widget.onCopy!();
+            }
+          },
+          child: ReorderableDragStartListener(
+            index: widget.index,
+            child: Icon(
+              Icons.drag_indicator,
+              color: widget.todo.status == 1
+                  ? kSecondaryColor.shade300
+                  : kSecondaryColor,
+            ),
           ),
         ),
         title: TextFormField(

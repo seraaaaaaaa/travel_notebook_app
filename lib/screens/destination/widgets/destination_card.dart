@@ -137,12 +137,24 @@ class DestinationCard extends StatelessWidget {
                           .copyWith(color: kWhiteColor),
                     ),
                     const SizedBox(height: 4),
-                    Text(
-                      '${formatDateWithoutYear(destination.startDate)} - ${formatDateWithoutYear(destination.endDate)}',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineSmall!
-                          .copyWith(color: kWhiteColor, fontSize: kPadding),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '${formatDateWithoutYear(destination.startDate)} - ${formatDateWithoutYear(destination.endDate)}',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall!
+                              .copyWith(color: kWhiteColor, fontSize: kPadding),
+                        ),
+                        Text(
+                          formatDateWithYearOnly(destination.startDate),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall!
+                              .copyWith(color: kWhiteColor, fontSize: kPadding),
+                        ),
+                      ],
                     ),
                   ],
                 ),
