@@ -67,7 +67,7 @@ class _SelectTodoState extends State<SelectTodo> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(30.0),
+          preferredSize: const Size.fromHeight(30.0),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(kPadding, 4, kPadding, 10),
             child: TextFormField(
@@ -143,7 +143,8 @@ class _SelectTodoState extends State<SelectTodo> {
                     final groupedTodos = _groupTodosByCategory(state.todos);
 
                     return state.todos.isEmpty
-                        ? NoData(msg: 'No To-do Found', icon: Icons.check_box)
+                        ? const NoData(
+                            msg: 'No To-do Found', icon: Icons.check_box)
                         : Expanded(
                             child: ListView.builder(
                               shrinkWrap: true,
@@ -181,7 +182,7 @@ class _SelectTodoState extends State<SelectTodo> {
                                       return CheckboxListTile(
                                         dense: true,
                                         checkColor: kWhiteColor,
-                                        contentPadding: EdgeInsets.all(0),
+                                        contentPadding: const EdgeInsets.all(0),
                                         controlAffinity:
                                             ListTileControlAffinity.leading,
                                         title: Text(
@@ -244,13 +245,13 @@ class _SelectTodoState extends State<SelectTodo> {
                 onPressed: () {
                   Navigator.pop(context, _selectedTodos);
                 },
-                child: Text('Done'),
+                child: const Text('Done'),
               ),
             ),
             GestureDetector(
               onTap: () => Navigator.pop(context),
-              child: Padding(
-                padding: const EdgeInsets.only(top: kPadding),
+              child: const Padding(
+                padding: EdgeInsets.only(top: kPadding),
                 child: Text('Cancel'),
               ),
             ),

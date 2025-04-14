@@ -244,7 +244,7 @@ class _TodoListState extends State<TodoList> {
                                   }),
                                 ),
                                 Container(
-                                  margin: EdgeInsets.symmetric(
+                                  margin: const EdgeInsets.symmetric(
                                       horizontal: kPadding, vertical: 6),
                                   width: double.infinity,
                                   child: TextButton(
@@ -256,7 +256,7 @@ class _TodoListState extends State<TodoList> {
                                           sequence: _latestSeq,
                                           categoryId: _categoryId)));
                                     },
-                                    child: Text('Add'),
+                                    child: const Text('Add'),
                                   ),
                                 ),
                               ],

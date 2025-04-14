@@ -16,10 +16,10 @@ class FilterChoiceChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(right: 10),
+      padding: const EdgeInsets.only(right: 10),
       child: ChoiceChip(
         showCheckmark: false,
-        padding: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
+        padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
         side: BorderSide(color: kSecondaryColor.shade100),
         selectedColor: kGreyColor.shade100,
         shape: RoundedRectangleBorder(

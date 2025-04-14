@@ -219,7 +219,7 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                                           color: kSecondaryColor.shade100),
                                     ),
                                   ),
-                                  padding: EdgeInsets.all(0),
+                                  padding: const EdgeInsets.all(0),
                                   icon: const Icon(Icons.chevron_left),
                                   color: kPrimaryColor,
                                   onPressed: _destination.decimal <= 0
@@ -231,7 +231,7 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                                         },
                                 ),
                                 Container(
-                                  padding: EdgeInsets.symmetric(
+                                  padding: const EdgeInsets.symmetric(
                                       horizontal: kPadding),
                                   child: Text(
                                     _destination.decimal == 0
@@ -256,7 +256,7 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                                           color: kSecondaryColor.shade100),
                                     ),
                                   ),
-                                  padding: EdgeInsets.all(0),
+                                  padding: const EdgeInsets.all(0),
                                   icon: const Icon(Icons.chevron_right),
                                   color: kPrimaryColor,
                                   onPressed: _destination.decimal >= 3

@@ -49,7 +49,7 @@ class ViewReceipt extends StatelessWidget {
                       );
                     });
               },
-              icon: Icon(
+              icon: const Icon(
                 Icons.delete_outline,
                 color: kRedColor,
               ),

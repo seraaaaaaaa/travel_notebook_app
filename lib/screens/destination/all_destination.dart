@@ -102,7 +102,7 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           toolbarHeight: 90,
-          title: Text('My Destination'),
+          title: const Text('My Destination'),
           actions: [
             GestureDetector(
               onTap: () async {
@@ -128,7 +128,7 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
             ),
           ],
           bottom: PreferredSize(
-            preferredSize: Size.fromHeight(30.0),
+            preferredSize: const Size.fromHeight(30.0),
             child: Padding(
               padding: const EdgeInsets.fromLTRB(kPadding, 4, kPadding, 10),
               child: TextFormField(

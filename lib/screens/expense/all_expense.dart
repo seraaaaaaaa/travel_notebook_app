@@ -171,7 +171,7 @@ class _AllExpensePageState extends State<AllExpensePage> {
 
                                                   _refreshData(_currentTypeNo);
                                                 },
-                                                child: Icon(
+                                                child: const Icon(
                                                   Icons.filter_list,
                                                   color: kGreyColor,
                                                 ),

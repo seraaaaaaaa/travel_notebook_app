@@ -46,30 +46,30 @@ class HomePage extends StatelessWidget {
                   },
                   indicatorSize: TabBarIndicatorSize.tab,
                   dividerColor: kTransparentColor,
-                  indicator: BoxDecoration(
+                  indicator: const BoxDecoration(
                     color: kWhiteColor,
                     borderRadius: BorderRadius.all(Radius.circular(24)),
                   ),
                   labelColor: kPrimaryColor,
                   unselectedLabelColor: Colors.black54,
-                  labelStyle: TextStyle(
+                  labelStyle: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
                       letterSpacing: .4),
                   tabs: [
-                    Tab(
+                    const Tab(
                       child: Text(
                         'Expense',
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    Tab(
+                    const Tab(
                       child: Text(
                         'Currency',
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    Tab(
+                    const Tab(
                       child: Text(
                         'To-do',
                         overflow: TextOverflow.ellipsis,

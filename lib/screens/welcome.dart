@@ -92,8 +92,8 @@ class _WelcomePageState extends State<WelcomePage> {
                   Expanded(
                       child: Row(
                     children: [
-                      Icon(Icons.attach_money, color: kPrimaryColor),
-                      SizedBox(width: 10),
+                      const Icon(Icons.attach_money, color: kPrimaryColor),
+                      const SizedBox(width: 10),
                       Text(
                         'Your Currency',
                         style: Theme.of(context)
@@ -127,10 +127,10 @@ class _WelcomePageState extends State<WelcomePage> {
                       ),
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                 ],
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -138,8 +138,8 @@ class _WelcomePageState extends State<WelcomePage> {
                   Expanded(
                     child: Row(
                       children: [
-                        Icon(Icons.more_horiz, color: kPrimaryColor),
-                        SizedBox(width: 10),
+                        const Icon(Icons.more_horiz, color: kPrimaryColor),
+                        const SizedBox(width: 10),
                         Text(
                           'Decimal Places',
                           style: Theme.of(context)
@@ -153,7 +153,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   Row(
                     children: [
                       IconButton(
-                        padding: EdgeInsets.all(0),
+                        padding: const EdgeInsets.all(0),
                         icon: const Icon(Icons.chevron_left),
                         color: kPrimaryColor,
                         onPressed: _ownDecimal <= 0
@@ -165,7 +165,8 @@ class _WelcomePageState extends State<WelcomePage> {
                               },
                       ),
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: kPadding),
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: kPadding),
                         child: Text(
                           _ownDecimal == 0 ? 'N/A' : '.${'0' * _ownDecimal}',
                           style: TextStyle(
@@ -175,7 +176,7 @@ class _WelcomePageState extends State<WelcomePage> {
                         ),
                       ),
                       IconButton(
-                        padding: EdgeInsets.all(0),
+                        padding: const EdgeInsets.all(0),
                         icon: const Icon(Icons.chevron_right),
                         color: kPrimaryColor,
                         onPressed: _ownDecimal >= 3
@@ -223,7 +224,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   : GestureDetector(
                       onTap: _navigateToAllDestinationPage,
                       child: Container(
-                        padding: EdgeInsets.all(kPadding),
+                        padding: const EdgeInsets.all(kPadding),
                         alignment: Alignment.center,
                         child: Text(
                           'Cancel',
