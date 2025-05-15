@@ -67,9 +67,10 @@ class _SelectTodoState extends State<SelectTodo> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(30.0),
+          preferredSize: const Size.fromHeight(kHalfPadding * 3),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(kPadding, 4, kPadding, 10),
+            padding: const EdgeInsets.fromLTRB(
+                kPadding, kPadding / 4, kPadding, kHalfPadding),
             child: TextFormField(
               controller: _searchController,
               textAlignVertical: TextAlignVertical.center,
@@ -98,9 +99,9 @@ class _SelectTodoState extends State<SelectTodo> {
                 hintText: 'Search...',
                 hintStyle: const TextStyle(color: kGreyColor),
                 contentPadding: const EdgeInsets.symmetric(
-                    vertical: 10, horizontal: kPadding),
+                    vertical: kHalfPadding, horizontal: kPadding),
                 prefixIcon: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  padding: EdgeInsets.symmetric(horizontal: kHalfPadding * 2),
                   child: SizedBox(
                     child: Center(widthFactor: 0.0, child: Icon(Icons.search)),
                   ),
@@ -159,7 +160,7 @@ class _SelectTodoState extends State<SelectTodo> {
                                     // Return header
                                     return Padding(
                                       padding: const EdgeInsets.symmetric(
-                                          vertical: 8),
+                                          vertical: kPadding / 2),
                                       child: Text(
                                         TodoCategory.values
                                             .firstWhere((category) =>
@@ -192,8 +193,8 @@ class _SelectTodoState extends State<SelectTodo> {
                                               .bodyLarge,
                                         ),
                                         checkboxShape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
+                                          borderRadius: BorderRadius.circular(
+                                              kHalfPadding),
                                         ),
                                         side: const BorderSide(
                                             color: kSecondaryColor),

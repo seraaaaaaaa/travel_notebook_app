@@ -139,7 +139,7 @@ class _AllExpensePageState extends State<AllExpensePage> {
                                   // Return header
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(
-                                        vertical: 10),
+                                        vertical: kHalfPadding),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,

@@ -104,7 +104,7 @@ class _TodoListState extends State<TodoList> {
         child: RefreshIndicator(
           onRefresh: _refreshPage,
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(kPadding),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -245,7 +245,8 @@ class _TodoListState extends State<TodoList> {
                                 ),
                                 Container(
                                   margin: const EdgeInsets.symmetric(
-                                      horizontal: kPadding, vertical: 6),
+                                      horizontal: kPadding,
+                                      vertical: kHalfPadding / 2),
                                   width: double.infinity,
                                   child: TextButton(
                                     onPressed: () {

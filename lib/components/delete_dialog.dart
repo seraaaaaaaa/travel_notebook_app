@@ -21,7 +21,8 @@ class DeleteDialog extends StatelessWidget {
       style: OutlinedButton.styleFrom(
         backgroundColor: kGreyColor.shade200,
         foregroundColor: kSecondaryColor,
-        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: kPadding),
+        padding: const EdgeInsets.symmetric(
+            horizontal: kHalfPadding * 3, vertical: kPadding),
       ),
       onPressed: onCancel,
       child: const Text("Cancel"),
@@ -31,7 +32,8 @@ class DeleteDialog extends StatelessWidget {
       style: TextButton.styleFrom(
         backgroundColor: kRedColor,
         foregroundColor: kWhiteColor,
-        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: kPadding),
+        padding: const EdgeInsets.symmetric(
+            horizontal: kHalfPadding * 3, vertical: kPadding),
       ),
       onPressed: onConfirm,
       child: const Text("Confirm"),
@@ -41,9 +43,12 @@ class DeleteDialog extends StatelessWidget {
       icon: const Icon(
         Icons.auto_delete_outlined,
         color: kRedColor,
-        size: 35,
+        size: kPadding * 2,
       ),
-      iconPadding: const EdgeInsets.only(top: 34, bottom: 10),
+      iconPadding: const EdgeInsets.only(
+        top: kPadding * 2,
+        bottom: kHalfPadding,
+      ),
       title: Text(title),
       content: Text(
         content,

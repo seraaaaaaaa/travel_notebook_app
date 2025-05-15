@@ -52,7 +52,7 @@ class PieChartWidgetState extends State<PieChartWidget> {
                       borderData: FlBorderData(
                         show: false,
                       ),
-                      sectionsSpace: 10,
+                      sectionsSpace: kHalfPadding,
                       centerSpaceRadius: 70,
                       sections: showingSections(),
                     ),

@@ -95,7 +95,7 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
               key: _formKey,
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: kPadding, vertical: 8),
+                    horizontal: kPadding, vertical: kPadding / 2),
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -196,7 +196,8 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 6),
+                            horizontal: kHalfPadding,
+                            vertical: kPadding - kHalfPadding),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,

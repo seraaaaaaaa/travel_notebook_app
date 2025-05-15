@@ -31,13 +31,15 @@ class HomePage extends StatelessWidget {
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(55),
             child: ClipRRect(
-              borderRadius: const BorderRadius.all(Radius.circular(24)),
+              borderRadius:
+                  const BorderRadius.all(Radius.circular(kPadding * 1.5)),
               child: Container(
                 height: 48,
-                padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 6),
-                margin: const EdgeInsets.symmetric(horizontal: 12),
+                padding: const EdgeInsets.all(6),
+                margin: const EdgeInsets.symmetric(horizontal: kHalfPadding),
                 decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(24)),
+                  borderRadius:
+                      const BorderRadius.all(Radius.circular(kPadding * 1.5)),
                   color: kSecondaryColor.shade50,
                 ),
                 child: TabBar(
@@ -48,7 +50,8 @@ class HomePage extends StatelessWidget {
                   dividerColor: kTransparentColor,
                   indicator: const BoxDecoration(
                     color: kWhiteColor,
-                    borderRadius: BorderRadius.all(Radius.circular(24)),
+                    borderRadius:
+                        BorderRadius.all(Radius.circular(kPadding * 1.5)),
                   ),
                   labelColor: kPrimaryColor,
                   unselectedLabelColor: Colors.black54,

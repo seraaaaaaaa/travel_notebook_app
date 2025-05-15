@@ -16,7 +16,8 @@ class NoData extends StatelessWidget {
     var width = MediaQuery.of(context).size.width;
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 24, vertical: kPadding),
+      margin: const EdgeInsets.symmetric(
+          horizontal: kPadding * 1.5, vertical: kPadding),
       width: width,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -26,10 +27,10 @@ class NoData extends StatelessWidget {
             child: Container(
               width: width / 1.5,
               padding: const EdgeInsets.symmetric(
-                  horizontal: kPadding, vertical: 12),
+                  horizontal: kPadding, vertical: kHalfPadding),
               decoration: BoxDecoration(
                   color: kGreyColor.shade50,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(kPadding / 2),
                   boxShadow: [
                     BoxShadow(
                       color: kGreyColor.shade300,
@@ -40,10 +41,10 @@ class NoData extends StatelessWidget {
               child: Row(
                 children: [
                   Container(
-                    margin: const EdgeInsets.only(right: 12),
+                    margin: const EdgeInsets.only(right: kHalfPadding),
                     child: Icon(
                       icon ?? Icons.reorder,
-                      color: kPrimaryColor.withOpacity(.4),
+                      color: kPrimaryColor.withValues(alpha: .4),
                       size: 28,
                     ),
                   ),
@@ -53,16 +54,18 @@ class NoData extends StatelessWidget {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
+                            borderRadius:
+                                BorderRadius.circular(kHalfPadding / 2),
                             color: kGreyColor.shade200,
                           ),
                           height: 14,
                         ),
                         Container(
-                          margin: const EdgeInsets.only(top: 8),
+                          margin: const EdgeInsets.only(top: kPadding / 2),
                           width: 100,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
+                            borderRadius:
+                                BorderRadius.circular(kHalfPadding / 2),
                             color: kGreyColor.shade200,
                           ),
                           height: 14,
@@ -80,10 +83,10 @@ class NoData extends StatelessWidget {
             child: Container(
               width: width / 1.5,
               padding: const EdgeInsets.symmetric(
-                  horizontal: kPadding, vertical: 12),
+                  horizontal: kPadding, vertical: kHalfPadding),
               decoration: BoxDecoration(
                   color: kGreyColor.shade50,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(kPadding / 2),
                   boxShadow: [
                     BoxShadow(
                       color: kGreyColor.shade300,
@@ -94,10 +97,10 @@ class NoData extends StatelessWidget {
               child: Row(
                 children: [
                   Container(
-                    margin: const EdgeInsets.only(right: 12),
+                    margin: const EdgeInsets.only(right: kHalfPadding),
                     child: Icon(
                       icon ?? Icons.reorder,
-                      color: kCyanColor.withOpacity(.4),
+                      color: kCyanColor.withValues(alpha: .4),
                       size: 28,
                     ),
                   ),
@@ -107,16 +110,18 @@ class NoData extends StatelessWidget {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
+                            borderRadius:
+                                BorderRadius.circular(kHalfPadding / 2),
                             color: kGreyColor.shade200,
                           ),
                           height: 14,
                         ),
                         Container(
-                          margin: const EdgeInsets.only(top: 8),
+                          margin: const EdgeInsets.only(top: kPadding / 2),
                           width: 100,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
+                            borderRadius:
+                                BorderRadius.circular(kHalfPadding / 2),
                             color: kGreyColor.shade200,
                           ),
                           height: 14,

@@ -17,7 +17,7 @@ class PercentIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10, top: 4),
+      margin: const EdgeInsets.only(bottom: kHalfPadding, top: 4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[

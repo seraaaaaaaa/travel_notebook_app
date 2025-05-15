@@ -76,7 +76,7 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
       child: RefreshIndicator(
         onRefresh: _refreshPage,
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(kPadding),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[

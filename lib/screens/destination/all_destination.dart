@@ -128,9 +128,10 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
             ),
           ],
           bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(30.0),
+            preferredSize: const Size.fromHeight(kHalfPadding * 3),
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(kPadding, 4, kPadding, 10),
+              padding: const EdgeInsets.fromLTRB(
+                  kPadding, kPadding / 4, kPadding, kHalfPadding),
               child: TextFormField(
                 controller: _searchController,
                 textAlignVertical: TextAlignVertical.center,
@@ -162,10 +163,9 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
                   hintText: 'Search...',
                   hintStyle: const TextStyle(color: kGreyColor),
                   contentPadding: const EdgeInsets.symmetric(
-                      vertical: 10, horizontal: kPadding),
+                      vertical: kHalfPadding, horizontal: kPadding),
                   prefixIcon: const Padding(
-                    padding: EdgeInsets.only(
-                        right: 20, left: 20), // Add padding to the prefixIcon
+                    padding: EdgeInsets.symmetric(horizontal: kHalfPadding * 2),
                     child: SizedBox(
                       child:
                           Center(widthFactor: 0.0, child: Icon(Icons.search)),

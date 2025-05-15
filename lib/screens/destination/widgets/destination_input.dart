@@ -33,7 +33,8 @@ class _DestinationInputState extends State<DestinationInput> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+      padding: const EdgeInsets.symmetric(
+          vertical: kHalfPadding, horizontal: kHalfPadding / 2),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -111,7 +112,8 @@ class _DestinationInputState extends State<DestinationInput> {
               hintStyle: const TextStyle(
                   color: kGreyColor, fontWeight: FontWeight.normal),
               enabledBorder: OutlineInputBorder(
-                borderRadius: const BorderRadius.all(Radius.circular(4)),
+                borderRadius:
+                    const BorderRadius.all(Radius.circular(kPadding / 4)),
                 borderSide: BorderSide(color: kGreyColor.shade300, width: 1),
               ),
               prefixIcon: widget.prefixText.isEmpty
@@ -132,11 +134,13 @@ class _DestinationInputState extends State<DestinationInput> {
                       ),
                     ),
               border: OutlineInputBorder(
-                borderRadius: const BorderRadius.all(Radius.circular(4)),
+                borderRadius:
+                    const BorderRadius.all(Radius.circular(kPadding / 4)),
                 borderSide: BorderSide(color: kGreyColor.shade200, width: 1),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: const BorderRadius.all(Radius.circular(4)),
+                borderRadius:
+                    const BorderRadius.all(Radius.circular(kPadding / 4)),
                 borderSide:
                     BorderSide(color: kSecondaryColor.shade200, width: 1),
               ),

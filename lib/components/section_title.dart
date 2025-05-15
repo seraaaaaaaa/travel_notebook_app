@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_notebook/themes/constants.dart';
 
 class SectionTitle extends StatelessWidget {
   final String title;
@@ -17,7 +18,7 @@ class SectionTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(top: 10),
+      padding: const EdgeInsets.only(top: kHalfPadding),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

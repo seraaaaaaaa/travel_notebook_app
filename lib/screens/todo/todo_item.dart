@@ -60,7 +60,7 @@ class _TodoItemState extends State<TodoItem> {
         );
       },
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+        contentPadding: const EdgeInsets.symmetric(horizontal: kHalfPadding),
         leading: GestureDetector(
           onDoubleTap: () {
             if (widget.onCopy != null) {

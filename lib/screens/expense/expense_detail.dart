@@ -176,7 +176,7 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
                         },
                         decoration: InputDecoration(
                           prefixIcon: Padding(
-                            padding: const EdgeInsets.only(left: 10),
+                            padding: const EdgeInsets.only(left: kHalfPadding),
                             child: SizedBox(
                               child: Center(
                                 widthFactor: 0.0,
@@ -198,7 +198,8 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 4),
+                                vertical: kPadding / 2,
+                                horizontal: kPadding / 4),
                             child: Text(
                               formatCurrency(
                                 _expense.converted,
@@ -210,7 +211,7 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: kHalfPadding),
                       Text(
                         'Payment Method',
                         style: Theme.of(context).textTheme.labelLarge,
@@ -230,7 +231,7 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
                         'Expense Type',
                         style: Theme.of(context).textTheme.labelLarge,
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: kPadding / 2),
                       GestureDetector(
                         behavior: HitTestBehavior.opaque,
                         onTap: () {
@@ -246,13 +247,13 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
                                     Center(
                                       child: Container(
                                         margin: const EdgeInsets.only(
-                                            bottom: 10, top: 6),
+                                            bottom: kHalfPadding, top: 6),
                                         decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
+                                          borderRadius: BorderRadius.circular(
+                                              kHalfPadding),
                                           color: kSecondaryColor.shade100,
                                         ),
-                                        height: 10,
+                                        height: kHalfPadding,
                                         width: 120,
                                       ),
                                     ),
@@ -302,7 +303,7 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
                               child: Row(
                                 children: [
                                   Icon(_expenseType.icon),
-                                  const SizedBox(width: 10),
+                                  const SizedBox(width: kHalfPadding),
                                   Text(
                                     _expenseType.name,
                                     style:
@@ -314,13 +315,14 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
                             Container(
                                 decoration: BoxDecoration(
                                     color: kGreyColor.shade200,
-                                    borderRadius: BorderRadius.circular(30)),
-                                padding: const EdgeInsets.all(8),
+                                    borderRadius: BorderRadius.circular(
+                                        kHalfPadding * 3)),
+                                padding: const EdgeInsets.all(kPadding / 2),
                                 child: const Icon(Icons.keyboard_arrow_down))
                           ],
                         ),
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: kPadding * 1.5),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [

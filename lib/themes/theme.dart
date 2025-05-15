@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:travel_notebook/themes/constants.dart';
 
 class GlobalThemData {
-  static final Color _lightFocusColor = kBlackColor.withOpacity(0.12);
+  static final Color _lightFocusColor = kBlackColor.withValues(alpha: 0.12);
 
   static ThemeData lightThemeData =
       themeData(lightColorScheme, _lightFocusColor);
@@ -48,7 +48,7 @@ class GlobalThemData {
 
   static IconButtonThemeData iconButtonTheme = IconButtonThemeData(
     style: IconButton.styleFrom(
-      padding: const EdgeInsets.all(4),
+      padding: const EdgeInsets.all(kPadding / 4),
       foregroundColor: kSecondaryColor,
       backgroundColor: kGreyColor.shade200,
       shape: const RoundedRectangleBorder(
@@ -74,9 +74,10 @@ class GlobalThemData {
     style: ElevatedButton.styleFrom(
       foregroundColor: kWhiteColor,
       backgroundColor: kPrimaryColor,
-      padding: const EdgeInsets.symmetric(horizontal: kPadding, vertical: 12),
+      padding: const EdgeInsets.symmetric(
+          horizontal: kPadding, vertical: kHalfPadding),
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(4)),
+        borderRadius: BorderRadius.all(Radius.circular(kPadding / 4)),
       ),
     ),
   );

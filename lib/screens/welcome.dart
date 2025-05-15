@@ -60,7 +60,7 @@ class _WelcomePageState extends State<WelcomePage> {
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.all(kPadding * 1.5),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -74,7 +74,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: kPadding / 2),
               const Text(
                 'Your all-in-one travel companion for organizing destinations and tracking expenses effortlessly',
                 textAlign: TextAlign.center,
@@ -93,7 +93,7 @@ class _WelcomePageState extends State<WelcomePage> {
                       child: Row(
                     children: [
                       const Icon(Icons.attach_money, color: kPrimaryColor),
-                      const SizedBox(width: 10),
+                      const SizedBox(width: kHalfPadding),
                       Text(
                         'Your Currency',
                         style: Theme.of(context)
@@ -127,10 +127,10 @@ class _WelcomePageState extends State<WelcomePage> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: kHalfPadding),
                 ],
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: kHalfPadding),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -139,7 +139,7 @@ class _WelcomePageState extends State<WelcomePage> {
                     child: Row(
                       children: [
                         const Icon(Icons.more_horiz, color: kPrimaryColor),
-                        const SizedBox(width: 10),
+                        const SizedBox(width: kHalfPadding),
                         Text(
                           'Decimal Places',
                           style: Theme.of(context)

@@ -65,12 +65,14 @@ class ExpenseItem extends StatelessWidget {
                           Center(
                             child: Container(
                               margin: const EdgeInsets.only(
-                                  bottom: kPadding, top: 6),
+                                  bottom: kPadding,
+                                  top: kPadding - kHalfPadding),
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius:
+                                    BorderRadius.circular(kHalfPadding),
                                 color: kSecondaryColor.shade100,
                               ),
-                              height: 10,
+                              height: kHalfPadding,
                               width: 120,
                             ),
                           ),
@@ -81,8 +83,9 @@ class ExpenseItem extends StatelessWidget {
                               Row(
                                 children: [
                                   Container(
-                                    padding: const EdgeInsets.all(10),
-                                    margin: const EdgeInsets.only(right: 10),
+                                    padding: const EdgeInsets.all(kHalfPadding),
+                                    margin: const EdgeInsets.only(
+                                        right: kHalfPadding),
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
                                       color: ExpenseType.values
@@ -90,7 +93,7 @@ class ExpenseItem extends StatelessWidget {
                                               e.typeNo == expense.typeNo &&
                                               !e.enabled)
                                           .color!
-                                          .withOpacity(.2),
+                                          .withValues(alpha: .2),
                                     ),
                                     child: Icon(
                                       ExpenseType.values
@@ -128,7 +131,8 @@ class ExpenseItem extends StatelessWidget {
                             ],
                           ),
                           Container(
-                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            padding: const EdgeInsets.symmetric(
+                                vertical: kHalfPadding),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -148,7 +152,7 @@ class ExpenseItem extends StatelessWidget {
                                   ),
                                 ),
                                 const SizedBox(
-                                  width: 10,
+                                  width: kHalfPadding,
                                 ),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
@@ -284,17 +288,18 @@ class ExpenseItem extends StatelessWidget {
                     );
                   });
             },
-      contentPadding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+      contentPadding:
+          const EdgeInsets.symmetric(horizontal: 4, vertical: kPadding / 2),
       leading: ReorderableDragStartListener(
         index: index,
         child: Container(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(kHalfPadding),
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: ExpenseType.values
                 .firstWhere((e) => e.typeNo == expense.typeNo && !e.enabled)
                 .color!
-                .withOpacity(.2),
+                .withValues(alpha: .2),
           ),
           child: Icon(
             ExpenseType.values

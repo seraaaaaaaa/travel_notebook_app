@@ -54,7 +54,8 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
       child: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
         child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+          padding: const EdgeInsets.symmetric(
+              horizontal: kPadding * 1.25, vertical: kHalfPadding),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -64,7 +65,7 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
                     '1 ${_destination.ownCurrency} = ${formatCurrency(_destination.rate, null, currency: _destination.currency)}',
               ),
               const SizedBox(
-                height: 10,
+                height: kHalfPadding,
               ),
               CurrencyInput(
                 controller: _ownCurrencyController,
@@ -80,10 +81,10 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
                 prefixText: _destination.ownCurrency,
                 decimal: _destination.ownDecimal,
               ),
-              Center(
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  child: const Icon(
+              const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(kPadding / 2),
+                  child: Icon(
                     Icons.swap_vert,
                     color: kSecondaryColor,
                     size: 28,

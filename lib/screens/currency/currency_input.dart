@@ -40,7 +40,7 @@ class _CurrencyInputState extends State<CurrencyInput> {
                 .copyWith(color: kSecondaryColor),
           ),
           const SizedBox(
-            height: 10,
+            height: kHalfPadding,
           ),
           TextFormField(
             onTap: () => widget.controller.selection = TextSelection(

@@ -12,3 +12,4 @@ const kAmberColor = Colors.amber;
 const kTransparentColor = Colors.transparent;
 
 const kPadding = 16.0;
+const kHalfPadding = 10.0;

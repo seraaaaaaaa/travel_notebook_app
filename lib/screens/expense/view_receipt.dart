@@ -26,7 +26,7 @@ class ViewReceipt extends StatelessWidget {
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 8.0),
+            padding: const EdgeInsets.only(right: kPadding / 2),
             child: IconButton(
               onPressed: () async {
                 showDialog(
@@ -59,7 +59,7 @@ class ViewReceipt extends StatelessWidget {
       ),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(kPadding),
           child: FutureBuilder<bool>(
             future: File(imagePath).exists(),
             builder: (context, snapshot) {
@@ -80,7 +80,7 @@ class ViewReceipt extends StatelessWidget {
                       color: kGreyColor.shade300,
                     ),
                     const SizedBox(
-                      height: 10,
+                      height: kHalfPadding,
                     ),
                     Text(
                       'Failed to load image',

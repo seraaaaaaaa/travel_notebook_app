@@ -23,7 +23,8 @@ class CategoryItem extends StatelessWidget {
       onTap: onTap,
       child: Padding(
         key: itemKey,
-        padding: const EdgeInsets.fromLTRB(6, 10, 16, 10),
+        padding:
+            const EdgeInsets.fromLTRB(6, kHalfPadding, kPadding, kHalfPadding),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -42,7 +43,7 @@ class CategoryItem extends StatelessWidget {
             //     borderRadius: BorderRadius.circular(kPadding),
             //     color: selected ? kPrimaryColor : kTransparentColor,
             //   ),
-            //   margin: const EdgeInsets.only(top: 4),
+            //   margin: const EdgeInsets.only(top:  kPadding/4),
             // ),
           ],
         ),

@@ -62,7 +62,8 @@ class _SelectImageState extends State<SelectImage> {
                   _selectImg();
                 },
           child: Container(
-            margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+            margin: const EdgeInsets.symmetric(
+                vertical: kHalfPadding, horizontal: kPadding / 2),
             width: double.infinity,
             height: MediaQuery.of(context).size.height * .28,
             decoration: BoxDecoration(
@@ -72,7 +73,7 @@ class _SelectImageState extends State<SelectImage> {
                 width: 1.0,
               ),
               borderRadius: const BorderRadius.all(
-                Radius.circular(4.0),
+                Radius.circular(kPadding / 4),
               ),
             ),
             child: _selectedImg != null
@@ -85,12 +86,10 @@ class _SelectImageState extends State<SelectImage> {
                     children: [
                       const Icon(
                         Icons.image,
-                        size: 30,
+                        size: kHalfPadding * 3,
                         color: kGreyColor,
                       ),
-                      const SizedBox(
-                        height: 6,
-                      ),
+                      const SizedBox(height: kHalfPadding / 2),
                       Text(
                         'Select Image',
                         style: Theme.of(context).textTheme.labelLarge,

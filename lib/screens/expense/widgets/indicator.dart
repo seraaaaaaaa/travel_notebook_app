@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:travel_notebook/themes/constants.dart';
 
 class Indicator extends StatelessWidget {
   final Color color;
@@ -15,9 +16,9 @@ class Indicator extends StatelessWidget {
     required this.color,
     this.text = '',
     required this.isSquare,
-    this.width = 12,
-    this.height = 12,
-    this.padding = 8,
+    this.width = kHalfPadding + 2,
+    this.height = kHalfPadding + 2,
+    this.padding = kPadding / 2,
     this.borderRadius,
     this.tooltipMsg = '',
   });
@@ -46,7 +47,7 @@ class Indicator extends StatelessWidget {
             text.isEmpty
                 ? Container()
                 : Container(
-                    padding: const EdgeInsets.only(left: 6),
+                    padding: const EdgeInsets.only(left: kHalfPadding / 2),
                     child: Text(
                       text,
                       style: Theme.of(context).textTheme.titleMedium,

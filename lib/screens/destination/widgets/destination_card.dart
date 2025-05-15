@@ -46,7 +46,8 @@ class DestinationCard extends StatelessWidget {
       },
       child: Container(
         height: size.height * .28,
-        margin: const EdgeInsets.symmetric(horizontal: kPadding, vertical: 12),
+        margin: const EdgeInsets.symmetric(
+            horizontal: kPadding, vertical: kHalfPadding),
         decoration: BoxDecoration(
           color: kGreyColor.shade500,
           borderRadius: BorderRadius.circular(kPadding),
@@ -59,7 +60,7 @@ class DestinationCard extends StatelessWidget {
                 ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(kHalfPadding),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -125,7 +126,7 @@ class DestinationCard extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(kPadding / 2),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -136,7 +137,7 @@ class DestinationCard extends StatelessWidget {
                           .headlineLarge!
                           .copyWith(color: kWhiteColor),
                     ),
-                    const SizedBox(height: 4),
+                    const SizedBox(height: kPadding / 4),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
