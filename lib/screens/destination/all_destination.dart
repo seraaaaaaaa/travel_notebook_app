@@ -176,95 +176,92 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
             ),
           ),
         ),
-        body: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: RefreshIndicator(
-            onRefresh: _refreshPage,
-            child: BlocConsumer<DestinationBloc, DestinationState>(
-              listener: (context, state) async {
-                if (state is DestinationsLoaded) {
-                  _destinations = state.destinations;
+        body: RefreshIndicator(
+          onRefresh: _refreshPage,
+          child: BlocConsumer<DestinationBloc, DestinationState>(
+            listener: (context, state) async {
+              if (state is DestinationsLoaded) {
+                _destinations = state.destinations;
 
-                  if (_prevDestinationId != null &&
-                      _prevDestinationId! > 0 &&
-                      _init) {
-                    setState(() {
-                      _init = false;
-                    });
+                if (_prevDestinationId != null &&
+                    _prevDestinationId! > 0 &&
+                    _init) {
+                  setState(() {
+                    _init = false;
+                  });
 
-                    final destination = state.destinations
-                        .where(
-                          (destination) =>
-                              destination.destinationId == _prevDestinationId,
-                        )
-                        .first;
+                  final destination = state.destinations
+                      .where(
+                        (destination) =>
+                            destination.destinationId == _prevDestinationId,
+                      )
+                      .first;
 
-                    destination.ownCurrency = _ownCurrency;
-                    destination.ownDecimal = _ownDecimal;
+                  destination.ownCurrency = _ownCurrency;
+                  destination.ownDecimal = _ownDecimal;
 
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => HomePage(
-                                destination: destination,
-                              )),
-                    );
-                  }
-                }
-
-                if (state is DestinationUpdated) {
-                  _destinations[_destinations.indexWhere((destination) =>
-                      destination.destinationId ==
-                      state.destination.destinationId)] = state.destination;
-                }
-              },
-              builder: (context, state) {
-                if (state is DestinationLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (state is DestinationError) {
-                  return ErrorMsg(
-                    msg: state.message,
-                    onTryAgain: () => _refreshPage(),
-                  );
-                } else {
-                  final destinations = _destinations
-                      .where((destination) => destination.name
-                          .toLowerCase()
-                          .contains(_searchQuery.toLowerCase()))
-                      .toList();
-
-                  return destinations.isEmpty
-                      ? const NoData(
-                          msg: 'No Destination Found',
-                          icon: Icons.location_on,
-                        )
-                      : ListView.builder(
-                          itemCount: destinations.length,
-                          itemBuilder: (context, index) {
-                            final destination = destinations[index];
-                            return DestinationCard(
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => HomePage(
                               destination: destination,
-                              ownCurrency: _ownCurrency,
-                              ownDecimal: _ownDecimal,
-                              onDelete: () async {
-                                await ImageHandler()
-                                    .deleteImage(destination.imgPath);
-                                _destinationBloc.add(DeleteDestination(
-                                    destination.destinationId!));
-                              },
-                              onPin: () {
-                                destination.isPin =
-                                    destination.isPin == 1 ? 0 : 1;
-
-                                _destinationBloc
-                                    .add(UpdateDestination(destination));
-                              },
-                            );
-                          },
-                        );
+                            )),
+                  );
                 }
-              },
-            ),
+              }
+
+              if (state is DestinationUpdated) {
+                _destinations[_destinations.indexWhere((destination) =>
+                    destination.destinationId ==
+                    state.destination.destinationId)] = state.destination;
+              }
+            },
+            builder: (context, state) {
+              if (state is DestinationLoading) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is DestinationError) {
+                return ErrorMsg(
+                  msg: state.message,
+                  onTryAgain: () => _refreshPage(),
+                );
+              } else {
+                final destinations = _destinations
+                    .where((destination) => destination.name
+                        .toLowerCase()
+                        .contains(_searchQuery.toLowerCase()))
+                    .toList();
+
+                return destinations.isEmpty
+                    ? const NoData(
+                        msg: 'No Destination Found',
+                        icon: Icons.location_on,
+                      )
+                    : ListView.builder(
+                        itemCount: destinations.length,
+                        itemBuilder: (context, index) {
+                          final destination = destinations[index];
+                          return DestinationCard(
+                            destination: destination,
+                            ownCurrency: _ownCurrency,
+                            ownDecimal: _ownDecimal,
+                            onDelete: () async {
+                              await ImageHandler()
+                                  .deleteImage(destination.imgPath);
+                              _destinationBloc.add(DeleteDestination(
+                                  destination.destinationId!));
+                            },
+                            onPin: () {
+                              destination.isPin =
+                                  destination.isPin == 1 ? 0 : 1;
+
+                              _destinationBloc
+                                  .add(UpdateDestination(destination));
+                            },
+                          );
+                        },
+                      );
+              }
+            },
           ),
         ),
         floatingActionButton: FloatingActionButton(

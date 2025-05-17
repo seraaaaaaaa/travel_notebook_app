@@ -56,17 +56,20 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.light,
-      theme: GlobalThemData.lightThemeData,
-      home: ownCurrency.isEmpty
-          ? const WelcomePage()
-          : AllDestinationPage(
-              prevDestinationId: prevDestinationId,
-              ownCurrency: ownCurrency,
-              ownDecimal: ownDecimal,
-            ),
+    return GestureDetector(
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        themeMode: ThemeMode.light,
+        theme: GlobalThemData.lightThemeData,
+        home: ownCurrency.isEmpty
+            ? const WelcomePage()
+            : AllDestinationPage(
+                prevDestinationId: prevDestinationId,
+                ownCurrency: ownCurrency,
+                ownDecimal: ownDecimal,
+              ),
+      ),
     );
   }
 }

@@ -124,263 +124,257 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
             );
           }
         },
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: SafeArea(
-            child: Form(
-              key: _formKey,
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(kPadding),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Amount',
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                      TextFormField(
-                        controller: _amountController,
-                        onTap: () => _amountController.selection =
-                            TextSelection(
-                                baseOffset: 0,
-                                extentOffset:
-                                    _amountController.value.text.length),
-                        onChanged: (val) {
-                          double ownAmount = calculateOwnCurrency(
-                              _destination.rate, parseDouble(val));
+        child: SafeArea(
+          child: Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(kPadding),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Amount',
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                    TextFormField(
+                      controller: _amountController,
+                      onTap: () => _amountController.selection = TextSelection(
+                          baseOffset: 0,
+                          extentOffset: _amountController.value.text.length),
+                      onChanged: (val) {
+                        double ownAmount = calculateOwnCurrency(
+                            _destination.rate, parseDouble(val));
 
-                          setState(() {
-                            _expense.converted = ownAmount;
-                          });
-                        },
-                        keyboardType: TextInputType.number,
-                        inputFormatters: <TextInputFormatter>[
-                          CurrencyTextInputFormatter.simpleCurrency(
-                              decimalDigits: _destination.decimal, name: '')
-                        ],
-                        enableInteractiveSelection: false,
-                        autofocus: _isAddNew ? true : false,
-                        textAlignVertical: TextAlignVertical.center,
-                        textInputAction: TextInputAction.done,
-                        style: const TextStyle(
-                            letterSpacing: 1,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500),
-                        textAlign: TextAlign.end,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Required';
-                          }
+                        setState(() {
+                          _expense.converted = ownAmount;
+                        });
+                      },
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        CurrencyTextInputFormatter.simpleCurrency(
+                            decimalDigits: _destination.decimal, name: '')
+                      ],
+                      enableInteractiveSelection: false,
+                      autofocus: _isAddNew ? true : false,
+                      textAlignVertical: TextAlignVertical.center,
+                      textInputAction: TextInputAction.done,
+                      style: const TextStyle(
+                          letterSpacing: 1,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500),
+                      textAlign: TextAlign.end,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Required';
+                        }
 
-                          return null;
-                        },
-                        decoration: InputDecoration(
-                          prefixIcon: Padding(
-                            padding: const EdgeInsets.only(left: kHalfPadding),
-                            child: SizedBox(
-                              child: Center(
-                                widthFactor: 0.0,
-                                child: Text(
-                                  _destination.currency,
-                                  style: const TextStyle(
-                                      letterSpacing: 1,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                      color: kSecondaryColor),
-                                ),
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        prefixIcon: Padding(
+                          padding: const EdgeInsets.only(left: kHalfPadding),
+                          child: SizedBox(
+                            child: Center(
+                              widthFactor: 0.0,
+                              child: Text(
+                                _destination.currency,
+                                style: const TextStyle(
+                                    letterSpacing: 1,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: kSecondaryColor),
                               ),
                             ),
                           ),
                         ),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: kPadding / 2,
-                                horizontal: kPadding / 4),
-                            child: Text(
-                              formatCurrency(
-                                _expense.converted,
-                                _destination.ownDecimal,
-                                currency: _destination.ownCurrency,
-                              ),
-                              style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: kPadding / 2, horizontal: kPadding / 4),
+                          child: Text(
+                            formatCurrency(
+                              _expense.converted,
+                              _destination.ownDecimal,
+                              currency: _destination.ownCurrency,
                             ),
+                            style: Theme.of(context).textTheme.labelLarge,
                           ),
-                        ],
-                      ),
-                      const SizedBox(height: kHalfPadding),
-                      Text(
-                        'Payment Method',
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                      SelectPayment(
-                        PaymentMethod.values,
-                        _paymentMethod,
-                        onSelectionChanged: (selectedChoice) {
-                          FocusScope.of(context).unfocus();
-                          setState(() {
-                            _paymentMethod = selectedChoice;
-                          });
-                        },
-                      ),
-                      const SizedBox(height: kPadding),
-                      Text(
-                        'Expense Type',
-                        style: Theme.of(context).textTheme.labelLarge,
-                      ),
-                      const SizedBox(height: kPadding / 2),
-                      GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () {
-                          FocusScope.of(context).unfocus();
-                          showModalBottomSheet(
-                            context: context,
-                            builder: (context) {
-                              return Padding(
-                                padding: const EdgeInsets.all(kPadding),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Center(
-                                      child: Container(
-                                        margin: const EdgeInsets.only(
-                                            bottom: kHalfPadding, top: 6),
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                              kHalfPadding),
-                                          color: kSecondaryColor.shade100,
-                                        ),
-                                        height: kHalfPadding,
-                                        width: 120,
-                                      ),
-                                    ),
-                                    // Scrollable list
-                                    Expanded(
-                                      child: ListView(
-                                        children: ExpenseType.values
-                                            .map<Widget>(
-                                                (ExpenseType expenseType) {
-                                          return ListTile(
-                                            visualDensity: const VisualDensity(
-                                                vertical: -3),
-                                            contentPadding:
-                                                const EdgeInsets.all(0),
-                                            onTap: () {
-                                              Navigator.pop(context);
-                                              setState(() {
-                                                _expenseType = expenseType;
-                                              });
-                                            },
-                                            enabled: expenseType.enabled,
-                                            leading: expenseType.icon != null
-                                                ? Icon(expenseType.icon)
-                                                : null, // If no icon, leading is null
-                                            title: Text(
-                                              expenseType.name,
-                                              style: expenseType.enabled
-                                                  ? null
-                                                  : Theme.of(context)
-                                                      .textTheme
-                                                      .labelLarge,
-                                            ),
-                                          );
-                                        }).toList(),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          );
-                        },
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: Row(
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: kHalfPadding),
+                    Text(
+                      'Payment Method',
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                    SelectPayment(
+                      PaymentMethod.values,
+                      _paymentMethod,
+                      onSelectionChanged: (selectedChoice) {
+                        null;
+                        setState(() {
+                          _paymentMethod = selectedChoice;
+                        });
+                      },
+                    ),
+                    const SizedBox(height: kPadding),
+                    Text(
+                      'Expense Type',
+                      style: Theme.of(context).textTheme.labelLarge,
+                    ),
+                    const SizedBox(height: kPadding / 2),
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        FocusScope.of(context).unfocus();
+
+                        showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return Padding(
+                              padding: const EdgeInsets.all(kPadding),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Icon(_expenseType.icon),
-                                  const SizedBox(width: kHalfPadding),
-                                  Text(
-                                    _expenseType.name,
-                                    style:
-                                        Theme.of(context).textTheme.titleMedium,
+                                  Center(
+                                    child: Container(
+                                      margin: const EdgeInsets.only(
+                                          bottom: kHalfPadding, top: 6),
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(kHalfPadding),
+                                        color: kSecondaryColor.shade100,
+                                      ),
+                                      height: kHalfPadding,
+                                      width: 120,
+                                    ),
+                                  ),
+                                  // Scrollable list
+                                  Expanded(
+                                    child: ListView(
+                                      children: ExpenseType.values.map<Widget>(
+                                          (ExpenseType expenseType) {
+                                        return ListTile(
+                                          visualDensity:
+                                              const VisualDensity(vertical: -3),
+                                          contentPadding:
+                                              const EdgeInsets.all(0),
+                                          onTap: () {
+                                            Navigator.pop(context);
+                                            setState(() {
+                                              _expenseType = expenseType;
+                                            });
+                                          },
+                                          enabled: expenseType.enabled,
+                                          leading: expenseType.icon != null
+                                              ? Icon(expenseType.icon)
+                                              : null, // If no icon, leading is null
+                                          title: Text(
+                                            expenseType.name,
+                                            style: expenseType.enabled
+                                                ? null
+                                                : Theme.of(context)
+                                                    .textTheme
+                                                    .labelLarge,
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
                                   ),
                                 ],
                               ),
-                            ),
-                            Container(
-                                decoration: BoxDecoration(
-                                    color: kGreyColor.shade200,
-                                    borderRadius: BorderRadius.circular(
-                                        kHalfPadding * 3)),
-                                padding: const EdgeInsets.all(kPadding / 2),
-                                child: const Icon(Icons.keyboard_arrow_down))
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: kPadding * 1.5),
-                      Row(
+                            );
+                          },
+                        );
+                      },
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Remark',
-                            style: Theme.of(context).textTheme.labelLarge,
-                          ),
-                          GestureDetector(
-                            onTap: () async {
-                              FocusManager.instance.primaryFocus?.unfocus();
-
-                              _todos = await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => SelectTodo(
-                                          destinationId:
-                                              _destination.destinationId!,
-                                        )),
-                              );
-
-                              if (_todos != null && _todos!.isNotEmpty) {
-                                if (_remarkController.text.isNotEmpty) {
-                                  _remarkController.text += ' ';
-                                }
-
-                                _remarkController.text += _todos!
-                                    .map((todo) => todo.content)
-                                    .join(', ');
-                              }
-                            },
-                            child: Text(
-                              'Select To-do',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium!
-                                  .copyWith(color: kPrimaryColor),
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Icon(_expenseType.icon),
+                                const SizedBox(width: kHalfPadding),
+                                Text(
+                                  _expenseType.name,
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium,
+                                ),
+                              ],
                             ),
                           ),
+                          Container(
+                              decoration: BoxDecoration(
+                                  color: kGreyColor.shade200,
+                                  borderRadius:
+                                      BorderRadius.circular(kHalfPadding * 3)),
+                              padding: const EdgeInsets.all(kPadding / 2),
+                              child: const Icon(Icons.keyboard_arrow_down))
                         ],
                       ),
-                      TextField(
-                        maxLines: 3,
-                        controller: _remarkController,
-                        textCapitalization: TextCapitalization.sentences,
-                        textInputAction: TextInputAction.done,
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w500, letterSpacing: 1),
-                        decoration: const InputDecoration(
-                          hintText: 'Add a remark here...',
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            color: kGreyColor,
+                    ),
+                    const SizedBox(height: kPadding * 1.5),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Remark',
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
+                        GestureDetector(
+                          onTap: () async {
+                            FocusManager.instance.primaryFocus?.unfocus();
+
+                            _todos = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SelectTodo(
+                                        destinationId:
+                                            _destination.destinationId!,
+                                      )),
+                            );
+
+                            if (_todos != null && _todos!.isNotEmpty) {
+                              if (_remarkController.text.isNotEmpty) {
+                                _remarkController.text += ' ';
+                              }
+
+                              _remarkController.text += _todos!
+                                  .map((todo) => todo.content)
+                                  .join(', ');
+                            }
+                          },
+                          child: Text(
+                            'Select To-do',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(color: kPrimaryColor),
                           ),
                         ),
+                      ],
+                    ),
+                    TextField(
+                      maxLines: 3,
+                      controller: _remarkController,
+                      textCapitalization: TextCapitalization.sentences,
+                      textInputAction: TextInputAction.done,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.w500, letterSpacing: 1),
+                      decoration: const InputDecoration(
+                        hintText: 'Add a remark here...',
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(
+                          fontWeight: FontWeight.normal,
+                          color: kGreyColor,
+                        ),
                       ),
-                    ]),
-              ),
+                    ),
+                  ]),
             ),
           ),
         ),

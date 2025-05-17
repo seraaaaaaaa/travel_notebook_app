@@ -99,180 +99,174 @@ class _TodoListState extends State<TodoList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: RefreshIndicator(
-          onRefresh: _refreshPage,
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(kPadding),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SectionTitle(
-                  title: 'To-do List',
-                  btnText: 'Add',
-                  btnAction: () {
-                    FocusScope.of(context).unfocus();
+      body: RefreshIndicator(
+        onRefresh: _refreshPage,
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(kPadding),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SectionTitle(
+                title: 'To-do List',
+                btnText: 'Add',
+                btnAction: () {
+                  FocusScope.of(context).unfocus();
 
-                    _todoBloc.add(AddTodo(Todo(
-                        destinationId: _destinationId,
-                        content: '',
-                        sequence: -1,
-                        categoryId: _categoryId)));
-                  },
-                ),
-                SingleChildScrollView(
-                  controller: _scrollController,
-                  scrollDirection: Axis.horizontal,
-                  child: Stack(
-                    children: [
-                      Row(
-                        children: TodoCategory.values.map((category) {
-                          return CategoryItem(
-                            categoryId: category.id,
-                            categoryName: category.name,
-                            selected: _categoryId == category.id,
-                            itemKey: _itemKeys[category.id]!,
-                            onTap: () {
-                              setState(() {
-                                _categoryId = category.id;
-                              });
+                  _todoBloc.add(AddTodo(Todo(
+                      destinationId: _destinationId,
+                      content: '',
+                      sequence: -1,
+                      categoryId: _categoryId)));
+                },
+              ),
+              SingleChildScrollView(
+                controller: _scrollController,
+                scrollDirection: Axis.horizontal,
+                child: Stack(
+                  children: [
+                    Row(
+                      children: TodoCategory.values.map((category) {
+                        return CategoryItem(
+                          categoryId: category.id,
+                          categoryName: category.name,
+                          selected: _categoryId == category.id,
+                          itemKey: _itemKeys[category.id]!,
+                          onTap: () {
+                            setState(() {
+                              _categoryId = category.id;
+                            });
 
-                              _updateIndicatorPosition();
-                              _refreshPage();
-                            },
-                          );
-                        }).toList(),
-                      ),
-                      // Sliding underline animation
-                      AnimatedPositioned(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                        left: _indicatorLeft, // Dynamically updated
-                        bottom: 0,
-                        child: Container(
-                          width: _indicatorWidth, // Dynamic width
-                          height: 5.0,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
-                            color: kPrimaryColor,
-                          ),
+                            _updateIndicatorPosition();
+                            _refreshPage();
+                          },
+                        );
+                      }).toList(),
+                    ),
+                    // Sliding underline animation
+                    AnimatedPositioned(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
+                      left: _indicatorLeft, // Dynamically updated
+                      bottom: 0,
+                      child: Container(
+                        width: _indicatorWidth, // Dynamic width
+                        height: 5.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(6),
+                          color: kPrimaryColor,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                BlocBuilder<TodoBloc, TodoState>(
-                  builder: (context, state) {
-                    if (state is TodoLoading) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (state is TodoLoaded) {
-                      _latestSeq = state.todos.isNotEmpty
-                          ? state.todos.last.sequence + 1
-                          : 0;
+              ),
+              BlocBuilder<TodoBloc, TodoState>(
+                builder: (context, state) {
+                  if (state is TodoLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else if (state is TodoLoaded) {
+                    _latestSeq = state.todos.isNotEmpty
+                        ? state.todos.last.sequence + 1
+                        : 0;
 
-                      String msg = TodoCategory.values[_categoryId].msg;
+                    String msg = TodoCategory.values[_categoryId].msg;
 
-                      return state.todos.isEmpty
-                          ? NoData(msg: msg, icon: Icons.check_box)
-                          : Column(
-                              children: [
-                                ReorderableListView(
-                                  shrinkWrap: true,
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  buildDefaultDragHandles:
-                                      false, // Disable the default drag handles
-                                  onReorder: (int oldIndex, int newIndex) {
-                                    setState(() {
-                                      if (oldIndex < newIndex) {
-                                        newIndex -= 1;
-                                      }
-                                      final todo =
-                                          state.todos.removeAt(oldIndex);
-                                      state.todos.insert(newIndex, todo);
+                    return state.todos.isEmpty
+                        ? NoData(msg: msg, icon: Icons.check_box)
+                        : Column(
+                            children: [
+                              ReorderableListView(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                buildDefaultDragHandles:
+                                    false, // Disable the default drag handles
+                                onReorder: (int oldIndex, int newIndex) {
+                                  setState(() {
+                                    if (oldIndex < newIndex) {
+                                      newIndex -= 1;
+                                    }
+                                    final todo = state.todos.removeAt(oldIndex);
+                                    state.todos.insert(newIndex, todo);
 
-                                      for (int i = 0;
-                                          i < state.todos.length;
-                                          i++) {
-                                        state.todos[i].sequence = i;
-                                      }
-                                    });
-                                    _todoBloc.add(UpdateAllTodos(state.todos));
-                                  },
-                                  children: List.generate(state.todos.length,
-                                      (index) {
-                                    final todo = state.todos[index];
-                                    return Container(
-                                      key: Key(todo.id.toString()),
-                                      child: TodoItem(
-                                        todo: todo,
-                                        index: index,
-                                        onRemove: () {
-                                          _todoBloc.add(DeleteTodo(
-                                            todo.id!,
-                                            _destinationId,
-                                            _categoryId,
-                                          ));
-                                        },
-                                        onTapCheck: () {
-                                          setState(() {
-                                            todo.status =
-                                                todo.status == 1 ? 0 : 1;
-                                          });
+                                    for (int i = 0;
+                                        i < state.todos.length;
+                                        i++) {
+                                      state.todos[i].sequence = i;
+                                    }
+                                  });
+                                  _todoBloc.add(UpdateAllTodos(state.todos));
+                                },
+                                children:
+                                    List.generate(state.todos.length, (index) {
+                                  final todo = state.todos[index];
+                                  return Container(
+                                    key: Key(todo.id.toString()),
+                                    child: TodoItem(
+                                      todo: todo,
+                                      index: index,
+                                      onRemove: () {
+                                        _todoBloc.add(DeleteTodo(
+                                          todo.id!,
+                                          _destinationId,
+                                          _categoryId,
+                                        ));
+                                      },
+                                      onTapCheck: () {
+                                        setState(() {
+                                          todo.status =
+                                              todo.status == 1 ? 0 : 1;
+                                        });
+                                        _todoBloc.add(UpdateTodo(todo));
+                                      },
+                                      onChanged: (val) {
+                                        _debouncer.run(() {
+                                          todo.content = val;
                                           _todoBloc.add(UpdateTodo(todo));
-                                        },
-                                        onChanged: (val) {
-                                          _debouncer.run(() {
-                                            todo.content = val;
-                                            _todoBloc.add(UpdateTodo(todo));
-                                          });
-                                        },
-                                        onCopy: todo.status == 1
-                                            ? null
-                                            : () {
-                                                FocusScope.of(context)
-                                                    .unfocus();
-                                                _todoBloc.add(AddTodo(Todo(
-                                                    destinationId:
-                                                        _destinationId,
-                                                    content: todo.content,
-                                                    sequence: todo.sequence,
-                                                    categoryId: _categoryId)));
-                                              },
-                                      ),
-                                    );
-                                  }),
+                                        });
+                                      },
+                                      onCopy: todo.status == 1
+                                          ? null
+                                          : () {
+                                              FocusScope.of(context).unfocus();
+                                              _todoBloc.add(AddTodo(Todo(
+                                                  destinationId: _destinationId,
+                                                  content: todo.content,
+                                                  sequence: todo.sequence,
+                                                  categoryId: _categoryId)));
+                                            },
+                                    ),
+                                  );
+                                }),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: kPadding,
+                                    vertical: kHalfPadding / 2),
+                                width: double.infinity,
+                                child: TextButton(
+                                  onPressed: () {
+                                    FocusScope.of(context).unfocus();
+                                    _todoBloc.add(AddTodo(Todo(
+                                        destinationId: _destinationId,
+                                        content: '',
+                                        sequence: _latestSeq,
+                                        categoryId: _categoryId)));
+                                  },
+                                  child: const Text('Add'),
                                 ),
-                                Container(
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: kPadding,
-                                      vertical: kHalfPadding / 2),
-                                  width: double.infinity,
-                                  child: TextButton(
-                                    onPressed: () {
-                                      FocusScope.of(context).unfocus();
-                                      _todoBloc.add(AddTodo(Todo(
-                                          destinationId: _destinationId,
-                                          content: '',
-                                          sequence: _latestSeq,
-                                          categoryId: _categoryId)));
-                                    },
-                                    child: const Text('Add'),
-                                  ),
-                                ),
-                              ],
-                            );
-                    } else if (state is TodoError) {
-                      return ErrorMsg(
-                        msg: state.message,
-                        onTryAgain: () => _refreshPage(),
-                      );
-                    }
-                    return Container();
-                  },
-                ),
-              ],
-            ),
+                              ),
+                            ],
+                          );
+                  } else if (state is TodoError) {
+                    return ErrorMsg(
+                      msg: state.message,
+                      onTryAgain: () => _refreshPage(),
+                    );
+                  }
+                  return Container();
+                },
+              ),
+            ],
           ),
         ),
       ),

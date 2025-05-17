@@ -130,108 +130,104 @@ class _SelectTodoState extends State<SelectTodo> {
           ),
         ),
       ),
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Container(
-          padding: const EdgeInsets.all(kPadding),
-          child: Column(
-            children: [
-              BlocBuilder<TodoBloc, TodoState>(
-                builder: (context, state) {
-                  if (state is TodoLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else if (state is SelectTodoLoaded) {
-                    final groupedTodos = _groupTodosByCategory(state.todos);
+      body: Padding(
+        padding: const EdgeInsets.all(kPadding),
+        child: Column(
+          children: [
+            BlocBuilder<TodoBloc, TodoState>(
+              builder: (context, state) {
+                if (state is TodoLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is SelectTodoLoaded) {
+                  final groupedTodos = _groupTodosByCategory(state.todos);
 
-                    return state.todos.isEmpty
-                        ? const NoData(
-                            msg: 'No To-do Found', icon: Icons.check_box)
-                        : Expanded(
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount:
-                                  groupedTodos.length + state.todos.length,
-                              itemBuilder: (context, index) {
-                                final categoryKeys = groupedTodos.keys.toList();
-                                int itemIndex = 0;
+                  return state.todos.isEmpty
+                      ? const NoData(
+                          msg: 'No To-do Found', icon: Icons.check_box)
+                      : Expanded(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: groupedTodos.length + state.todos.length,
+                            itemBuilder: (context, index) {
+                              final categoryKeys = groupedTodos.keys.toList();
+                              int itemIndex = 0;
 
-                                for (String categoryKey in categoryKeys) {
-                                  if (itemIndex == index) {
-                                    // Return header
-                                    return Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: kPadding / 2),
-                                      child: Text(
-                                        TodoCategory.values
-                                            .firstWhere((category) =>
-                                                category.id ==
-                                                int.parse(categoryKey))
-                                            .name,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          color: kGreyColor,
-                                        ),
+                              for (String categoryKey in categoryKeys) {
+                                if (itemIndex == index) {
+                                  // Return header
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: kPadding / 2),
+                                    child: Text(
+                                      TodoCategory.values
+                                          .firstWhere((category) =>
+                                              category.id ==
+                                              int.parse(categoryKey))
+                                          .name,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        color: kGreyColor,
                                       ),
+                                    ),
+                                  );
+                                }
+                                itemIndex++;
+
+                                // Check if the current item index is one of the todos under this header
+                                final todoList = groupedTodos[categoryKey]!;
+                                for (Todo todo in todoList) {
+                                  if (itemIndex == index) {
+                                    return CheckboxListTile(
+                                      dense: true,
+                                      checkColor: kWhiteColor,
+                                      contentPadding: const EdgeInsets.all(0),
+                                      controlAffinity:
+                                          ListTileControlAffinity.leading,
+                                      title: Text(
+                                        todo.content,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge,
+                                      ),
+                                      checkboxShape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(kHalfPadding),
+                                      ),
+                                      side: const BorderSide(
+                                          color: kSecondaryColor),
+                                      value: todo.status == 1,
+                                      onChanged: (bool? value) {
+                                        if (todo.status == 1) {
+                                          _selectedTodos.remove(todo);
+                                        } else {
+                                          _selectedTodos.add(todo);
+                                        }
+                                        setState(() {
+                                          todo.status =
+                                              todo.status == 1 ? 0 : 1;
+                                        });
+                                      },
                                     );
                                   }
                                   itemIndex++;
-
-                                  // Check if the current item index is one of the todos under this header
-                                  final todoList = groupedTodos[categoryKey]!;
-                                  for (Todo todo in todoList) {
-                                    if (itemIndex == index) {
-                                      return CheckboxListTile(
-                                        dense: true,
-                                        checkColor: kWhiteColor,
-                                        contentPadding: const EdgeInsets.all(0),
-                                        controlAffinity:
-                                            ListTileControlAffinity.leading,
-                                        title: Text(
-                                          todo.content,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge,
-                                        ),
-                                        checkboxShape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              kHalfPadding),
-                                        ),
-                                        side: const BorderSide(
-                                            color: kSecondaryColor),
-                                        value: todo.status == 1,
-                                        onChanged: (bool? value) {
-                                          if (todo.status == 1) {
-                                            _selectedTodos.remove(todo);
-                                          } else {
-                                            _selectedTodos.add(todo);
-                                          }
-                                          setState(() {
-                                            todo.status =
-                                                todo.status == 1 ? 0 : 1;
-                                          });
-                                        },
-                                      );
-                                    }
-                                    itemIndex++;
-                                  }
                                 }
+                              }
 
-                                // Fallback in case of any mismatch
-                                return const SizedBox.shrink();
-                              },
-                            ),
-                          );
-                  } else if (state is TodoError) {
-                    return ErrorMsg(
-                      msg: state.message,
-                      onTryAgain: () => Navigator.pop(context),
-                    );
-                  }
-                  return Container();
-                },
-              ),
-            ],
-          ),
+                              // Fallback in case of any mismatch
+                              return const SizedBox.shrink();
+                            },
+                          ),
+                        );
+                } else if (state is TodoError) {
+                  return ErrorMsg(
+                    msg: state.message,
+                    onTryAgain: () => Navigator.pop(context),
+                  );
+                }
+                return Container();
+              },
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: SafeArea(

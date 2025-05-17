@@ -51,63 +51,60 @@ class _CurrencyConverterState extends State<CurrencyConverter> {
           });
         }
       },
-      child: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(
-              horizontal: kPadding * 1.25, vertical: kHalfPadding),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SectionTitle(
-                title: 'Currency Converter',
-                subtitle:
-                    '1 ${_destination.ownCurrency} = ${formatCurrency(_destination.rate, null, currency: _destination.currency)}',
-              ),
-              const SizedBox(
-                height: kHalfPadding,
-              ),
-              CurrencyInput(
-                controller: _ownCurrencyController,
-                labelText: 'From',
-                onChanged: (val) {
-                  double foreignAmount = calculateForeignCurrency(
-                      parseDouble(val), _destination.rate);
-                  setState(() {
-                    _foreignCurrencyController.text =
-                        formatCurrency(foreignAmount, _destination.decimal);
-                  });
-                },
-                prefixText: _destination.ownCurrency,
-                decimal: _destination.ownDecimal,
-              ),
-              const Center(
-                child: Padding(
-                  padding: EdgeInsets.all(kPadding / 2),
-                  child: Icon(
-                    Icons.swap_vert,
-                    color: kSecondaryColor,
-                    size: 28,
-                  ),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(
+            horizontal: kPadding * 1.25, vertical: kHalfPadding),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SectionTitle(
+              title: 'Currency Converter',
+              subtitle:
+                  '1 ${_destination.ownCurrency} = ${formatCurrency(_destination.rate, null, currency: _destination.currency)}',
+            ),
+            const SizedBox(
+              height: kHalfPadding,
+            ),
+            CurrencyInput(
+              controller: _ownCurrencyController,
+              labelText: 'From',
+              onChanged: (val) {
+                double foreignAmount = calculateForeignCurrency(
+                    parseDouble(val), _destination.rate);
+                setState(() {
+                  _foreignCurrencyController.text =
+                      formatCurrency(foreignAmount, _destination.decimal);
+                });
+              },
+              prefixText: _destination.ownCurrency,
+              decimal: _destination.ownDecimal,
+            ),
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.all(kPadding / 2),
+                child: Icon(
+                  Icons.swap_vert,
+                  color: kSecondaryColor,
+                  size: 28,
                 ),
               ),
-              CurrencyInput(
-                controller: _foreignCurrencyController,
-                labelText: 'To',
-                onChanged: (val) {
-                  double ownAmount =
-                      calculateOwnCurrency(_destination.rate, parseDouble(val));
+            ),
+            CurrencyInput(
+              controller: _foreignCurrencyController,
+              labelText: 'To',
+              onChanged: (val) {
+                double ownAmount =
+                    calculateOwnCurrency(_destination.rate, parseDouble(val));
 
-                  setState(() {
-                    _ownCurrencyController.text =
-                        formatCurrency(ownAmount, _destination.ownDecimal);
-                  });
-                },
-                prefixText: _destination.currency,
-                decimal: _destination.decimal,
-              ),
-            ],
-          ),
+                setState(() {
+                  _ownCurrencyController.text =
+                      formatCurrency(ownAmount, _destination.ownDecimal);
+                });
+              },
+              prefixText: _destination.currency,
+              decimal: _destination.decimal,
+            ),
+          ],
         ),
       ),
     );

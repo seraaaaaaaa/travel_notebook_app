@@ -88,200 +88,197 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
             );
           }
         },
-        child: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: SafeArea(
-            child: Form(
-              key: _formKey,
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: kPadding, vertical: kPadding / 2),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SectionTitle(
-                        title: 'Destination Details',
-                        subtitle:
-                            'Please fill in the information about your trip',
-                      ),
-                      const SizedBox(
-                        height: kPadding,
-                      ),
-                      DestinationInput(
-                        labelText: 'Destination Name',
-                        initialValue: _destination.name,
-                        onSaved: (val) {
-                          _destination.name = val;
-                        },
-                        required: true,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: DestinationInput(
-                              labelText: 'Arrival Date',
-                              initialValue: formatDate(_destination.startDate),
-                              onSaved: (val) {
-                                _destination.startDate = parseDateString(val);
-                              },
-                              inputType: 'date',
-                              hintText: 'dd/mm/yyyy',
-                            ),
+        child: SafeArea(
+          child: Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(
+                  horizontal: kPadding, vertical: kPadding / 2),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SectionTitle(
+                      title: 'Destination Details',
+                      subtitle:
+                          'Please fill in the information about your trip',
+                    ),
+                    const SizedBox(
+                      height: kPadding,
+                    ),
+                    DestinationInput(
+                      labelText: 'Destination Name',
+                      initialValue: _destination.name,
+                      onSaved: (val) {
+                        _destination.name = val;
+                      },
+                      required: true,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: DestinationInput(
+                            labelText: 'Arrival Date',
+                            initialValue: formatDate(_destination.startDate),
+                            onSaved: (val) {
+                              _destination.startDate = parseDateString(val);
+                            },
+                            inputType: 'date',
+                            hintText: 'dd/mm/yyyy',
                           ),
-                          Expanded(
-                            child: DestinationInput(
-                              labelText: 'Departure Date',
-                              initialValue: formatDate(_destination.endDate),
-                              onSaved: (val) {
-                                _destination.endDate = parseDateString(val);
-                              },
-                              inputType: 'date',
-                              hintText: 'dd/mm/yyyy',
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: DestinationInput(
-                              labelText: 'Currency',
-                              initialValue: _destination.currency,
-                              onSaved: (val) {
-                                _destination.currency = val;
-                              },
-                              required: true,
-                              inputType: 'uppercase',
-                            ),
-                          ),
-                          Expanded(
-                            child: DestinationInput(
-                              labelText: 'Budget',
-                              initialValue: _isAddNew
-                                  ? ''
-                                  : formatCurrency(
-                                      _destination.budget,
-                                      null,
-                                    ),
-                              onSaved: (val) {
-                                _destination.budget =
-                                    parseDouble(val.replaceAll(',', ''));
-                              },
-                              inputType: 'double',
-                              decimal: _destination.decimal,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: DestinationInput(
-                              labelText: 'Exchange Rate',
-                              initialValue: _isAddNew
-                                  ? ''
-                                  : formatCurrency(
-                                      _destination.rate,
-                                      null,
-                                    ),
-                              onSaved: (val) {
-                                _destination.rate =
-                                    parseDouble(val.replaceAll(',', ''));
-                              },
-                              inputType: 'double',
-                              prefixText: '1 ${widget.ownCurrency} =',
-                            ),
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: kHalfPadding,
-                            vertical: kPadding - kHalfPadding),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Expanded(
-                              child: Text(
-                                'Decimal Places',
-                                style: Theme.of(context).textTheme.titleSmall,
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                IconButton(
-                                  style: IconButton.styleFrom(
-                                    backgroundColor: kTransparentColor,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(30)),
-                                      side: BorderSide(
-                                          color: kSecondaryColor.shade100),
-                                    ),
-                                  ),
-                                  padding: const EdgeInsets.all(0),
-                                  icon: const Icon(Icons.chevron_left),
-                                  color: kPrimaryColor,
-                                  onPressed: _destination.decimal <= 0
-                                      ? null
-                                      : () {
-                                          setState(() {
-                                            _destination.decimal--;
-                                          });
-                                        },
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: kPadding),
-                                  child: Text(
-                                    _destination.decimal == 0
-                                        ? 'N/A'
-                                        : '.${'0' * _destination.decimal}',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                        letterSpacing: .4,
-                                        color: _destination.decimal == 0
-                                            ? kGreyColor
-                                            : null),
-                                  ),
-                                ),
-                                IconButton(
-                                  style: IconButton.styleFrom(
-                                    backgroundColor: kTransparentColor,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.circular(30)),
-                                      side: BorderSide(
-                                          color: kSecondaryColor.shade100),
-                                    ),
-                                  ),
-                                  padding: const EdgeInsets.all(0),
-                                  icon: const Icon(Icons.chevron_right),
-                                  color: kPrimaryColor,
-                                  onPressed: _destination.decimal >= 3
-                                      ? null
-                                      : () {
-                                          setState(() {
-                                            _destination.decimal++;
-                                          });
-                                        },
-                                ),
-                              ],
-                            ),
-                          ],
                         ),
+                        Expanded(
+                          child: DestinationInput(
+                            labelText: 'Departure Date',
+                            initialValue: formatDate(_destination.endDate),
+                            onSaved: (val) {
+                              _destination.endDate = parseDateString(val);
+                            },
+                            inputType: 'date',
+                            hintText: 'dd/mm/yyyy',
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: DestinationInput(
+                            labelText: 'Currency',
+                            initialValue: _destination.currency,
+                            onSaved: (val) {
+                              _destination.currency = val;
+                            },
+                            required: true,
+                            inputType: 'uppercase',
+                          ),
+                        ),
+                        Expanded(
+                          child: DestinationInput(
+                            labelText: 'Budget',
+                            initialValue: _isAddNew
+                                ? ''
+                                : formatCurrency(
+                                    _destination.budget,
+                                    null,
+                                  ),
+                            onSaved: (val) {
+                              _destination.budget =
+                                  parseDouble(val.replaceAll(',', ''));
+                            },
+                            inputType: 'double',
+                            decimal: _destination.decimal,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: DestinationInput(
+                            labelText: 'Exchange Rate',
+                            initialValue: _isAddNew
+                                ? ''
+                                : formatCurrency(
+                                    _destination.rate,
+                                    null,
+                                  ),
+                            onSaved: (val) {
+                              _destination.rate =
+                                  parseDouble(val.replaceAll(',', ''));
+                            },
+                            inputType: 'double',
+                            prefixText: '1 ${widget.ownCurrency} =',
+                          ),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: kHalfPadding,
+                          vertical: kPadding - kHalfPadding),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              'Decimal Places',
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              IconButton(
+                                style: IconButton.styleFrom(
+                                  backgroundColor: kTransparentColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(30)),
+                                    side: BorderSide(
+                                        color: kSecondaryColor.shade100),
+                                  ),
+                                ),
+                                padding: const EdgeInsets.all(0),
+                                icon: const Icon(Icons.chevron_left),
+                                color: kPrimaryColor,
+                                onPressed: _destination.decimal <= 0
+                                    ? null
+                                    : () {
+                                        setState(() {
+                                          _destination.decimal--;
+                                        });
+                                      },
+                              ),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: kPadding),
+                                child: Text(
+                                  _destination.decimal == 0
+                                      ? 'N/A'
+                                      : '.${'0' * _destination.decimal}',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                      letterSpacing: .4,
+                                      color: _destination.decimal == 0
+                                          ? kGreyColor
+                                          : null),
+                                ),
+                              ),
+                              IconButton(
+                                style: IconButton.styleFrom(
+                                  backgroundColor: kTransparentColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(30)),
+                                    side: BorderSide(
+                                        color: kSecondaryColor.shade100),
+                                  ),
+                                ),
+                                padding: const EdgeInsets.all(0),
+                                icon: const Icon(Icons.chevron_right),
+                                color: kPrimaryColor,
+                                onPressed: _destination.decimal >= 3
+                                    ? null
+                                    : () {
+                                        setState(() {
+                                          _destination.decimal++;
+                                        });
+                                      },
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      SelectImage(
-                          initialImgPath: _destination.imgPath,
-                          onSelected: (val) async {
-                            setState(() {
-                              _selectedImg = val;
-                            });
-                          }),
-                    ]),
-              ),
+                    ),
+                    SelectImage(
+                        initialImgPath: _destination.imgPath,
+                        onSelected: (val) async {
+                          setState(() {
+                            _selectedImg = val;
+                          });
+                        }),
+                  ]),
             ),
           ),
         ),

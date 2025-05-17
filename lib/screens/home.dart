@@ -42,37 +42,34 @@ class HomePage extends StatelessWidget {
                       const BorderRadius.all(Radius.circular(kPadding * 1.5)),
                   color: kSecondaryColor.shade50,
                 ),
-                child: TabBar(
-                  onTap: (index) {
-                    FocusScope.of(context).unfocus();
-                  },
+                child: const TabBar(
                   indicatorSize: TabBarIndicatorSize.tab,
                   dividerColor: kTransparentColor,
-                  indicator: const BoxDecoration(
+                  indicator: BoxDecoration(
                     color: kWhiteColor,
                     borderRadius:
                         BorderRadius.all(Radius.circular(kPadding * 1.5)),
                   ),
                   labelColor: kPrimaryColor,
                   unselectedLabelColor: Colors.black54,
-                  labelStyle: const TextStyle(
+                  labelStyle: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w500,
                       letterSpacing: .4),
                   tabs: [
-                    const Tab(
+                    Tab(
                       child: Text(
                         'Expense',
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    const Tab(
+                    Tab(
                       child: Text(
                         'Currency',
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    const Tab(
+                    Tab(
                       child: Text(
                         'To-do',
                         overflow: TextOverflow.ellipsis,
