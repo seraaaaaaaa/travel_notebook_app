@@ -6,7 +6,7 @@ import 'package:travel_notebook/blocs/expense/expense_state.dart';
 import 'package:travel_notebook/components/error_msg.dart';
 import 'package:travel_notebook/models/expense/enum/expense_type.dart';
 import 'package:travel_notebook/components/filter_chip.dart';
-import 'package:travel_notebook/screens/expense/reorder_expense.dart';
+import 'package:travel_notebook/models/expense/enum/payment_method.dart';
 import 'package:travel_notebook/themes/constants.dart';
 import 'package:travel_notebook/models/destination/destination_model.dart';
 import 'package:travel_notebook/models/expense/expense_model.dart';
@@ -34,7 +34,10 @@ class _AllExpensePageState extends State<AllExpensePage> {
 
   final List<ExpenseType> _expenseTypes =
       ExpenseType.values.where((e) => e.enabled == false).toList();
-  int _currentTypeNo = 0;
+  final List<PaymentMethod> _paymentMethods = PaymentMethod.values;
+
+  int _filterTypeNo = 0;
+  String _filterPaymentMethod = '';
 
   @override
   void initState() {
@@ -43,8 +46,11 @@ class _AllExpensePageState extends State<AllExpensePage> {
     _destination = widget.destination;
 
     _expenseBloc = BlocProvider.of<ExpenseBloc>(context);
-    _expenseBloc
-        .add(GetExpenses(_destination.destinationId!, typeNo: _currentTypeNo));
+    _expenseBloc.add(GetExpenses(
+      _destination.destinationId!,
+      typeNo: _filterTypeNo,
+      paymentMethod: _filterPaymentMethod,
+    ));
   }
 
   Map<String, List<Expense>> _groupExpensesByDate(List<Expense> expenses) {
@@ -61,12 +67,12 @@ class _AllExpensePageState extends State<AllExpensePage> {
     return groupedExpenses;
   }
 
-  Future _refreshData(int typeNo) async {
-    setState(() {
-      _currentTypeNo = typeNo;
-    });
-    _expenseBloc
-        .add(GetExpenses(_destination.destinationId!, typeNo: _currentTypeNo));
+  Future _refreshData() async {
+    _expenseBloc.add(GetExpenses(
+      _destination.destinationId!,
+      typeNo: _filterTypeNo,
+      paymentMethod: _filterPaymentMethod,
+    ));
   }
 
   @override
@@ -80,39 +86,192 @@ class _AllExpensePageState extends State<AllExpensePage> {
           },
         ),
         title: const Text('Expenses'),
-      ),
-      body: Container(
-        padding: const EdgeInsets.all(kPadding),
-        child: Column(
-          children: [
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  // Add "All" ChoiceChip at the beginning
-                  FilterChoiceChip(
-                    label: 'All',
-                    selected: _currentTypeNo == 0,
-                    onTap: () {
-                      _refreshData(0);
-                    },
-                  ),
-
-                  // Generate ChoiceChips dynamically
-                  ...List.generate(_expenseTypes.length, (index) {
-                    var expenseType = _expenseTypes[index];
-                    return FilterChoiceChip(
-                      label: expenseType.name,
-                      selected: _currentTypeNo == expenseType.typeNo,
-                      onTap: () {
-                        _refreshData(expenseType.typeNo);
-                      },
-                    );
-                  }),
-                ],
+        actions: [
+          GestureDetector(
+            child: const Padding(
+              padding: EdgeInsets.symmetric(horizontal: kPadding),
+              child: Icon(
+                Icons.filter_list,
+                color: kSecondaryColor,
               ),
             ),
+            onTap: () async {
+              final result = await showModalBottomSheet(
+                context: context,
+                isDismissible: false,
+                builder: (context) {
+                  return StatefulBuilder(
+                    builder: (context, setModalState) {
+                      return Padding(
+                        padding: const EdgeInsets.all(kPadding),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: kPadding),
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.filter_list,
+                                      color: kSecondaryColor),
+                                  const SizedBox(
+                                    width: kHalfPadding,
+                                  ),
+                                  Text('Filter',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: kPadding / 2),
+                              child: Text('Expense Type',
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium),
+                            ),
+                            Wrap(
+                              children: [
+                                FilterChoiceChip(
+                                  label: 'All',
+                                  selected: _filterTypeNo == 0,
+                                  onTap: () {
+                                    setModalState(() {
+                                      _filterTypeNo = 0;
+                                    });
+                                  },
+                                ),
+                                ...List.generate(_expenseTypes.length, (index) {
+                                  var expenseType = _expenseTypes[index];
+                                  return FilterChoiceChip(
+                                    label: expenseType.name,
+                                    selected:
+                                        _filterTypeNo == expenseType.typeNo,
+                                    onTap: () {
+                                      setModalState(() {
+                                        _filterTypeNo = expenseType.typeNo;
+                                      });
+                                    },
+                                  );
+                                }),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: kPadding / 2),
+                              child: Text('Payment Method',
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium),
+                            ),
+                            Wrap(
+                              children: [
+                                FilterChoiceChip(
+                                  label: 'All',
+                                  selected: _filterPaymentMethod.isEmpty,
+                                  onTap: () {
+                                    setModalState(() {
+                                      _filterPaymentMethod = '';
+                                    });
+                                  },
+                                ),
+                                ...List.generate(_paymentMethods.length,
+                                    (index) {
+                                  var paymentMethod = _paymentMethods[index];
+                                  return FilterChoiceChip(
+                                    label: paymentMethod.name,
+                                    selected: _filterPaymentMethod ==
+                                        paymentMethod.name,
+                                    onTap: () {
+                                      setModalState(() {
+                                        _filterPaymentMethod =
+                                            paymentMethod.name;
+                                      });
+                                    },
+                                  );
+                                }),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: kPadding),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: kSecondaryColor),
+                                        onPressed: () {
+                                          setModalState(() {
+                                            _filterTypeNo = 0;
+                                            _filterPaymentMethod = '';
+                                          });
+                                          Navigator.pop(context, {
+                                            'typeNo': _filterTypeNo,
+                                            'paymentMethod':
+                                                _filterPaymentMethod,
+                                          });
+                                        },
+                                        child: const Text('Reset')),
+                                  ),
+                                  const SizedBox(
+                                    width: kPadding,
+                                  ),
+                                  Expanded(
+                                    child: ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.pop(context, {
+                                            'typeNo': _filterTypeNo,
+                                            'paymentMethod':
+                                                _filterPaymentMethod,
+                                          });
+                                        },
+                                        child: const Text('Apply')),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+              );
+
+              if (result != null) {
+                setState(() {
+                  _filterTypeNo = result['typeNo'];
+                  _filterPaymentMethod = result['paymentMethod'];
+                });
+                _refreshData();
+              }
+            },
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ExpenseDetailPage(
+                      destination: _destination,
+                    )),
+          );
+        },
+        tooltip: 'Record Expense',
+        child: const Icon(
+          Icons.edit_note,
+          size: kHalfPadding * 3,
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(
+            horizontal: kPadding, vertical: kHalfPadding),
+        child: Column(
+          children: [
             BlocBuilder<ExpenseBloc, ExpenseState>(
               builder: (context, state) {
                 if (state is ExpenseLoading) {
@@ -127,8 +286,8 @@ class _AllExpensePageState extends State<AllExpensePage> {
                       : Expanded(
                           child: ListView.builder(
                             shrinkWrap: true,
-                            itemCount: groupedExpenses.length +
-                                state.expenses.length, // account for headers
+                            itemCount:
+                                groupedExpenses.length + state.expenses.length,
                             itemBuilder: (context, index) {
                               final dateKeys = groupedExpenses.keys.toList();
                               int itemIndex = 0;
@@ -136,47 +295,15 @@ class _AllExpensePageState extends State<AllExpensePage> {
                               for (String dateKey in dateKeys) {
                                 // Check if the current item index is the header for this date
                                 if (itemIndex == index) {
-                                  // Return header
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: kHalfPadding),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          dateKey,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            color: kGreyColor,
-                                          ),
-                                        ),
-                                        _currentTypeNo > 0
-                                            ? Container()
-                                            : GestureDetector(
-                                                onTap: () async {
-                                                  await Navigator.of(context)
-                                                      .push(
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          ReorderExpensePage(
-                                                        destination:
-                                                            _destination,
-                                                        expenses:
-                                                            groupedExpenses[
-                                                                dateKey]!,
-                                                      ),
-                                                    ),
-                                                  );
-
-                                                  _refreshData(_currentTypeNo);
-                                                },
-                                                child: const Icon(
-                                                  Icons.filter_list,
-                                                  color: kGreyColor,
-                                                ),
-                                              ),
-                                      ],
+                                    child: Text(
+                                      dateKey,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w500,
+                                        color: kGreyColor,
+                                      ),
                                     ),
                                   );
                                 }

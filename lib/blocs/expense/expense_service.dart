@@ -8,7 +8,7 @@ class ExpenseService {
   final DatabaseHelper _databaseHelper = DatabaseHelper.instance;
 
   Future<List<Expense>> readAllExpenses(
-      int destinationId, int? limit, int typeNo) async {
+      int destinationId, int? limit, int typeNo, String paymentMethod) async {
     final db = await _databaseHelper.database;
 
     var orderBy =
@@ -24,6 +24,11 @@ class ExpenseService {
     if (typeNo > 0) {
       where += " AND ${ExpenseField.typeNo} = ?";
       whereArgs.add(typeNo);
+    }
+
+    if (paymentMethod.isNotEmpty) {
+      where += " AND ${ExpenseField.paymentMethod} = ?";
+      whereArgs.add(paymentMethod);
     }
 
     final result = await db.query(

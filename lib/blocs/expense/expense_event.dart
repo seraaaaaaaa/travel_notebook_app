@@ -7,8 +7,14 @@ class GetExpenses extends ExpenseEvent {
   final int destinationId;
   final int? limit;
   final int typeNo;
+  final String paymentMethod;
 
-  GetExpenses(this.destinationId, {this.limit, this.typeNo = 0});
+  GetExpenses(
+    this.destinationId, {
+    this.limit,
+    this.typeNo = 0,
+    this.paymentMethod = '',
+  });
 }
 
 class AddExpense extends ExpenseEvent {

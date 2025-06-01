@@ -21,14 +21,15 @@ class FilterChoiceChip extends StatelessWidget {
         showCheckmark: false,
         padding: const EdgeInsets.symmetric(
             vertical: kPadding - kHalfPadding, horizontal: kPadding / 2),
-        side: BorderSide(color: kSecondaryColor.shade100),
-        selectedColor: kGreyColor.shade100,
+        side: BorderSide(color: kGreyColor.shade300),
+        selectedColor: kSecondaryColor.shade50,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(kHalfPadding * 2),
         ),
         label: Text(label),
         labelStyle: TextStyle(
           color: selected ? kPrimaryColor : kGreyColor.shade800,
+          fontWeight: selected ? FontWeight.bold : FontWeight.normal,
         ),
         selected: selected,
         onSelected: (_) => onTap(),
