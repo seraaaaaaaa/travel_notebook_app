@@ -244,7 +244,8 @@ class ExpenseItem extends StatelessWidget {
                           ),
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 6),
-                            margin: const EdgeInsets.only(top: 4),
+                            margin: const EdgeInsets.only(
+                                top: kHalfPadding / 2, bottom: kHalfPadding),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -13,6 +13,11 @@ String formatDateWithTime(DateTime? date) {
   return date == null ? "" : dateFormat.format(date);
 }
 
+String formatDateWithTimeAndDay(DateTime? date) {
+  final DateFormat dateFormat = DateFormat('EEE dd MMM yyyy hh:mm a');
+  return date == null ? "" : dateFormat.format(date);
+}
+
 String formatDateWithoutYear(DateTime? date) {
   final DateFormat dateFormat = DateFormat('MMM dd');
   return date == null ? "" : dateFormat.format(date).toUpperCase();

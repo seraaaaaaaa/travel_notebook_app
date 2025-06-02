@@ -45,7 +45,7 @@ class DestinationCard extends StatelessWidget {
         }
       },
       child: Container(
-        height: size.height * .28,
+        height: size.height * .285,
         margin: const EdgeInsets.symmetric(
             horizontal: kPadding, vertical: kHalfPadding),
         decoration: BoxDecoration(

@@ -1,4 +1,5 @@
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,6 +41,7 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
   late Destination _destination;
 
   final _amountController = TextEditingController();
+  final _dateController = TextEditingController();
   final _remarkController = TextEditingController();
 
   ExpenseType _expenseType = ExpenseType.others;
@@ -82,12 +84,15 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
       _remarkController.text = _expense.remark;
     }
 
+    _dateController.text = formatDateWithTimeAndDay(_expense.createdTime);
+
     super.initState();
   }
 
   @override
   void dispose() {
     _amountController.dispose();
+    _dateController.dispose();
     _remarkController.dispose();
 
     super.dispose();
@@ -133,9 +138,162 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Amount',
+                      'Date',
                       style: Theme.of(context).textTheme.labelLarge,
                     ),
+                    const SizedBox(height: kHalfPadding),
+                    TextFormField(
+                      controller: _dateController,
+                      readOnly: true,
+                      onTap: () {
+                        showCupertinoModalPopup(
+                          context: context,
+                          builder: (_) {
+                            DateTime tempDate =
+                                _expense.createdTime ?? DateTime.now();
+                            return Container(
+                              height: MediaQuery.of(context).size.height * .4,
+                              color:
+                                  CupertinoColors.systemBackground.resolveFrom(
+                                context,
+                              ),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(
+                                      kHalfPadding,
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            const Icon(
+                                              Icons.calendar_month_outlined,
+                                              color: kPrimaryColor,
+                                            ),
+                                            const SizedBox(width: kHalfPadding),
+                                            Text(
+                                              'Select Date',
+                                              style: Theme.of(
+                                                context,
+                                              ).textTheme.titleLarge,
+                                            ),
+                                          ],
+                                        ),
+                                        CupertinoButton(
+                                          child: const Text('Done'),
+                                          onPressed: () {
+                                            setState(() {
+                                              _expense.createdTime = tempDate;
+                                              _dateController.text =
+                                                  formatDateWithTimeAndDay(
+                                                      _expense.createdTime);
+                                            });
+
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: CupertinoTheme(
+                                      data: const CupertinoThemeData(
+                                        textTheme: CupertinoTextThemeData(
+                                          dateTimePickerTextStyle: TextStyle(
+                                            fontSize: 17,
+                                            letterSpacing: 1,
+                                            color: kBlackColor,
+                                          ),
+                                        ),
+                                      ),
+                                      child: CupertinoDatePicker(
+                                        initialDateTime: _expense.createdTime ??
+                                            DateTime.now(),
+                                        mode:
+                                            CupertinoDatePickerMode.dateAndTime,
+                                        dateOrder: DatePickerDateOrder.ymd,
+                                        //TODO minimumYear: 2000,
+                                        maximumDate: DateTime.now()
+                                            .add(const Duration(days: 1)),
+                                        onDateTimeChanged: (DateTime newDate) {
+                                          tempDate = newDate;
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      onChanged: (val) {},
+                      textAlignVertical: TextAlignVertical.center,
+                      textInputAction: TextInputAction.next,
+                      textAlign: TextAlign.start,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Required';
+                        }
+
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        fillColor: kGreyColor.shade100,
+                        filled: true,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(kHalfPadding),
+                          borderSide: BorderSide(
+                            color: kSecondaryColor.shade50,
+                            width: 1,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(kHalfPadding),
+                          borderSide: BorderSide(
+                            color: kSecondaryColor.shade50,
+                            width: 1,
+                          ),
+                        ),
+                        suffixIcon: const Padding(
+                          padding: EdgeInsets.only(right: kHalfPadding),
+                          child: SizedBox(
+                            child: Center(
+                                widthFactor: 0.0,
+                                child: Icon(Icons.calendar_month)),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: kPadding),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Amount',
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: kPadding / 3),
+                          child: Text(
+                            formatCurrency(
+                              _expense.converted,
+                              _destination.ownDecimal,
+                              currency: _destination.ownCurrency,
+                            ),
+                            style: Theme.of(context).textTheme.labelLarge,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: kHalfPadding),
                     TextFormField(
                       controller: _amountController,
                       onTap: () => _amountController.selection = TextSelection(
@@ -171,6 +329,23 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
                         return null;
                       },
                       decoration: InputDecoration(
+                        border: InputBorder.none,
+                        fillColor: kGreyColor.shade100,
+                        filled: true,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(kHalfPadding),
+                          borderSide: BorderSide(
+                            color: kSecondaryColor.shade50,
+                            width: 1,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(kHalfPadding),
+                          borderSide: BorderSide(
+                            color: kSecondaryColor.shade50,
+                            width: 1,
+                          ),
+                        ),
                         prefixIcon: Padding(
                           padding: const EdgeInsets.only(left: kHalfPadding),
                           child: SizedBox(
@@ -189,24 +364,7 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
                         ),
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: kPadding / 2, horizontal: kPadding / 4),
-                          child: Text(
-                            formatCurrency(
-                              _expense.converted,
-                              _destination.ownDecimal,
-                              currency: _destination.ownCurrency,
-                            ),
-                            style: Theme.of(context).textTheme.labelLarge,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: kHalfPadding),
+                    const SizedBox(height: kPadding),
                     Text(
                       'Payment Method',
                       style: Theme.of(context).textTheme.labelLarge,
@@ -358,17 +516,36 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
                         ),
                       ],
                     ),
+                    const SizedBox(
+                      height: kHalfPadding,
+                    ),
                     TextField(
-                      maxLines: 3,
+                      maxLines: 5,
                       controller: _remarkController,
                       textCapitalization: TextCapitalization.sentences,
                       textInputAction: TextInputAction.done,
                       style: const TextStyle(
                           fontWeight: FontWeight.w500, letterSpacing: 1),
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                         hintText: 'Add a remark here...',
+                        fillColor: kGreyColor.shade100,
+                        filled: true,
                         border: InputBorder.none,
-                        hintStyle: TextStyle(
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(kHalfPadding),
+                          borderSide: BorderSide(
+                            color: kSecondaryColor.shade50,
+                            width: 1,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(kHalfPadding),
+                          borderSide: BorderSide(
+                            color: kSecondaryColor.shade50,
+                            width: 1,
+                          ),
+                        ),
+                        hintStyle: const TextStyle(
                           fontWeight: FontWeight.normal,
                           color: kGreyColor,
                         ),

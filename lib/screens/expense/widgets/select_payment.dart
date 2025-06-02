@@ -24,18 +24,21 @@ class _SelectPaymentState extends State<SelectPayment> {
     List<Widget> choices = [];
     selectedChoice = widget.selectedChoice;
     for (var item in widget.choiceList) {
-      choices.add(Container(
-        padding: const EdgeInsets.all(4.0),
+      choices.add(Padding(
+        padding: const EdgeInsets.symmetric(horizontal: kHalfPadding / 2),
         child: ChoiceChip(
           showCheckmark: false,
           side: BorderSide(color: kGreyColor.shade100),
           backgroundColor: kGreyColor.shade100,
           selectedColor: kPrimaryColor,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-          avatar: Icon(
-            item.icon,
-            color: selectedChoice == item ? kWhiteColor : kGreyColor.shade800,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(kHalfPadding * 2)),
+          avatar: Padding(
+            padding: const EdgeInsets.only(left: kHalfPadding / 2),
+            child: Icon(
+              item.icon,
+              color: selectedChoice == item ? kWhiteColor : kGreyColor.shade800,
+            ),
           ),
           label: Text(item.name),
           labelStyle: TextStyle(
