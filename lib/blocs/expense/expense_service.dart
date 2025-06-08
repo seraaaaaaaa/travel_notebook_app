@@ -11,8 +11,7 @@ class ExpenseService {
       int destinationId, int? limit, int typeNo, String paymentMethod) async {
     final db = await _databaseHelper.database;
 
-    var orderBy =
-        '${ExpenseField.sequence} ASC, ${ExpenseField.createdTime} DESC';
+    var orderBy = '${ExpenseField.createdTime} DESC';
 
     if (limit == 4) {
       orderBy = '${ExpenseField.createdTime} DESC';

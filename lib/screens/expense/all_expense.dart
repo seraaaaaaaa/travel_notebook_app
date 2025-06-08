@@ -98,8 +98,10 @@ class _AllExpensePageState extends State<AllExpensePage> {
             onTap: () async {
               final result = await showModalBottomSheet(
                 context: context,
-                isDismissible: false,
                 builder: (context) {
+                  int currentTypeNo = _filterTypeNo;
+                  String currentPaymentMethod = _filterPaymentMethod;
+
                   return StatefulBuilder(
                     builder: (context, setModalState) {
                       return Padding(
@@ -136,10 +138,10 @@ class _AllExpensePageState extends State<AllExpensePage> {
                               children: [
                                 FilterChoiceChip(
                                   label: 'All',
-                                  selected: _filterTypeNo == 0,
+                                  selected: currentTypeNo == 0,
                                   onTap: () {
                                     setModalState(() {
-                                      _filterTypeNo = 0;
+                                      currentTypeNo = 0;
                                     });
                                   },
                                 ),
@@ -148,10 +150,10 @@ class _AllExpensePageState extends State<AllExpensePage> {
                                   return FilterChoiceChip(
                                     label: expenseType.name,
                                     selected:
-                                        _filterTypeNo == expenseType.typeNo,
+                                        currentTypeNo == expenseType.typeNo,
                                     onTap: () {
                                       setModalState(() {
-                                        _filterTypeNo = expenseType.typeNo;
+                                        currentTypeNo = expenseType.typeNo;
                                       });
                                     },
                                   );
@@ -169,10 +171,10 @@ class _AllExpensePageState extends State<AllExpensePage> {
                               children: [
                                 FilterChoiceChip(
                                   label: 'All',
-                                  selected: _filterPaymentMethod.isEmpty,
+                                  selected: currentPaymentMethod.isEmpty,
                                   onTap: () {
                                     setModalState(() {
-                                      _filterPaymentMethod = '';
+                                      currentPaymentMethod = '';
                                     });
                                   },
                                 ),
@@ -181,11 +183,11 @@ class _AllExpensePageState extends State<AllExpensePage> {
                                   var paymentMethod = _paymentMethods[index];
                                   return FilterChoiceChip(
                                     label: paymentMethod.name,
-                                    selected: _filterPaymentMethod ==
+                                    selected: currentPaymentMethod ==
                                         paymentMethod.name,
                                     onTap: () {
                                       setModalState(() {
-                                        _filterPaymentMethod =
+                                        currentPaymentMethod =
                                             paymentMethod.name;
                                       });
                                     },
@@ -204,13 +206,13 @@ class _AllExpensePageState extends State<AllExpensePage> {
                                             backgroundColor: kSecondaryColor),
                                         onPressed: () {
                                           setModalState(() {
-                                            _filterTypeNo = 0;
-                                            _filterPaymentMethod = '';
+                                            currentTypeNo = 0;
+                                            currentPaymentMethod = '';
                                           });
                                           Navigator.pop(context, {
-                                            'typeNo': _filterTypeNo,
+                                            'typeNo': currentTypeNo,
                                             'paymentMethod':
-                                                _filterPaymentMethod,
+                                                currentPaymentMethod,
                                           });
                                         },
                                         child: const Text('Reset')),
@@ -222,9 +224,9 @@ class _AllExpensePageState extends State<AllExpensePage> {
                                     child: ElevatedButton(
                                         onPressed: () {
                                           Navigator.pop(context, {
-                                            'typeNo': _filterTypeNo,
+                                            'typeNo': currentTypeNo,
                                             'paymentMethod':
-                                                _filterPaymentMethod,
+                                                currentPaymentMethod,
                                           });
                                         },
                                         child: const Text('Apply')),
