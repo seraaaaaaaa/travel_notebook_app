@@ -114,19 +114,14 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
           if (state is ExpenseError) {
             Navigator.pop(context);
             // Show an error message
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
+            showToast(state.message, color: kRedColor);
           } else if (state is ExpenseResult) {
             Navigator.pop(context);
 
             // Show a success message when Destinations are loaded
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                  content: Text(_isAddNew
-                      ? 'Expense recorded successfully'
-                      : 'Expense updated successfully')),
-            );
+            showToast(_isAddNew
+                ? 'Expense recorded successfully'
+                : 'Expense updated successfully');
           }
         },
         child: SafeArea(

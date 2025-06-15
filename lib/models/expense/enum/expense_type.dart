@@ -9,8 +9,8 @@ enum ExpenseType {
   taxi(name: 'Taxi', typeNo: 1, icon: Icons.local_taxi_outlined),
   parking(name: 'Parking', typeNo: 1, icon: Icons.local_parking_outlined),
   petrol(name: 'Petrol', typeNo: 1, icon: Icons.local_gas_station_outlined),
+  flight(name: 'Flight', typeNo: 1, icon: Icons.airplane_ticket_outlined),
 
-  // Meal
   meal(name: 'Meal', typeNo: 2, color: kPrimaryColor, enabled: false),
   food(name: 'Food', typeNo: 2, icon: Icons.flatware_outlined),
   drinks(name: 'Drinks', typeNo: 2, icon: Icons.local_cafe_outlined),
@@ -19,7 +19,7 @@ enum ExpenseType {
 
   // Misc
   miscellaneous(name: 'Miscellaneous', typeNo: 3, color: kCyanColor, enabled: false),
-  accomodation(name: 'Accomodation', typeNo: 3, icon: Icons.bed_outlined),
+  accommodation(name: 'Accommodation', typeNo: 3, icon: Icons.bed_outlined),
   shopping(name: 'Shopping', typeNo: 3, icon: Icons.shopping_bag_outlined),
   souvenir(name: 'Souvenir', typeNo: 3, icon: Icons.redeem_outlined),
   ticket(name: 'Ticket', typeNo: 3, icon: Icons.confirmation_num_outlined),

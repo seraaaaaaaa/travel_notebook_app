@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:travel_notebook/services/utils.dart';
 import 'package:travel_notebook/themes/constants.dart';
 import 'package:travel_notebook/screens/destination/all_destination.dart';
 
@@ -20,6 +20,7 @@ class WelcomePage extends StatefulWidget {
 
 class _WelcomePageState extends State<WelcomePage> {
   final TextEditingController _currencyController = TextEditingController();
+  final FocusNode _currencyFocusNode = FocusNode();
 
   String _ownCurrency = "";
   int _ownDecimal = 2;
@@ -41,6 +42,7 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   void dispose() {
     _currencyController.dispose();
+    _currencyFocusNode.dispose();
     super.dispose();
   }
 
@@ -56,17 +58,31 @@ class _WelcomePageState extends State<WelcomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height * 0.425;
+
     return Scaffold(
+      appBar: _init
+          ? null
+          : AppBar(
+              leading: IconButton(
+                icon: const Icon(Icons.keyboard_backspace),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(kPadding * 1.5),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            SvgPicture.asset(
-              'assets/images/welcome.svg',
-              height: MediaQuery.of(context).size.height * .55,
+            Image.asset(
+              'assets/icon/icon.png',
+              height: height,
+              fit: BoxFit.contain,
             ),
+            const SizedBox(height: kPadding),
             Text(
               'Welcome to Travel Notebook',
               textAlign: TextAlign.center,
@@ -82,7 +98,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   height: 1.6,
                   letterSpacing: .4),
             ),
-            const SizedBox(height: 30),
+            const SizedBox(height: kPadding * 2.5),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -104,6 +120,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 Expanded(
                   child: TextFormField(
                     controller: _currencyController,
+                    focusNode: _currencyFocusNode,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Required'; // Allow empty value (if needed)
@@ -188,7 +205,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 ),
               ],
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: kPadding * 2.5),
             TextButton(
               onPressed: () async {
                 _ownCurrency = _currencyController.text;
@@ -199,10 +216,9 @@ class _WelcomePageState extends State<WelcomePage> {
 
                   _navigateToAllDestinationPage();
                 } else {
-                  // Navigate to the next page or show a message
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Please enter your currency')),
-                  );
+                  _currencyFocusNode.requestFocus(); // Focus the input
+
+                  showToast('Please enter your currency');
                 }
               },
               style: TextButton.styleFrom(
@@ -215,23 +231,6 @@ class _WelcomePageState extends State<WelcomePage> {
                 style: TextStyle(fontSize: 18),
               ),
             ),
-            _init
-                ? Container()
-                : GestureDetector(
-                    onTap: _navigateToAllDestinationPage,
-                    child: Container(
-                      padding: const EdgeInsets.all(kPadding),
-                      alignment: Alignment.center,
-                      child: Text(
-                        'Cancel',
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(
-                                color: kSecondaryColor, letterSpacing: .4),
-                      ),
-                    ),
-                  ),
           ],
         ),
       ),

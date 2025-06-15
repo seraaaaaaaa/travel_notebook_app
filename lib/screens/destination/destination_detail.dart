@@ -76,16 +76,12 @@ class _DestinationDetailPageState extends State<DestinationDetailPage> {
             Navigator.pop(context);
 
             // Show an error message
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
+            showToast(state.message, color: kRedColor);
           } else if (state is DestinationResult) {
             Navigator.pop(context);
 
             // Show a success message
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.result)),
-            );
+            showToast(state.result);
           }
         },
         child: SafeArea(

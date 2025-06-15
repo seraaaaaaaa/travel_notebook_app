@@ -106,7 +106,7 @@ class _AllDestinationPageState extends State<AllDestinationPage> {
           actions: [
             GestureDetector(
               onTap: () async {
-                Navigator.pushReplacement(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => WelcomePage(

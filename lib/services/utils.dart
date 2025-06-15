@@ -1,6 +1,9 @@
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:travel_notebook/models/destination/destination_model.dart';
 import 'package:travel_notebook/models/expense/expense_model.dart';
+import 'package:travel_notebook/themes/constants.dart';
 
 // Function to format date
 String formatDate(DateTime? date) {
@@ -99,4 +102,15 @@ void deductTotalExpenses(Expense expense, Destination destination) {
     //misc
     destination.totalMisc -= expense.amount;
   }
+}
+
+void showToast(String message, {Color color = kBlackColor}) {
+  Fluttertoast.showToast(
+    msg: message,
+    toastLength: Toast.LENGTH_SHORT,
+    gravity: ToastGravity.CENTER,
+    timeInSecForIosWeb: 1,
+    backgroundColor: color,
+    textColor: kWhiteColor,
+  );
 }

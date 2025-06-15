@@ -22,6 +22,7 @@ dependencies:
   flutter_svg: ^2.0.10+1
   path: ^1.9.0
   currency_text_input_formatter: ^2.2.6
+  fluttertoast: ^8.2.12
 
 dev_dependencies:
   flutter_test:
@@ -36,6 +37,6 @@ flutter_launcher_icons:
 
 flutter:
   uses-material-design: true
-
   assets:
     - assets/images/
+    - assets/icon/icon.png

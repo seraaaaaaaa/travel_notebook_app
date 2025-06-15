@@ -40,10 +40,7 @@ class ExpenseItem extends StatelessWidget {
     );
     if (result == 'deleted' && context.mounted) {
       Navigator.pop(context); //pop modal bottom dialog
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Receipt Deleted Successfully')),
-      );
+      showToast('Receipt Deleted Successfully');
     }
   }
 
@@ -174,12 +171,8 @@ class ExpenseItem extends StatelessWidget {
                                             await onUploadReceipt(imgPath);
 
                                             if (context.mounted) {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(
-                                                const SnackBar(
-                                                    content: Text(
-                                                        'Receipt Uploaded Successfully')),
-                                              );
+                                              showToast(
+                                                  'Receipt Uploaded Successfully');
 
                                               Navigator.pop(context);
                                               await _viewReceipt(context);
