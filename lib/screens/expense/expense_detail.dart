@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:travel_notebook/blocs/expense/expense_bloc.dart';
 import 'package:travel_notebook/blocs/expense/expense_event.dart';
 import 'package:travel_notebook/blocs/expense/expense_state.dart';
@@ -132,7 +133,8 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
           child: Form(
             key: _formKey,
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(kPadding),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: kPadding, vertical: kHalfPadding),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -265,7 +267,7 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
                           child: SizedBox(
                             child: Center(
                                 widthFactor: 0.0,
-                                child: Icon(Icons.calendar_month)),
+                                child: Icon(Iconsax.calendar_1_copy)),
                           ),
                         ),
                       ),

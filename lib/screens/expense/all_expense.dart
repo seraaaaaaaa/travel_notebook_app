@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:travel_notebook/blocs/expense/expense_bloc.dart';
 import 'package:travel_notebook/blocs/expense/expense_event.dart';
 import 'package:travel_notebook/blocs/expense/expense_state.dart';
@@ -92,8 +93,8 @@ class _AllExpensePageState extends State<AllExpensePage> {
               padding: const EdgeInsets.symmetric(horizontal: kPadding),
               child: Icon(
                 _filterTypeNo > 0 || _filterPaymentMethod.isNotEmpty
-                    ? Icons.filter_alt
-                    : Icons.filter_alt_outlined,
+                    ? Iconsax.filter_tick
+                    : Iconsax.document_filter_copy,
                 color: _filterTypeNo > 0 || _filterPaymentMethod.isNotEmpty
                     ? kPrimaryColor
                     : kSecondaryColor,
@@ -119,7 +120,7 @@ class _AllExpensePageState extends State<AllExpensePage> {
                                   vertical: kPadding),
                               child: Row(
                                 children: [
-                                  const Icon(Icons.filter_list,
+                                  const Icon(Iconsax.document_filter_copy,
                                       color: kSecondaryColor),
                                   const SizedBox(
                                     width: kHalfPadding,
@@ -269,104 +270,97 @@ class _AllExpensePageState extends State<AllExpensePage> {
         },
         tooltip: 'Record Expense',
         child: const Icon(
-          Icons.edit_note,
-          size: kHalfPadding * 3,
+          Iconsax.note_add,
+          size: kHalfPadding * 2.8,
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(
-            horizontal: kPadding, vertical: kHalfPadding),
-        child: Column(
-          children: [
-            BlocBuilder<ExpenseBloc, ExpenseState>(
-              builder: (context, state) {
-                if (state is ExpenseLoading) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (state is ExpensesLoaded) {
-                  final groupedExpenses = _groupExpensesByDate(state.expenses);
-                  return state.expenses.isEmpty
-                      ? const NoData(
-                          msg: 'No Expense Found',
-                          icon: Icons.credit_card,
-                        )
-                      : Expanded(
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount:
-                                groupedExpenses.length + state.expenses.length,
-                            itemBuilder: (context, index) {
-                              final dateKeys = groupedExpenses.keys.toList();
-                              int itemIndex = 0;
+        padding: const EdgeInsets.symmetric(horizontal: kPadding),
+        child: BlocConsumer<ExpenseBloc, ExpenseState>(
+          listener: (context, state) {
+            if (state is ExpenseResult) {
+              _refreshData();
+            }
+          },
+          builder: (context, state) {
+            if (state is ExpenseLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is ExpensesLoaded) {
+              final groupedExpenses = _groupExpensesByDate(state.expenses);
+              return state.expenses.isEmpty
+                  ? const NoData(
+                      msg: 'No Expense Found',
+                      icon: Icons.credit_card,
+                    )
+                  : ListView.builder(
+                      itemCount: groupedExpenses.length + state.expenses.length,
+                      itemBuilder: (context, index) {
+                        final dateKeys = groupedExpenses.keys.toList();
+                        int itemIndex = 0;
 
-                              for (String dateKey in dateKeys) {
-                                // Check if the current item index is the header for this date
-                                if (itemIndex == index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: kHalfPadding),
-                                    child: Text(
-                                      dateKey,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        color: kGreyColor,
-                                      ),
-                                    ),
-                                  );
-                                }
-                                itemIndex++;
+                        for (String dateKey in dateKeys) {
+                          // Check if the current item index is the header for this date
+                          if (itemIndex == index) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: kHalfPadding),
+                              child: Text(
+                                dateKey,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  color: kGreyColor,
+                                ),
+                              ),
+                            );
+                          }
+                          itemIndex++;
 
-                                // Check if the current item index is one of the expenses under this header
-                                final expenseList = groupedExpenses[dateKey]!;
-                                for (Expense expense in expenseList) {
-                                  if (itemIndex == index) {
-                                    return ExpenseItem(
-                                      expense: expense,
-                                      destination: _destination,
-                                      onUploadReceipt: (imgPath) async {
-                                        setState(() {
-                                          expense.receiptImg = imgPath;
-                                        });
-                                        _expenseBloc.add(UpdateExpense(
-                                            expense, _destination));
-                                      },
-                                      onEdit: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    ExpenseDetailPage(
-                                                      destination: _destination,
-                                                      expense: expense,
-                                                    )));
-                                      },
-                                      onDelete: () async {
-                                        deductTotalExpenses(
-                                            expense, _destination);
-                                        await ImageHandler()
-                                            .deleteImage(expense.receiptImg);
-                                        _expenseBloc.add(DeleteExpense(
-                                            expense, _destination));
-                                      },
-                                    );
-                                  }
-                                  itemIndex++;
-                                }
-                              }
+                          // Check if the current item index is one of the expenses under this header
+                          final expenseList = groupedExpenses[dateKey]!;
+                          for (Expense expense in expenseList) {
+                            if (itemIndex == index) {
+                              return ExpenseItem(
+                                expense: expense,
+                                destination: _destination,
+                                onUploadReceipt: (imgPath) async {
+                                  setState(() {
+                                    expense.receiptImg = imgPath;
+                                  });
+                                  _expenseBloc.add(
+                                      UpdateExpense(expense, _destination));
+                                },
+                                onEdit: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => ExpenseDetailPage(
+                                            destination: _destination,
+                                            expense: expense,
+                                          )));
+                                },
+                                onDelete: () async {
+                                  deductTotalExpenses(expense, _destination);
+                                  await ImageHandler()
+                                      .deleteImage(expense.receiptImg);
+                                  _expenseBloc.add(
+                                      DeleteExpense(expense, _destination));
+                                },
+                              );
+                            }
+                            itemIndex++;
+                          }
+                        }
 
-                              // Fallback in case of any mismatch
-                              return const SizedBox.shrink();
-                            },
-                          ),
-                        );
-                } else if (state is ExpenseError) {
-                  return ErrorMsg(
-                    msg: state.message,
-                    onTryAgain: () => Navigator.pop(context),
-                  );
-                }
-                return const SizedBox.shrink();
-              },
-            ),
-          ],
+                        // Fallback in case of any mismatch
+                        return const SizedBox.shrink();
+                      },
+                    );
+            } else if (state is ExpenseError) {
+              return ErrorMsg(
+                msg: state.message,
+                onTryAgain: () => Navigator.pop(context),
+              );
+            }
+            return const SizedBox.shrink();
+          },
         ),
       ),
     );

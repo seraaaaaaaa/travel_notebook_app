@@ -69,8 +69,7 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
         BlocListener<ExpenseBloc, ExpenseState>(
           listener: (context, state) {
             if (state is ExpenseResult) {
-              _destinationBloc.add(GetDestination(_destination.destinationId!,
-                  _destination.ownCurrency, _destination.ownDecimal));
+              _refreshPage();
             }
             if (state is ExpensesLoaded) {
               if (state.typeNo == 0 && state.paymentMethod.isEmpty) {

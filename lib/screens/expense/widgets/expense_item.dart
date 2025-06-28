@@ -69,52 +69,31 @@ class ExpenseItem extends StatelessWidget {
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                      spacing: kHalfPadding,
                       children: [
-                        Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(kHalfPadding),
-                              margin:
-                                  const EdgeInsets.only(right: kHalfPadding),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: ExpenseType.values
-                                    .firstWhere((e) =>
-                                        e.typeNo == expense.typeNo &&
-                                        !e.enabled)
-                                    .color!
-                                    .withValues(alpha: .2),
+                        Expanded(
+                          child: Row(
+                            spacing: kHalfPadding,
+                            children: [
+                              _ExpenseIcon(
+                                typeNo: expense.typeNo,
+                                typeName: expense.typeName,
                               ),
-                              child: Icon(
-                                ExpenseType.values
-                                    .firstWhere(
-                                        (e) => e.name == expense.typeName)
-                                    .icon,
-                                size: 28,
-                                color: kGreyColor.shade800,
+                              Expanded(
+                                child: _ExpenseTitle(
+                                  expense: expense,
+                                  showFull: true,
+                                ),
                               ),
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  expense.typeName,
-                                  style:
-                                      Theme.of(context).textTheme.titleMedium,
-                                ),
-                                Text(
-                                  ExpenseType.values
-                                      .firstWhere(
-                                          (e) => e.typeNo == expense.typeNo)
-                                      .name,
-                                  style: Theme.of(context).textTheme.labelLarge,
-                                ),
-                              ],
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                        Text(formatDateWithTime(expense.createdTime)),
+                        Text(
+                          formatDateWithTime(expense.createdTime),
+                          textAlign: TextAlign.right,
+                          style: const TextStyle(
+                              fontSize: 13, color: kSecondaryColor),
+                        ),
                       ],
                     ),
                     Container(
@@ -223,25 +202,6 @@ class ExpenseItem extends StatelessWidget {
                     Divider(
                       color: kSecondaryColor.shade100,
                     ),
-                    if (expense.excludeBudget == 1)
-                      Container(
-                        decoration: BoxDecoration(
-                            color: kGreyColor.shade50,
-                            border: Border.all(color: kSecondaryColor.shade100),
-                            borderRadius:
-                                BorderRadius.circular(kHalfPadding / 2.5)),
-                        padding: const EdgeInsets.symmetric(
-                            vertical: kHalfPadding / 3,
-                            horizontal: kHalfPadding),
-                        margin: const EdgeInsets.only(top: kHalfPadding / 2),
-                        child: Text(
-                          'Excluded from Budget',
-                          style: Theme.of(context)
-                              .textTheme
-                              .labelMedium!
-                              .copyWith(color: kSecondaryColor, fontSize: 13),
-                        ),
-                      ),
                     Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: kHalfPadding / 2),
@@ -260,7 +220,7 @@ class ExpenseItem extends StatelessWidget {
                                         (e) => e.name == expense.paymentMethod)
                                     .icon,
                                 size: 28,
-                                color: kGreyColor.shade800,
+                                color: kSecondaryColor.shade700,
                               ),
                               const SizedBox(width: kHalfPadding / 2),
                               Text(
@@ -290,67 +250,11 @@ class ExpenseItem extends StatelessWidget {
       },
       contentPadding: const EdgeInsets.symmetric(
           horizontal: kHalfPadding / 3, vertical: kPadding / 2),
-      leading: Container(
-        padding: const EdgeInsets.all(kHalfPadding),
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: ExpenseType.values
-              .firstWhere((e) => e.typeNo == expense.typeNo && !e.enabled)
-              .color!
-              .withValues(alpha: .2),
-        ),
-        child: Icon(
-          ExpenseType.values.firstWhere((e) => e.name == expense.typeName).icon,
-          size: 28,
-          color: kGreyColor.shade800,
-        ),
+      leading: _ExpenseIcon(
+        typeNo: expense.typeNo,
+        typeName: expense.typeName,
       ),
-      title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Flexible(
-                child: Text(
-                  expense.typeName,
-                  style: Theme.of(context).textTheme.titleMedium,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              if (expense.excludeBudget == 1)
-                Container(
-                  margin: const EdgeInsets.only(left: kHalfPadding),
-                  padding: const EdgeInsets.symmetric(
-                      vertical: kHalfPadding / 5,
-                      horizontal: kHalfPadding / 1.5),
-                  decoration: BoxDecoration(
-                      color: kGreyColor.shade50,
-                      border: Border.all(color: kSecondaryColor.shade100),
-                      borderRadius: BorderRadius.circular(kHalfPadding / 2.5)),
-                  child: Text(
-                    'Excl.',
-                    style: Theme.of(context)
-                        .textTheme
-                        .labelMedium!
-                        .copyWith(color: kSecondaryColor),
-                  ),
-                ),
-            ],
-          ),
-          Text(
-            expense.remark.isNotEmpty
-                ? expense.remark
-                : ExpenseType.values
-                    .firstWhere((e) => e.typeNo == expense.typeNo)
-                    .name,
-            style: Theme.of(context).textTheme.labelLarge,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      ),
+      title: _ExpenseTitle(expense: expense),
       trailing: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -375,6 +279,94 @@ class ExpenseItem extends StatelessWidget {
             style: Theme.of(context).textTheme.labelMedium,
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _ExpenseTitle extends StatelessWidget {
+  const _ExpenseTitle({
+    required this.expense,
+    this.showFull = false,
+  });
+
+  final Expense expense;
+  final bool showFull;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Flexible(
+              child: Text(
+                expense.typeName,
+                style: Theme.of(context).textTheme.titleMedium,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+            if (expense.excludeBudget == 1)
+              Container(
+                margin: const EdgeInsets.only(left: kHalfPadding),
+                padding: const EdgeInsets.symmetric(
+                    vertical: kHalfPadding / 5, horizontal: kHalfPadding / 1.5),
+                decoration: BoxDecoration(
+                    color: kGreyColor.shade50,
+                    border: Border.all(color: kSecondaryColor.shade100),
+                    borderRadius: BorderRadius.circular(kHalfPadding / 2.5)),
+                child: Text(
+                  showFull ? 'Excluded' : 'Excl.',
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelMedium!
+                      .copyWith(color: kSecondaryColor),
+                ),
+              ),
+          ],
+        ),
+        Text(
+          expense.remark.isNotEmpty && !showFull
+              ? expense.remark
+              : ExpenseType.values
+                  .firstWhere((e) => e.typeNo == expense.typeNo)
+                  .name,
+          style: Theme.of(context).textTheme.labelLarge,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+      ],
+    );
+  }
+}
+
+class _ExpenseIcon extends StatelessWidget {
+  const _ExpenseIcon({
+    required this.typeNo,
+    required this.typeName,
+  });
+
+  final int typeNo;
+  final String typeName;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(kHalfPadding),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: ExpenseType.values
+            .firstWhere((e) => e.typeNo == typeNo && !e.enabled)
+            .color!
+            .withValues(alpha: .2),
+      ),
+      child: Icon(
+        ExpenseType.values.firstWhere((e) => e.name == typeName).icon,
+        size: 28,
+        color: kGreyColor.shade800,
       ),
     );
   }

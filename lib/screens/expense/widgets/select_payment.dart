@@ -24,9 +24,8 @@ class _SelectPaymentState extends State<SelectPayment> {
     List<Widget> choices = [];
     selectedChoice = widget.selectedChoice;
     for (var item in widget.choiceList) {
-      choices.add(Padding(
-        padding: const EdgeInsets.symmetric(horizontal: kHalfPadding / 2),
-        child: ChoiceChip(
+      choices.add(
+        ChoiceChip(
           showCheckmark: false,
           side: BorderSide(color: kGreyColor.shade100),
           backgroundColor: kGreyColor.shade100,
@@ -54,7 +53,7 @@ class _SelectPaymentState extends State<SelectPayment> {
             }
           },
         ),
-      ));
+      );
     }
 
     return choices;
@@ -65,6 +64,7 @@ class _SelectPaymentState extends State<SelectPayment> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Wrap(
+        spacing: kHalfPadding / 2,
         children: _buildChoiceList(),
       ),
     );

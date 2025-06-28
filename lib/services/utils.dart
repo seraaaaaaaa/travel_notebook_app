@@ -12,7 +12,7 @@ String formatDate(DateTime? date) {
 }
 
 String formatDateWithTime(DateTime? date) {
-  final DateFormat dateFormat = DateFormat('dd MMM hh:mm a');
+  final DateFormat dateFormat = DateFormat('dd MMM \n hh:mm a');
   return date == null ? "" : dateFormat.format(date);
 }
 

@@ -26,8 +26,6 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
         await expenseService.createExpense(event.expense, event.destination);
 
         emit(ExpenseResult());
-
-        add(GetExpenses(event.expense.destinationId));
       } catch (e) {
         emit(ExpenseError('Error occurred: ${e.toString()}'));
       }
@@ -38,8 +36,6 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
         await expenseService.updateExpense(event.expense, event.destination);
 
         emit(ExpenseResult());
-
-        add(GetExpenses(event.destination.destinationId!));
       } catch (e) {
         emit(ExpenseError('Error occurred: ${e.toString()}'));
       }
@@ -59,8 +55,6 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
             event.expense.expenseId!, event.destination);
 
         emit(ExpenseResult());
-
-        add(GetExpenses(event.expense.destinationId));
       } catch (e) {
         emit(ExpenseError('Error occurred: ${e.toString()}'));
       }
