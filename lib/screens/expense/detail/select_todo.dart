@@ -224,7 +224,7 @@ class _SelectTodoState extends State<SelectTodo> {
                     onTryAgain: () => Navigator.pop(context),
                   );
                 }
-                return Container();
+                return const SizedBox.shrink();
               },
             ),
           ],

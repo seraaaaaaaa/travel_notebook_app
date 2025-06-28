@@ -6,8 +6,10 @@ class ExpenseLoading extends ExpenseState {}
 
 class ExpensesLoaded extends ExpenseState {
   final List<Expense> expenses;
+  final int typeNo;
+  final String paymentMethod;
 
-  ExpensesLoaded(this.expenses);
+  ExpensesLoaded(this.expenses, this.typeNo, this.paymentMethod);
 }
 
 class ExpenseResult extends ExpenseState {

@@ -44,15 +44,14 @@ class Indicator extends StatelessWidget {
                 color: color,
               ),
             ),
-            text.isEmpty
-                ? Container()
-                : Container(
-                    padding: const EdgeInsets.only(left: kHalfPadding / 2),
-                    child: Text(
-                      text,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                  )
+            if (text.isNotEmpty)
+              Container(
+                padding: const EdgeInsets.only(left: kHalfPadding / 2),
+                child: Text(
+                  text,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              )
           ],
         ),
       ),

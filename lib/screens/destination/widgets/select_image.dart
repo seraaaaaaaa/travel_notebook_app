@@ -98,16 +98,15 @@ class _SelectImageState extends State<SelectImage> {
                   ),
           ),
         ),
-        _selectedImg != null
-            ? Positioned(
-                top: 20,
-                right: 20,
-                child: TextButton(
-                    onPressed: () {
-                      _selectImg();
-                    },
-                    child: const Text('Change')))
-            : Container(),
+        if (_selectedImg != null)
+          Positioned(
+              top: 20,
+              right: 20,
+              child: TextButton(
+                  onPressed: () {
+                    _selectImg();
+                  },
+                  child: const Text('Change'))),
       ],
     );
   }

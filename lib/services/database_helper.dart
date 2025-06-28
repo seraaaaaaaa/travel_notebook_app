@@ -30,7 +30,7 @@ class DatabaseHelper {
     final path = join(databasePath, 'travel.db');
     return await openDatabase(
       path,
-      version: 3,
+      version: 4,
       onCreate: _createDatabase,
       onUpgrade: _upgradeDatabase,
     );
@@ -44,9 +44,15 @@ class DatabaseHelper {
     ''');
     }
 
-    if (oldVersion < 3) {
+    // if (oldVersion < 3) {
+    //   await db.execute('''
+    //   ALTER TABLE ${ExpenseField.tableName} ADD COLUMN ${ExpenseField.sequence} $intType DEFAULT 0
+    // ''');
+    // }
+
+    if (oldVersion < 4) {
       await db.execute('''
-      ALTER TABLE ${ExpenseField.tableName} ADD COLUMN ${ExpenseField.sequence} $intType DEFAULT 0
+      ALTER TABLE ${ExpenseField.tableName} ADD COLUMN ${ExpenseField.excludeBudget} $intType DEFAULT 0
     ''');
     }
   }
@@ -83,7 +89,7 @@ class DatabaseHelper {
           ${ExpenseField.remark} $textType,    
           ${ExpenseField.receiptImg} $textType,
           ${ExpenseField.createdTime} $textType,
-          ${ExpenseField.sequence} $intType
+          ${ExpenseField.excludeBudget} $intType
         )
       ''');
 

@@ -47,6 +47,8 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
   ExpenseType _expenseType = ExpenseType.others;
   PaymentMethod _paymentMethod = PaymentMethod.cash;
 
+  bool _isExclude = false;
+
   late TodoBloc _todoBloc;
   late List<Todo>? _todos;
 
@@ -73,6 +75,8 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
           createdTime: DateTime.now());
     } else {
       _expense = widget.expense!;
+
+      _isExclude = _expense.excludeBudget == 1;
 
       _expenseType =
           ExpenseType.values.firstWhere((e) => e.name == _expense.typeName);
@@ -350,7 +354,7 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
                                 _destination.currency,
                                 style: const TextStyle(
                                     letterSpacing: 1,
-                                    fontSize: 16,
+                                    fontSize: kPadding,
                                     fontWeight: FontWeight.w500,
                                     color: kSecondaryColor),
                               ),
@@ -358,6 +362,52 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
                           ),
                         ),
                       ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Transform.scale(
+                          scale: 1.25,
+                          child: CupertinoCheckbox(
+                            activeColor: kPrimaryColor,
+                            checkColor: kWhiteColor,
+                            value: _isExclude,
+                            onChanged: (bool? value) {
+                              if (value != null) {
+                                setState(() {
+                                  _isExclude = value;
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                        Text(
+                          'Exclude from Budget',
+                          style: Theme.of(context)
+                              .textTheme
+                              .labelLarge!
+                              .copyWith(color: kSecondaryColor),
+                        ),
+                        const SizedBox(
+                          width: kHalfPadding / 2,
+                        ),
+                        Tooltip(
+                          decoration: BoxDecoration(
+                              color: kBlackColor,
+                              borderRadius:
+                                  BorderRadius.circular(kHalfPadding / 2)),
+                          padding: const EdgeInsets.all(kHalfPadding),
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: kHalfPadding),
+                          message:
+                              'Tick this box to exclude this expense from your total budget',
+                          child: Icon(
+                            Icons.help,
+                            size: kPadding * 1.25,
+                            color: kGreyColor.shade400,
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: kPadding),
                     Text(
@@ -560,6 +610,7 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
                 _formKey.currentState!.save();
 
                 if (!_isAddNew) {
+                  //is edit
                   deductTotalExpenses(_expense, _destination);
                 }
 
@@ -573,6 +624,7 @@ class _ExpenseDetailPageState extends State<ExpenseDetailPage> {
                 _expense.typeNo = _expenseType.typeNo;
                 _expense.typeName = _expenseType.name;
                 _expense.remark = _remarkController.text;
+                _expense.excludeBudget = _isExclude ? 1 : 0;
 
                 updateTotalExpenses(_expense, _destination);
 

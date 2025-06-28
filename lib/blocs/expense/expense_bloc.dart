@@ -15,7 +15,7 @@ class ExpenseBloc extends Bloc<ExpenseEvent, ExpenseState> {
             event.limit,
             event.typeNo,
             event.paymentMethod);
-        emit(ExpensesLoaded(expenses));
+        emit(ExpensesLoaded(expenses, event.typeNo, event.paymentMethod));
       } catch (e) {
         emit(ExpenseError('Error occurred: ${e.toString()}'));
       }

@@ -263,7 +263,7 @@ class _TodoListState extends State<TodoList> {
                       onTryAgain: () => _refreshPage(),
                     );
                   }
-                  return Container();
+                  return const SizedBox.shrink();
                 },
               ),
             ],

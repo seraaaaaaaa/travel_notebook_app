@@ -88,11 +88,15 @@ class _AllExpensePageState extends State<AllExpensePage> {
         title: const Text('Expenses'),
         actions: [
           GestureDetector(
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: kPadding),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: kPadding),
               child: Icon(
-                Icons.filter_list,
-                color: kSecondaryColor,
+                _filterTypeNo > 0 || _filterPaymentMethod.isNotEmpty
+                    ? Icons.filter_alt
+                    : Icons.filter_alt_outlined,
+                color: _filterTypeNo > 0 || _filterPaymentMethod.isNotEmpty
+                    ? kPrimaryColor
+                    : kSecondaryColor,
               ),
             ),
             onTap: () async {
@@ -215,7 +219,7 @@ class _AllExpensePageState extends State<AllExpensePage> {
                                                 currentPaymentMethod,
                                           });
                                         },
-                                        child: const Text('Reset')),
+                                        child: const Text('Clear')),
                                   ),
                                   const SizedBox(
                                     width: kPadding,
@@ -359,7 +363,7 @@ class _AllExpensePageState extends State<AllExpensePage> {
                     onTryAgain: () => Navigator.pop(context),
                   );
                 }
-                return Container();
+                return const SizedBox.shrink();
               },
             ),
           ],

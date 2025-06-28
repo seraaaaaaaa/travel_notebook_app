@@ -29,20 +29,18 @@ class SectionTitle extends StatelessWidget {
                 title,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
-              subtitle.isEmpty
-                  ? Container()
-                  : Text(
-                      subtitle,
-                      style: Theme.of(context).textTheme.labelLarge,
-                    ),
+              if (subtitle.isNotEmpty)
+                Text(
+                  subtitle,
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
             ],
           ),
-          btnText.isEmpty
-              ? Container()
-              : TextButton(
-                  onPressed: btnAction,
-                  child: Text(btnText),
-                ),
+          if (btnText.isNotEmpty)
+            TextButton(
+              onPressed: btnAction,
+              child: Text(btnText),
+            ),
         ],
       ),
     );

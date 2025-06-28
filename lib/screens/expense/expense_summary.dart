@@ -6,6 +6,7 @@ import 'package:travel_notebook/blocs/destination/destination_state.dart';
 import 'package:travel_notebook/blocs/expense/expense_bloc.dart';
 import 'package:travel_notebook/blocs/expense/expense_event.dart';
 import 'package:travel_notebook/blocs/expense/expense_state.dart';
+import 'package:travel_notebook/models/expense/expense_model.dart';
 import 'package:travel_notebook/themes/constants.dart';
 import 'package:travel_notebook/models/destination/destination_model.dart';
 import 'package:travel_notebook/screens/expense/all_expense.dart';
@@ -31,6 +32,7 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
   late ExpenseBloc _expenseBloc;
   late DestinationBloc _destinationBloc;
 
+  late List<Expense> _expenses = [];
   late Destination _destination;
 
   @override
@@ -40,7 +42,7 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
     _destinationBloc = BlocProvider.of<DestinationBloc>(context);
 
     _expenseBloc = BlocProvider.of<ExpenseBloc>(context);
-    _expenseBloc.add(GetExpenses(_destination.destinationId!, limit: 4));
+    _expenseBloc.add(GetExpenses(_destination.destinationId!));
 
     super.initState();
   }
@@ -48,7 +50,7 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
   Future _refreshPage() async {
     _destinationBloc.add(GetDestination(_destination.destinationId!,
         _destination.ownCurrency, _destination.ownDecimal));
-    _expenseBloc.add(GetExpenses(_destination.destinationId!, limit: 4));
+    _expenseBloc.add(GetExpenses(_destination.destinationId!));
   }
 
   @override
@@ -69,6 +71,13 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
             if (state is ExpenseResult) {
               _destinationBloc.add(GetDestination(_destination.destinationId!,
                   _destination.ownCurrency, _destination.ownDecimal));
+            }
+            if (state is ExpensesLoaded) {
+              if (state.typeNo == 0 && state.paymentMethod.isEmpty) {
+                setState(() {
+                  _expenses = state.expenses.take(4).toList();
+                });
+              }
             }
           },
         ),
@@ -108,9 +117,6 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
                       builder: (context) => AllExpensePage(
                             destination: _destination,
                           )));
-
-                  _expenseBloc
-                      .add(GetExpenses(_destination.destinationId!, limit: 4));
                 },
               ),
               BlocBuilder<ExpenseBloc, ExpenseState>(
@@ -118,7 +124,7 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
                   if (state is ExpenseLoading) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (state is ExpensesLoaded) {
-                    return state.expenses.isEmpty
+                    return _expenses.isEmpty
                         ? const NoData(
                             msg: 'No Expenses Found',
                             icon: Icons.credit_card,
@@ -126,11 +132,9 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
                         : ListView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: state.expenses.length > 4
-                                ? 4
-                                : state.expenses.length,
+                            itemCount: _expenses.length,
                             itemBuilder: (context, index) {
-                              final expense = state.expenses[index];
+                              final expense = _expenses[index];
                               return ExpenseItem(
                                 expense: expense,
                                 destination: _destination,
@@ -161,7 +165,8 @@ class _ExpenseSummaryState extends State<ExpenseSummary> {
                   } else if (state is ExpenseError) {
                     return Center(child: Text(state.message));
                   }
-                  return Container();
+
+                  return const SizedBox.shrink();
                 },
               ),
             ],

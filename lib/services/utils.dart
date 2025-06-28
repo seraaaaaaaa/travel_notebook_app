@@ -75,6 +75,8 @@ double calculateForeignCurrency(double ownAmount, double rate) {
 }
 
 void updateTotalExpenses(Expense expense, Destination destination) {
+  if (expense.excludeBudget == 1) return;
+
   destination.totalExpense += expense.amount;
 
   if (expense.typeNo == 1) {
@@ -90,6 +92,8 @@ void updateTotalExpenses(Expense expense, Destination destination) {
 }
 
 void deductTotalExpenses(Expense expense, Destination destination) {
+  if (expense.excludeBudget == 1) return;
+
   destination.totalExpense -= expense.amount;
 
   if (expense.typeNo == 1) {
