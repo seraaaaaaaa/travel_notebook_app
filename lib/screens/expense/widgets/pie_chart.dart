@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:travel_notebook/themes/constants.dart';
 import 'package:travel_notebook/models/destination/destination_model.dart';
 import 'package:travel_notebook/models/expense/enum/expense_type.dart';
@@ -24,7 +25,11 @@ class PieChartWidgetState extends State<PieChartWidget> {
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: 1.5,
+      aspectRatio: ResponsiveBreakpoints.of(
+        context,
+      ).largerThan(MOBILE)
+          ? 2
+          : 1.5,
       child: Column(
         children: <Widget>[
           Expanded(
@@ -53,7 +58,11 @@ class PieChartWidgetState extends State<PieChartWidget> {
                         show: false,
                       ),
                       sectionsSpace: kHalfPadding,
-                      centerSpaceRadius: 70,
+                      centerSpaceRadius: ResponsiveBreakpoints.of(
+                        context,
+                      ).largerThan(MOBILE)
+                          ? 120
+                          : 70,
                       sections: showingSections(),
                     ),
                   ),

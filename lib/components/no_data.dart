@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:travel_notebook/themes/constants.dart';
 
 class NoData extends StatelessWidget {
@@ -25,7 +26,12 @@ class NoData extends StatelessWidget {
           Align(
             alignment: Alignment.topLeft,
             child: Container(
-              width: width / 1.5,
+              width: width /
+                  (ResponsiveBreakpoints.of(
+                    context,
+                  ).largerThan(MOBILE)
+                      ? 2
+                      : 1.5),
               padding: const EdgeInsets.symmetric(
                   horizontal: kPadding, vertical: kHalfPadding),
               decoration: BoxDecoration(
@@ -81,7 +87,12 @@ class NoData extends StatelessWidget {
           Align(
             alignment: Alignment.bottomRight,
             child: Container(
-              width: width / 1.5,
+              width: width /
+                  (ResponsiveBreakpoints.of(
+                    context,
+                  ).largerThan(MOBILE)
+                      ? 2
+                      : 1.5),
               padding: const EdgeInsets.symmetric(
                   horizontal: kPadding, vertical: kHalfPadding),
               decoration: BoxDecoration(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travel_notebook/blocs/destination/destination_bloc.dart';
 import 'package:travel_notebook/blocs/expense/expense_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:travel_notebook/blocs/destination/destination_service.dart';
 import 'package:travel_notebook/blocs/todo/todo_service.dart';
 import 'package:travel_notebook/screens/destination/all_destination.dart';
 import 'package:travel_notebook/screens/welcome.dart';
+import 'package:travel_notebook/themes/constants.dart';
 import 'package:travel_notebook/themes/theme.dart';
 
 void main() async {
@@ -58,17 +60,37 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        themeMode: ThemeMode.light,
-        theme: GlobalThemData.lightThemeData,
-        home: ownCurrency.isEmpty
-            ? const WelcomePage()
-            : AllDestinationPage(
-                prevDestinationId: prevDestinationId,
-                ownCurrency: ownCurrency,
-                ownDecimal: ownDecimal,
-              ),
+      child: Container(
+        color: kBlackColor,
+        alignment: Alignment.center,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 800),
+          child: MaterialApp(
+            // initialRoute: '/',
+            debugShowCheckedModeBanner: false,
+            themeMode: ThemeMode.light,
+            theme: GlobalThemData.lightThemeData,
+            home: ownCurrency.isEmpty
+                ? const WelcomePage()
+                : AllDestinationPage(
+                    prevDestinationId: prevDestinationId,
+                    ownCurrency: ownCurrency,
+                    ownDecimal: ownDecimal,
+                  ),
+            builder: (context, child) => ResponsiveBreakpoints.builder(
+              child: child!,
+              breakpoints: [
+                const Breakpoint(start: 0, end: 480, name: MOBILE),
+                const Breakpoint(start: 481, end: 1200, name: TABLET),
+                const Breakpoint(
+                  start: 1201,
+                  end: double.infinity,
+                  name: DESKTOP,
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
