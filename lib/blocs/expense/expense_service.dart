@@ -7,8 +7,8 @@ import 'package:travel_notebook/services/database_helper.dart'; // Import the da
 class ExpenseService {
   final DatabaseHelper _databaseHelper = DatabaseHelper.instance;
 
-  Future<List<Expense>> readAllExpenses(
-      int destinationId, int? limit, int typeNo, String paymentMethod) async {
+  Future<List<Expense>> readAllExpenses(int destinationId, int? limit,
+      int typeNo, String paymentMethod, int? inclBudget) async {
     final db = await _databaseHelper.database;
 
     var orderBy = '${ExpenseField.createdTime} DESC';
@@ -28,6 +28,11 @@ class ExpenseService {
     if (paymentMethod.isNotEmpty) {
       where += " AND ${ExpenseField.paymentMethod} = ?";
       whereArgs.add(paymentMethod);
+    }
+
+    if (inclBudget != null) {
+      where += " AND ${ExpenseField.excludeBudget} = ?";
+      whereArgs.add(inclBudget);
     }
 
     final result = await db.query(

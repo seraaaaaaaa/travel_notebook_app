@@ -39,18 +39,21 @@ class _AllExpensePageState extends State<AllExpensePage> {
 
   int _filterTypeNo = 0;
   String _filterPaymentMethod = '';
+  late int? _excludeBudget;
 
   @override
   void initState() {
     super.initState();
 
     _destination = widget.destination;
+    _excludeBudget = null;
 
     _expenseBloc = BlocProvider.of<ExpenseBloc>(context);
     _expenseBloc.add(GetExpenses(
       _destination.destinationId!,
       typeNo: _filterTypeNo,
       paymentMethod: _filterPaymentMethod,
+      excludeBudget: _excludeBudget,
     ));
   }
 
@@ -69,11 +72,10 @@ class _AllExpensePageState extends State<AllExpensePage> {
   }
 
   Future _refreshData() async {
-    _expenseBloc.add(GetExpenses(
-      _destination.destinationId!,
-      typeNo: _filterTypeNo,
-      paymentMethod: _filterPaymentMethod,
-    ));
+    _expenseBloc.add(GetExpenses(_destination.destinationId!,
+        typeNo: _filterTypeNo,
+        paymentMethod: _filterPaymentMethod,
+        excludeBudget: _excludeBudget));
   }
 
   @override
@@ -106,10 +108,11 @@ class _AllExpensePageState extends State<AllExpensePage> {
                 builder: (context) {
                   int currentTypeNo = _filterTypeNo;
                   String currentPaymentMethod = _filterPaymentMethod;
+                  int? currentBudget = _excludeBudget;
 
                   return StatefulBuilder(
                     builder: (context, setModalState) {
-                      return Padding(
+                      return SingleChildScrollView(
                         padding: const EdgeInsets.all(kPadding),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,6 +171,44 @@ class _AllExpensePageState extends State<AllExpensePage> {
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                   vertical: kPadding / 2),
+                              child: Text('Budget Status',
+                                  style:
+                                      Theme.of(context).textTheme.titleMedium),
+                            ),
+                            Wrap(
+                              children: [
+                                FilterChoiceChip(
+                                  label: 'All',
+                                  selected: currentBudget == null,
+                                  onTap: () {
+                                    setModalState(() {
+                                      currentBudget = null;
+                                    });
+                                  },
+                                ),
+                                FilterChoiceChip(
+                                  label: 'Excluded Only',
+                                  selected: currentBudget == 1,
+                                  onTap: () {
+                                    setModalState(() {
+                                      currentBudget = 1;
+                                    });
+                                  },
+                                ),
+                                FilterChoiceChip(
+                                  label: 'Included Only',
+                                  selected: currentBudget == 0,
+                                  onTap: () {
+                                    setModalState(() {
+                                      currentBudget = 0;
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: kPadding / 2),
                               child: Text('Payment Method',
                                   style:
                                       Theme.of(context).textTheme.titleMedium),
@@ -202,7 +243,7 @@ class _AllExpensePageState extends State<AllExpensePage> {
                             ),
                             Padding(
                               padding: const EdgeInsets.symmetric(
-                                  vertical: kPadding),
+                                  vertical: kHalfPadding),
                               child: Row(
                                 children: [
                                   Expanded(
@@ -213,11 +254,13 @@ class _AllExpensePageState extends State<AllExpensePage> {
                                           setModalState(() {
                                             currentTypeNo = 0;
                                             currentPaymentMethod = '';
+                                            currentBudget = null;
                                           });
                                           Navigator.pop(context, {
                                             'typeNo': currentTypeNo,
                                             'paymentMethod':
                                                 currentPaymentMethod,
+                                            'excludeBudget': currentBudget
                                           });
                                         },
                                         child: const Text('Clear')),
@@ -232,6 +275,7 @@ class _AllExpensePageState extends State<AllExpensePage> {
                                             'typeNo': currentTypeNo,
                                             'paymentMethod':
                                                 currentPaymentMethod,
+                                            'excludeBudget': currentBudget
                                           });
                                         },
                                         child: const Text('Apply')),
@@ -251,6 +295,7 @@ class _AllExpensePageState extends State<AllExpensePage> {
                 setState(() {
                   _filterTypeNo = result['typeNo'];
                   _filterPaymentMethod = result['paymentMethod'];
+                  _excludeBudget = result['excludeBudget'];
                 });
                 _refreshData();
               }
