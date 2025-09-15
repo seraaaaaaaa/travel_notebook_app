@@ -21,40 +21,47 @@ class DeleteDialog extends StatelessWidget {
       style: OutlinedButton.styleFrom(
         backgroundColor: kGreyColor.shade200,
         foregroundColor: kSecondaryColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(kHalfPadding / 2),
+        ),
         padding: const EdgeInsets.symmetric(
-            horizontal: kHalfPadding * 3, vertical: kPadding),
+            horizontal: kHalfPadding * 2.5, vertical: kHalfPadding),
       ),
       onPressed: onCancel,
-      child: const Text("Cancel"),
+      child: const Text("No, Cancel"),
     );
 
     Widget confirmButton = TextButton(
       style: TextButton.styleFrom(
         backgroundColor: kRedColor,
         foregroundColor: kWhiteColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(kHalfPadding / 2),
+        ),
         padding: const EdgeInsets.symmetric(
-            horizontal: kHalfPadding * 3, vertical: kPadding),
+            horizontal: kHalfPadding * 2.5, vertical: kHalfPadding),
       ),
       onPressed: onConfirm,
-      child: const Text("Confirm"),
+      child: const Text(
+        "Yes, Delete",
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
     );
 
     return AlertDialog(
-      icon: const Icon(
-        Icons.auto_delete_outlined,
-        color: kRedColor,
-        size: kPadding * 2,
-      ),
-      iconPadding: const EdgeInsets.only(
-        top: kPadding * 2,
-        bottom: kHalfPadding,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(kHalfPadding),
       ),
       title: Text(title),
       content: Text(
         content,
-        textAlign: TextAlign.center,
+        style: Theme.of(context)
+            .textTheme
+            .labelLarge!
+            .copyWith(color: kSecondaryColor),
       ),
-      actionsAlignment: MainAxisAlignment.spaceEvenly,
+      actionsOverflowButtonSpacing: kHalfPadding,
+      actionsAlignment: MainAxisAlignment.spaceAround,
       actions: [
         cancelButton,
         confirmButton,

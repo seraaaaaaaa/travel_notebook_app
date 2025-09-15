@@ -175,7 +175,7 @@ class ExpenseItem extends StatelessWidget {
                                         return DeleteDialog(
                                           title: "Delete Expense",
                                           content:
-                                              "Are you sure you want to delete this record?",
+                                              "Are you sure you want to delete this expense record?",
                                           onConfirm: () {
                                             Navigator.pop(context);
                                             Navigator.pop(context);

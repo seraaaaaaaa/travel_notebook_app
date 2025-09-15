@@ -103,7 +103,7 @@ class DestinationCard extends StatelessWidget {
                                   return DeleteDialog(
                                     title: "Delete Destination",
                                     content:
-                                        "Are you sure you want to delete this destination? All records will be removed.",
+                                        "Are you sure you want to delete this destination? All expenses records will be removed.",
                                     onConfirm: () {
                                       Navigator.pop(context);
 

@@ -101,16 +101,31 @@ class _TodoItemState extends State<TodoItem> {
               hintText: 'To-do',
               hintStyle: TextStyle(color: kGreyColor.shade400)),
         ),
-        trailing: GestureDetector(
-          onTap: () {
-            widget.onTapCheck();
+        trailing: IconButton(
+          icon: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              transitionBuilder: (child, anim) => RotationTransition(
+                    turns: child.key == const ValueKey('checkIcon')
+                        ? Tween<double>(begin: 1, end: 0.02).animate(anim)
+                        : Tween<double>(begin: 0.02, end: 1).animate(anim),
+                    child: FadeTransition(opacity: anim, child: child),
+                  ),
+              child: widget.todo.status == 1
+                  ? const Icon(
+                      Icons.task_alt,
+                      key: ValueKey('checkIcon'),
+                      color: kPrimaryColor,
+                    )
+                  : Icon(
+                      Icons.circle_outlined,
+                      key: const ValueKey('uncheckIcon'),
+                      color: kGreyColor.shade500,
+                    )),
+          onPressed: () {
+            setState(() {
+              widget.todo.status = widget.todo.status == 0 ? 1 : 0;
+            });
           },
-          child: Icon(
-            widget.todo.status == 1 ? Icons.task_alt : Icons.circle_outlined,
-            color:
-                widget.todo.status == 1 ? kPrimaryColor : kGreyColor.shade500,
-            size: 28,
-          ),
         ),
       ),
     );
