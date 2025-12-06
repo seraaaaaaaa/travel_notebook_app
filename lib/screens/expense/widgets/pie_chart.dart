@@ -21,6 +21,7 @@ class PieChartWidget extends StatefulWidget {
 
 class PieChartWidgetState extends State<PieChartWidget> {
   int touchedIndex = -1;
+  bool showForeignCurrency = true;
 
   @override
   Widget build(BuildContext context) {
@@ -66,26 +67,41 @@ class PieChartWidgetState extends State<PieChartWidget> {
                       sections: showingSections(),
                     ),
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Remaining',
-                        style: Theme.of(context).textTheme.labelLarge!,
-                      ),
-                      const SizedBox(
-                        height: 4,
-                      ),
-                      Text(
-                        formatCurrency(widget.destination.budgetRemaining,
-                            widget.destination.decimal),
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      Text(
-                        widget.destination.currency,
-                        style: Theme.of(context).textTheme.labelMedium,
-                      ),
-                    ],
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        showForeignCurrency = !showForeignCurrency;
+                      });
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Remaining',
+                          style: Theme.of(context).textTheme.labelLarge!,
+                        ),
+                        const SizedBox(
+                          height: kHalfPadding / 2,
+                        ),
+                        Text(
+                          !showForeignCurrency
+                              ? formatCurrency(
+                                  calculateOwnCurrency(widget.destination.rate,
+                                      widget.destination.budgetRemaining),
+                                  widget.destination.ownDecimal)
+                              : formatCurrency(
+                                  widget.destination.budgetRemaining,
+                                  widget.destination.decimal),
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        Text(
+                          !showForeignCurrency
+                              ? widget.destination.ownCurrency
+                              : widget.destination.currency,
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

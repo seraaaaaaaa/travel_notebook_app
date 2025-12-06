@@ -71,6 +71,14 @@ class _AllExpensePageState extends State<AllExpensePage> {
     return groupedExpenses;
   }
 
+  double _calculateDayTotal(List<Expense> expenses) {
+    double total = 0;
+    for (var expense in expenses) {
+      total += expense.amount;
+    }
+    return total;
+  }
+
   Future _refreshData() async {
     _expenseBloc.add(GetExpenses(_destination.destinationId!,
         typeNo: _filterTypeNo,
@@ -346,15 +354,41 @@ class _AllExpensePageState extends State<AllExpensePage> {
                         for (String dateKey in dateKeys) {
                           // Check if the current item index is the header for this date
                           if (itemIndex == index) {
+                            final dayExpenses = groupedExpenses[dateKey]!;
+                            final dayTotal = _calculateDayTotal(dayExpenses);
                             return Padding(
                               padding: const EdgeInsets.symmetric(
                                   vertical: kHalfPadding),
-                              child: Text(
-                                dateKey,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  color: kGreyColor,
-                                ),
+                              child: Row(
+                                spacing: kHalfPadding,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    dateKey,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      color: kGreyColor,
+                                    ),
+                                  ),
+                                  Tooltip(
+                                    message: 'Total: ${formatCurrency(
+                                      dayTotal,
+                                      _destination.decimal,
+                                      currency: _destination.currency,
+                                    )}',
+                                    decoration: BoxDecoration(
+                                        color: kBlackColor.withAlpha(200),
+                                        borderRadius: BorderRadius.circular(
+                                            kHalfPadding)),
+                                    triggerMode: TooltipTriggerMode.tap,
+                                    preferBelow: true,
+                                    child: Icon(
+                                      Iconsax.calculator_copy,
+                                      color: kSecondaryColor.shade300,
+                                    ),
+                                  )
+                                ],
                               ),
                             );
                           }
