@@ -66,7 +66,6 @@ class MainApp extends StatelessWidget {
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 800),
           child: MaterialApp(
-            // initialRoute: '/',
             debugShowCheckedModeBanner: false,
             themeMode: ThemeMode.light,
             theme: GlobalThemData.lightThemeData,
