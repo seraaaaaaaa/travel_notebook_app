@@ -34,6 +34,7 @@ class _TodoListState extends State<TodoList> with TickerProviderStateMixin {
   int _latestSeq = 0;
 
   final ScrollController _scrollController = ScrollController();
+  bool _hideDone = false;
 
   @override
   void initState() {
@@ -83,6 +84,17 @@ class _TodoListState extends State<TodoList> with TickerProviderStateMixin {
                 padding: const EdgeInsets.symmetric(horizontal: kHalfPadding),
                 child: SectionTitle(
                   title: 'To-do List',
+                  extraWidget: InkWell(
+                      onTap: () {
+                        setState(() {
+                          _hideDone = !_hideDone;
+                        });
+                      },
+                      child: Icon(
+                          !_hideDone
+                              ? Icons.done_all_outlined
+                              : Icons.remove_done_outlined,
+                          color: _hideDone ? kSecondaryColor : kPrimaryColor)),
                   btnText: 'Add',
                   btnAction: () {
                     FocusScope.of(context).unfocus();
@@ -129,95 +141,94 @@ class _TodoListState extends State<TodoList> with TickerProviderStateMixin {
 
                 return state.todos.isEmpty
                     ? NoData(msg: msg, icon: Icons.check_box)
-                    : RefreshIndicator(
-                        onRefresh: _refreshPage,
-                        child: Padding(
-                          padding: const EdgeInsets.all(kHalfPadding / 2),
-                          child: CustomScrollView(
-                            slivers: [
-                              ReorderableSliverList(
-                                delegate: ReorderableSliverChildBuilderDelegate(
-                                  (context, index) {
-                                    final todo = state.todos[index];
-                                    return Container(
-                                      key: Key(todo.id.toString()),
-                                      child: TodoItem(
-                                        todo: todo,
-                                        index: index,
-                                        onRemove: () {
-                                          _todoBloc.add(DeleteTodo(
-                                            todo.id!,
-                                            _destinationId,
-                                            _categoryId,
-                                          ));
-                                        },
-                                        onTapCheck: () {
-                                          setState(() {
-                                            todo.status =
-                                                todo.status == 1 ? 0 : 1;
-                                          });
-                                          _todoBloc.add(UpdateTodo(todo));
-                                        },
-                                        onChanged: (val) {
-                                          _debouncer.run(() {
-                                            todo.content = val;
-                                            _todoBloc.add(UpdateTodo(todo));
-                                          });
-                                        },
-                                        onCopy: todo.status == 1
-                                            ? null
-                                            : () {
-                                                FocusScope.of(context)
-                                                    .unfocus();
-                                                _todoBloc.add(AddTodo(Todo(
-                                                    destinationId:
-                                                        _destinationId,
-                                                    content: todo.content,
-                                                    sequence: todo.sequence,
-                                                    categoryId: _categoryId)));
-                                              },
-                                      ),
-                                    );
-                                  },
-                                  childCount: state.todos.length,
-                                ),
-                                onReorder: (int oldIndex, int newIndex) {
-                                  setState(() {
-                                    if (oldIndex < newIndex) {
-                                      newIndex -= 1;
-                                    }
-                                    final todo = state.todos.removeAt(oldIndex);
-                                    state.todos.insert(newIndex, todo);
-
-                                    for (int i = 0;
-                                        i < state.todos.length;
-                                        i++) {
-                                      state.todos[i].sequence = i;
-                                    }
-                                  });
-                                  _todoBloc.add(UpdateAllTodos(state.todos));
+                    : Padding(
+                        padding: const EdgeInsets.all(kHalfPadding / 2),
+                        child: CustomScrollView(
+                          slivers: [
+                            ReorderableSliverList(
+                              delegate: ReorderableSliverChildBuilderDelegate(
+                                (context, index) {
+                                  final todo = state.todos[index];
+                                  return _hideDone && todo.status == 1
+                                      ? const SizedBox.shrink()
+                                      : Container(
+                                          key: Key(todo.id.toString()),
+                                          child: TodoItem(
+                                            todo: todo,
+                                            index: index,
+                                            onRemove: () {
+                                              _todoBloc.add(DeleteTodo(
+                                                todo.id!,
+                                                _destinationId,
+                                                _categoryId,
+                                              ));
+                                            },
+                                            onTapCheck: () {
+                                              setState(() {
+                                                todo.status =
+                                                    todo.status == 1 ? 0 : 1;
+                                              });
+                                              _todoBloc.add(UpdateTodo(todo));
+                                            },
+                                            onChanged: (val) {
+                                              _debouncer.run(() {
+                                                todo.content = val;
+                                                _todoBloc.add(UpdateTodo(todo));
+                                              });
+                                            },
+                                            onCopy: todo.status == 1
+                                                ? null
+                                                : () {
+                                                    FocusScope.of(context)
+                                                        .unfocus();
+                                                    _todoBloc.add(AddTodo(Todo(
+                                                        destinationId:
+                                                            _destinationId,
+                                                        content: todo.content,
+                                                        sequence:
+                                                            todo.sequence + 1,
+                                                        categoryId:
+                                                            _categoryId)));
+                                                  },
+                                          ),
+                                        );
                                 },
+                                childCount: state.todos.length,
                               ),
-                              SliverToBoxAdapter(
-                                child: Container(
-                                  margin: const EdgeInsets.fromLTRB(kPadding,
-                                      kHalfPadding / 2, kPadding, kPadding * 2),
-                                  width: double.infinity,
-                                  child: TextButton(
-                                    onPressed: () {
-                                      FocusScope.of(context).unfocus();
-                                      _todoBloc.add(AddTodo(Todo(
-                                          destinationId: _destinationId,
-                                          content: '',
-                                          sequence: _latestSeq,
-                                          categoryId: _categoryId)));
-                                    },
-                                    child: const Text('Add'),
-                                  ),
+                              onReorder: (int oldIndex, int newIndex) {
+                                setState(() {
+                                  if (oldIndex < newIndex) {
+                                    newIndex -= 1;
+                                  }
+                                  final todo = state.todos.removeAt(oldIndex);
+                                  state.todos.insert(newIndex, todo);
+
+                                  for (int i = 0; i < state.todos.length; i++) {
+                                    state.todos[i].sequence = i;
+                                  }
+                                });
+                                _todoBloc.add(UpdateAllTodos(state.todos));
+                              },
+                            ),
+                            SliverToBoxAdapter(
+                              child: Container(
+                                margin: const EdgeInsets.fromLTRB(kPadding,
+                                    kHalfPadding / 2, kPadding, kPadding * 2),
+                                width: double.infinity,
+                                child: TextButton(
+                                  onPressed: () {
+                                    FocusScope.of(context).unfocus();
+                                    _todoBloc.add(AddTodo(Todo(
+                                        destinationId: _destinationId,
+                                        content: '',
+                                        sequence: _latestSeq,
+                                        categoryId: _categoryId)));
+                                  },
+                                  child: const Text('Add'),
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       );
               } else if (state is TodoError) {

@@ -6,6 +6,7 @@ class SectionTitle extends StatelessWidget {
   final String subtitle;
   final String btnText;
   final Function()? btnAction;
+  final Widget? extraWidget;
 
   const SectionTitle({
     super.key,
@@ -13,6 +14,7 @@ class SectionTitle extends StatelessWidget {
     this.subtitle = '',
     this.btnText = '',
     this.btnAction,
+    this.extraWidget,
   });
 
   @override
@@ -25,9 +27,15 @@ class SectionTitle extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                title,
-                style: Theme.of(context).textTheme.headlineSmall,
+              Row(
+                spacing: kHalfPadding,
+                children: [
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.headlineSmall,
+                  ),
+                  if (extraWidget != null) extraWidget!,
+                ],
               ),
               if (subtitle.isNotEmpty)
                 Text(

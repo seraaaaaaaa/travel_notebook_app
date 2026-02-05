@@ -122,9 +122,7 @@ class _TodoItemState extends State<TodoItem> {
                       color: kGreyColor.shade500,
                     )),
           onPressed: () {
-            setState(() {
-              widget.todo.status = widget.todo.status == 0 ? 1 : 0;
-            });
+            widget.onTapCheck();
           },
         ),
       ),
